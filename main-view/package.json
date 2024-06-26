@@ -1,0 +1,43 @@
+{
+  "name": "artour-main-view",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc && vite build",
+    "build:watch": "vue-tsc && vite build --watch",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@webpixels/css": "^1.2.6",
+    "axios": "^1.7.2",
+    "bootstrap": "^5.2.3",
+    "dropzone": "^6.0.0-beta.2",
+    "filesize": "^10.1.2",
+    "moment": "^2.30.1",
+    "pinia": "^2.1.7",
+    "placeholder-loading": "^0.6.0",
+    "toastify-js": "^1.12.0",
+    "uuid": "^10.0.0",
+    "vue": "^3.4.21",
+    "vue-router": "^4.3.3"
+  },
+  "devDependencies": {
+    "@types/dropzone": "^5.7.8",
+    "@types/node": "^20.14.2",
+    "@types/toastify-js": "^1.12.3",
+    "@typescript-eslint/eslint-plugin": "^6.21.0",
+    "@vitejs/plugin-vue": "^5.0.4",
+    "eslint": "^8.57.0",
+    "eslint-config-standard-with-typescript": "^43.0.1",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-n": "^16.6.2",
+    "eslint-plugin-promise": "^6.2.0",
+    "eslint-plugin-vue": "^9.26.0",
+    "sass": "~1.64.2",
+    "typescript": "^5.4.5",
+    "vite": "^5.2.0",
+    "vue-tsc": "^2.0.6"
+  }
+}

@@ -1,0 +1,26 @@
+export enum TaskFromEnum {
+    USER_DASHBOARD = 'USER_DASHBOARD',
+    CHECK_INSTANT = 'CHECK_INSTANT'
+}
+
+export enum AuthFromEnum {
+    USER_TASK = 'USER_TASK',
+    GUEST_TASK = 'GUEST_TASK',
+    MOBILE_TASK = 'MOBILE_TASK'
+  }
+
+export enum FileTypeEnum {
+    ORIGINAL_FILE = 'ORIGINAL_FILE',
+    RESULT_FILE = 'RESULT_FILE',
+    SCREENSHOT_FILE = 'SCREENSHOT_FILE'
+}
+
+export enum TaskStatusEnum {
+    PENDING_PAYMENT = 'PENDING_PAYMENT',
+    READY = 'READY',
+    SUBMITING = 'SUBMITING',
+    WAITING = 'WAITING',
+    EXPORTING = 'EXPORTING',
+    FAILURE = 'FAILURE',
+    SUCCESS = 'SUCCESS'
+}
