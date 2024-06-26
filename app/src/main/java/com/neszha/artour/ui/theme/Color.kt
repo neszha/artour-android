@@ -11,6 +11,5 @@ val PurpleGrey40 = Color(0xFF625b71)
 val Pink40 = Color(0xFF7D5260)
 
 // ITentix Colors
-val ColorPrimary = Color(0xff2ca87f)
 val ColorDark = Color(0xFF262626)
-val ColorWhiteBackground = Color(0xfff8f9fa)
+val ColorWhiteBackground = Color(0xFFFFFFFF)

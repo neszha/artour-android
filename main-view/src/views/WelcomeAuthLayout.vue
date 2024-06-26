@@ -1,5 +1,32 @@
 <template>
-    <h1>Auth Page</h1>
+    <div ref="authForm" class="auth-form container bg-surface-secondary d-flex">
+        <div class="auth-header d-flex align-items-center justify-content-center">
+            <div class="d-flex justify-content-center">
+                <img src="/logo/box_logo.png" alt="img">
+            </div>
+        </div>
+        <div class="auth-content pb-5">
+            <div class="text-center">
+                <h1 class="title lh-tight ls-tighter font-bolder h2 mb-2 px-3">
+                    Cari Tempat Wisata Terdekat di Sekitar Anda
+                </h1>
+                <p class="mb-5">
+                    Masuk dengan akun google anda.
+                </p>
+                <div class="d-grid px-3">
+                    <button type="button" class="btn-login btn btn-sm btn-square btn-neutral btn-lg w-100">
+                        <img class="me-2" src="@/assets/authentication/google.svg" alt="img">
+                        <span>Login with Google</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="auth-footer pb-4">
+            <p class="m-0 w-100 text-center">
+                <span>Lorem ipsum dolor sit, amet consectetur dolor adipisicing Lorem, ipsum dolor elit.</span>
+            </p>
+        </div>
+    </div>
 </template>
 
 <script lang="ts">
@@ -88,13 +115,13 @@ export default {
     mounted () {
         const height = window.innerHeight
         const authForm = this.$refs.authForm as HTMLElement
-        const authLoader = this.$refs.authLoader as HTMLElement
+        // const authLoader = this.$refs.authLoader as HTMLElement
         if (authForm !== undefined) {
             authForm.style.height = `${height}px`
         }
-        if (authLoader !== undefined) {
-            authLoader.style.height = `${height}px`
-        }
+        // if (authLoader !== undefined) {
+        //     authLoader.style.height = `${height}px`
+        // }
     },
 
     data () {
@@ -109,14 +136,10 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.auth-main {
-    position: absolute;
-    top: 0;
-    width: 100%;
-}
 .auth-form {
     min-height: 700px;
-    justify-content: space-between !important;
+    height: 100vh;
+    flex-direction: column;
 
     .auth-header {
         flex-grow: 1;
@@ -125,14 +148,20 @@ export default {
             width: 170px;
         }
     }
-}
-.auth-loader {
-    position: absolute;
-    z-index: 1;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100vh;
-    background-color: var(--bs-body-bg);
+
+    .auth-content {
+        .title {
+            font-size: 32px;
+            font-weight: bold;
+        }
+        .btn-login {
+            border-radius: 16px;
+            font-size: 18px;
+
+            img {
+                width: 22px;
+            }
+        }
+    }
 }
 </style>
