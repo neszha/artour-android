@@ -75,9 +75,9 @@ import HeaderNavbar from '@components/common/HeaderNavbar.vue'
             <div class="list-group-item position-relative hstack flex-wrap waves-effect waves-dark">
                 <div class="flex-1 px-3">
                     <div class="d-flex align-items-center justify-content-between">
-                        <a href="javascript:void(0)" class="d-block h4 stretched-link">
+                        <RouterLink :to="{name: 'information'}" class="d-block h4 stretched-link">
                             <span>Informasi</span>
-                        </a>
+                        </RouterLink>
                         <div class="icon text-end">
                             <i class="bi bi-chevron-right"></i>
                         </div>
@@ -87,9 +87,9 @@ import HeaderNavbar from '@components/common/HeaderNavbar.vue'
             <div class="list-group-item position-relative hstack flex-wrap waves-effect waves-dark">
                 <div class="flex-1 px-3">
                     <div class="d-flex align-items-center justify-content-between">
-                        <a href="javascript:void(0)" class="d-block h4 stretched-link">
+                        <RouterLink :to="{name: 'about'}" class="d-block h4 stretched-link">
                             <span>Tentang Aplikasi</span>
-                        </a>
+                        </RouterLink>
                         <div class="icon text-end">
                             <i class="bi bi-chevron-right"></i>
                         </div>

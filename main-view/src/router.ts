@@ -13,9 +13,13 @@ import RouterLayout from './App.vue'
 import AuthView from './views/AuthView.vue'
 import ExploreView from './views/main/ExploreView.vue'
 import MapsView from './views/main/MapsView.vue'
+
+// Profile
 import ProfileView from './views/main/ProfileView.vue'
 import ChangeAvatarView from './views/main/profile/ChangeAvatarView.vue'
 import ChangeNameView from './views/main/profile/ChangeNameView.vue'
+import InfomationView from './views/main/profile/InfomationView.vue'
+import AboutAppView from './views/main/profile/AboutAppView.vue'
 
 /**
  * Register page views to routes.
@@ -69,6 +73,16 @@ const routes: RouteRecordRaw [] = [
                         name: 'change-name',
                         path: 'name',
                         component: ChangeNameView
+                    },
+                    {
+                        name: 'information',
+                        path: 'information',
+                        component: InfomationView
+                    },
+                    {
+                        name: 'about',
+                        path: 'about',
+                        component: AboutAppView
                     }
                 ]
             }
