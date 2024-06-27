@@ -26,6 +26,14 @@
                 <li class="nav-item">
                     <a class="nav-link text-muted" href="javascript:void(0)">
                         <div class="box-icon">
+                            <i class="bi-vignette"></i>
+                        </div>
+                        <span>AR Maps</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted" href="javascript:void(0)">
+                        <div class="box-icon">
                             <i class="bi-plus-square-fill"></i>
                         </div>
                         <span>Kontribusi</span>
@@ -47,6 +55,10 @@
 <style scoped lang="scss">
 .main-layout {
     height: 100vh;
+
+    .main-content {
+        padding-bottom: 70px;
+    }
 }
 .bottom-navigation-bar {
     position: fixed;
@@ -64,6 +76,7 @@
         border: none;
 
         .nav-item {
+            width: 60px;
             margin: 0;
             display: flex;
             justify-content: center;
