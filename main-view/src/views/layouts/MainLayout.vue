@@ -1,14 +1,12 @@
 <template>
     <div class="main-layout">
         <div class="main-content">
-            <RouterView v-slot="{ Component }">
-                <Component :is="Component" />
-            </RouterView>
+            <slot></slot>
         </div>
         <div class="bottom-navigation-bar">
             <ul class="navigation-bar nav nav-tabs">
-                <li class="nav-item text-muted">
-                    <a class="nav-link active" href="javascript:void(0)">
+                <li class="nav-item">
+                    <a class="nav-link waves-effect waves-dark active" href="javascript:void(0)">
                         <div class="box-icon">
                             <i class="bi-compass-fill"></i>
                         </div>
@@ -16,7 +14,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-muted" href="javascript:void(0)">
+                    <a class="nav-link text-muted waves-effect waves-dark" href="javascript:void(0)">
                         <div class="box-icon">
                             <i class="bi-geo-alt-fill"></i>
                         </div>
@@ -24,7 +22,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-muted" href="javascript:void(0)">
+                    <a class="nav-link text-muted waves-effect waves-dark" href="javascript:void(0)">
                         <div class="box-icon">
                             <i class="bi-vignette"></i>
                         </div>
@@ -32,7 +30,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-muted" href="javascript:void(0)">
+                    <a class="nav-link text-muted waves-effect waves-dark" href="javascript:void(0)">
                         <div class="box-icon">
                             <i class="bi-plus-square-fill"></i>
                         </div>
@@ -40,12 +38,12 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-muted" href="javascript:void(0)">
+                    <RouterLink :to="{name: 'profile'}" class="nav-link text-muted waves-effect waves-dark">
                         <div class="box-icon">
-                            <i class="bi-plus-square-fill"></i>
+                            <i class="bi-person-circle"></i>
                         </div>
                         <span>Profile</span>
-                    </a>
+                    </RouterLink>
                 </li>
             </ul>
         </div>
@@ -76,7 +74,7 @@
         border: none;
 
         .nav-item {
-            width: 60px;
+            width: 20%;
             margin: 0;
             display: flex;
             justify-content: center;
@@ -87,6 +85,7 @@
         }
 
         .nav-link {
+            width: 100%;
             padding: 12px 0;
             font-size: 12px;
             &.active {

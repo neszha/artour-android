@@ -4,7 +4,7 @@ import { type RouteRecordRaw, createRouter, type Router, createWebHashHistory } 
 /**
  * Layout Componenets.
  */
-import MainLayout from './views/layouts/MainLayout.vue'
+import RouterLayout from './App.vue'
 
 /**
  * View Componenets.
@@ -13,6 +13,9 @@ import MainLayout from './views/layouts/MainLayout.vue'
 import AuthView from './views/AuthView.vue'
 import ExploreView from './views/main/ExploreView.vue'
 import MapsView from './views/main/MapsView.vue'
+import ProfileView from './views/main/ProfileView.vue'
+import ChangeAvatarView from './views/main/profile/ChangeAvatarView.vue'
+import ChangeNameView from './views/main/profile/ChangeNameView.vue'
 
 /**
  * Register page views to routes.
@@ -31,7 +34,7 @@ const routes: RouteRecordRaw [] = [
     {
         name: 'main',
         path: '/main',
-        component: MainLayout,
+        component: RouterLayout,
         children: [
             {
                 name: 'explore',
@@ -42,6 +45,32 @@ const routes: RouteRecordRaw [] = [
                 name: 'maps',
                 path: '/maps',
                 component: MapsView
+            },
+            {
+                name: 'maps',
+                path: '/maps',
+                component: MapsView
+            },
+            {
+                path: 'profile',
+                component: RouterLayout,
+                children: [
+                    {
+                        name: 'profile',
+                        path: '',
+                        component: ProfileView
+                    },
+                    {
+                        name: 'change-avatar',
+                        path: 'avatar',
+                        component: ChangeAvatarView
+                    },
+                    {
+                        name: 'change-name',
+                        path: 'name',
+                        component: ChangeNameView
+                    }
+                ]
             }
         ]
     }

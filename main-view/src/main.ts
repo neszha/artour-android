@@ -10,3 +10,8 @@ const app = createApp(App)
 app.use(pinia)
 app.use(router as Plugin<[]>)
 app.mount('#app')
+
+declare let Waves: any
+document.addEventListener('DOMContentLoaded', function () {
+    Waves.init()
+})

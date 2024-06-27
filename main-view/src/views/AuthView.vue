@@ -19,7 +19,7 @@ import PageSpinner from '@components/common/PageSpinner.vue'
                     Masuk dengan akun google anda.
                 </p>
                 <div class="d-grid px-3">
-                    <button @click="loginWithGoogle" :disabled="authGoogle.loading" type="button" class="btn-login btn btn-sm btn-square btn-neutral btn-lg w-100">
+                    <button @click="loginWithGoogle" :disabled="authGoogle.loading" type="button" class="btn-login btn btn-sm btn-square btn-neutral btn-lg w-100 waves-effect waves-dark">
                         <img class="me-2" src="@/assets/authentication/google.svg" alt="img">
                         <span>Login with Google</span>
                         <span v-if="authGoogle.loading">...</span>
@@ -40,7 +40,7 @@ import { mapActions } from 'pinia'
 import { useTaskStore } from '@/stores/task.store'
 import axios, { axiosUpdateAuthorization } from '@/helpers/axios.helper'
 import { API_URL_AUTH_GOOGLE_MOBILE_CALLBACK } from '@/constants/api-url'
-import { GOOGLE_AUTH_CLIENT_ID, API_BASE_URL } from '@/constants/environment'
+import { API_BASE_URL } from '@/constants/environment'
 
 export default {
 
@@ -66,7 +66,8 @@ export default {
 
             // Auth with Google in Android.
             if (window.Android !== undefined) {
-                window.Android.loginWithGoogle(GOOGLE_AUTH_CLIENT_ID)
+                this.$router.push({ name: 'explore' })
+                // window.Android.loginWithGoogle(GOOGLE_AUTH_CLIENT_ID)
                 return
             }
 
