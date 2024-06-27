@@ -4,8 +4,10 @@
 // Variables
 @import 'themes/default';
 
-// Components
-@import "bootstrap/scss/bootstrap";
+// Boststrap
+@import "bootstrap/dist/css/bootstrap";
+
+// Webpixels Components
 @import "@webpixels/css/base";
 @import "@webpixels/css/forms";
 @import "@webpixels/css/components";

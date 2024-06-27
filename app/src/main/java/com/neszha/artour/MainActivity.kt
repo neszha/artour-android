@@ -42,7 +42,7 @@ class MainActivity : ComponentActivity() {
         // Render content.
         val host: String = WebServer.Config.host
         val port: String = WebServer.Config.port.toString()
-        val webViewUrl = "http://$host:$port/index.html"
+        val webViewUrl = "http://$host:$port/index.html#/main"
         setContent {
             ITentixTheme {
                 Surface(

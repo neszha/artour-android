@@ -1,4 +1,9 @@
+<script setup lang="ts">
+import PageSpinner from '@components/common/PageSpinner.vue'
+</script>
+
 <template>
+    <PageSpinner :show="showPageSpinner" />
     <div ref="authForm" class="auth-form container bg-surface-secondary d-flex">
         <div class="auth-header d-flex align-items-center justify-content-center">
             <div class="d-flex justify-content-center">
@@ -14,9 +19,10 @@
                     Masuk dengan akun google anda.
                 </p>
                 <div class="d-grid px-3">
-                    <button type="button" class="btn-login btn btn-sm btn-square btn-neutral btn-lg w-100">
+                    <button @click="loginWithGoogle" :disabled="authGoogle.loading" type="button" class="btn-login btn btn-sm btn-square btn-neutral btn-lg w-100">
                         <img class="me-2" src="@/assets/authentication/google.svg" alt="img">
                         <span>Login with Google</span>
+                        <span v-if="authGoogle.loading">...</span>
                     </button>
                 </div>
             </div>
@@ -31,7 +37,6 @@
 
 <script lang="ts">
 import { mapActions } from 'pinia'
-import { GoogleAuthForm } from '@enums/Auth'
 import { useTaskStore } from '@/stores/task.store'
 import axios, { axiosUpdateAuthorization } from '@/helpers/axios.helper'
 import { API_URL_AUTH_GOOGLE_MOBILE_CALLBACK } from '@/constants/api-url'
@@ -46,14 +51,11 @@ export default {
             await new Promise(resolve => {
                 const accessToken = localStorage.getItem('access_token')
                 if (accessToken !== null) {
-                    (async () => {
-                        await this.getTasks()
-                        this.$router.push({ name: 'home' })
-                    })().catch(console.error)
-                    return
+                    localStorage.setItem('access_token', accessToken)
+                    axiosUpdateAuthorization()
                 }
                 setTimeout(() => {
-                    this.showLoader = false
+                    this.showPageSpinner = false
                 }, 500)
                 resolve(null)
             })
@@ -70,21 +72,20 @@ export default {
 
             // Auth with Google in Web.
             const url = new URL(`${API_BASE_URL}/auth/google`)
-            url.searchParams.append('authFrom', GoogleAuthForm.MOBILE)
             window.location.href = url.toString()
         },
 
-        async handleAuthTokenQuery () {
+        async handleAccessTokenQuery () {
             const url = new URL(window.location.href.replace('/#', ''))
-            const authToken = url.searchParams.get('authToken')
-            if (authToken !== null) {
-                localStorage.setItem('access_token', authToken)
+            const accessToken = url.searchParams.get('accessToken')
+            if (accessToken !== null) {
+                localStorage.setItem('access_token', accessToken)
                 axiosUpdateAuthorization()
-                this.$router.push({ name: 'home' })
+                this.$router.push({ name: 'explore' })
                 return
             }
             setTimeout(() => {
-                this.showLoader = false
+                this.showPageSpinner = false
             }, 500)
         },
 
@@ -108,25 +109,21 @@ export default {
 
     async beforeMount () {
         window.authGoogleAndroidCallback = this.authGoogleAndroidCallback
-        // await this.checkAuthSession()
-        this.handleAuthTokenQuery()
+        await this.checkAuthSession()
+        this.handleAccessTokenQuery()
     },
 
     mounted () {
         const height = window.innerHeight
         const authForm = this.$refs.authForm as HTMLElement
-        // const authLoader = this.$refs.authLoader as HTMLElement
         if (authForm !== undefined) {
             authForm.style.height = `${height}px`
         }
-        // if (authLoader !== undefined) {
-        //     authLoader.style.height = `${height}px`
-        // }
     },
 
     data () {
         return {
-            showLoader: false,
+            showPageSpinner: true,
             authGoogle: {
                 loading: false
             }
