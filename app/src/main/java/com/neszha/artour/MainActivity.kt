@@ -27,12 +27,15 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.neszha.artour.ui.theme.ITentixTheme
 import android.Manifest
+import android.webkit.GeolocationPermissions
 import android.widget.Toast
 
 class MainActivity : ComponentActivity() {
     private val REQUEST_CODE_POST_NOTIFICASSION = 102
     private val REQUEST_CODE_READ_STORAGE = 103
     private val REQUEST_CODE_WRITE_STORAGE = 104
+    private val REQUEST_CODE_FINE_LOCATION = 105
+    private val REQUEST_CODE_CAMERA_ACCESS = 106
     private val REQUEST_CODE_FILE_CHOOSER  = 2002
     private var fileChooserCallback: ValueCallback<Array<Uri>>? = null
 
@@ -96,6 +99,22 @@ class MainActivity : ComponentActivity() {
             } else {
                 Toast.makeText(this, "Write storage permission denied!", Toast.LENGTH_SHORT).show()
             }
+            this.requestPermission("fine-location")
+        }
+        if (requestCode == REQUEST_CODE_FINE_LOCATION) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this, "GPS permission granted!", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this, "GPS permission denied!", Toast.LENGTH_SHORT).show()
+            }
+            this.requestPermission("camera-access")
+        }
+        if (requestCode == REQUEST_CODE_CAMERA_ACCESS) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this, "Camera permission granted!", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this, "Camera permission denied!", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
@@ -131,6 +150,14 @@ class MainActivity : ComponentActivity() {
                     .create()
                     .show()
                 return true
+            }
+
+            // Handle permission GPS request.
+            override fun onGeolocationPermissionsShowPrompt(
+                origin: String,
+                callback: GeolocationPermissions.Callback
+            ) {
+                callback.invoke(origin, true, false)
             }
 
             // Handle permission request.
@@ -211,6 +238,24 @@ class MainActivity : ComponentActivity() {
                     ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), REQUEST_CODE_WRITE_STORAGE)
                     return
                 }
+            }
+            this.requestPermission("fine-location")
+        }
+
+        // Ask fine location.
+        if (permissionName == "fine-location") {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_CODE_FINE_LOCATION)
+                return
+            }
+            this.requestPermission("camera-access")
+        }
+
+        // Ask camera access.
+        if (permissionName == "camera-access") {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA), REQUEST_CODE_CAMERA_ACCESS)
+                return
             }
         }
     }

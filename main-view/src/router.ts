@@ -13,6 +13,7 @@ import RouterLayout from './App.vue'
 import AuthView from './views/AuthView.vue'
 import ExploreView from './views/main/ExploreView.vue'
 import MapsView from './views/main/MapsView.vue'
+import ArCameraView from './views/main/ArCameraView.vue'
 
 // Profile
 import ProfileView from './views/main/ProfileView.vue'
@@ -51,9 +52,9 @@ const routes: RouteRecordRaw [] = [
                 component: MapsView
             },
             {
-                name: 'maps',
-                path: '/maps',
-                component: MapsView
+                name: 'ar-camera',
+                path: '/ar-camera',
+                component: ArCameraView
             },
             {
                 path: 'profile',

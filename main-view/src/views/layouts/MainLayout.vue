@@ -22,12 +22,12 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-muted waves-effect waves-dark" href="javascript:void(0)">
+                    <RouterLink :to="{name: 'ar-camera'}" class="nav-link text-muted waves-effect waves-dark" href="javascript:void(0)">
                         <div class="box-icon">
                             <i class="bi-vignette"></i>
                         </div>
-                        <span>AR Maps</span>
-                    </a>
+                        <span>AR Cam</span>
+                    </RouterLink>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link text-muted waves-effect waves-dark" href="javascript:void(0)">
@@ -49,6 +49,18 @@
         </div>
     </div>
 </template>
+
+<script lang="ts">
+export default {
+    mounted () {
+        setTimeout(() => {
+            if (window.Android !== undefined) {
+                window.Android.setupPermissions()
+            }
+        }, 1_500)
+    }
+}
+</script>
 
 <style scoped lang="scss">
 .main-layout {

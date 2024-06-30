@@ -10,5 +10,6 @@ declare global {
     interface Window {
         Android: AndroidInterface
         authGoogleAndroidCallback: (token: string) => void
+        AFRAME: any
     }
 }
