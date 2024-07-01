@@ -15,21 +15,20 @@
             <a-entity
                 v-for="place in placesRenderer"
                 :key="place.title"
+                :gps-new-entity-place="`latitude: ${place.latitude}; longitude: ${place.longitude}`"
+                :rotation="`0 ${place.circleBearing} 0`"
                 place-entity
                 look-at="[gps-new-camera]"
-                :gps-new-entity-place="`latitude: ${place.latitude}; longitude: ${place.longitude}`"
-                rotation="0 0 0"
                 scale="1 1 1">
                 <a-image
                     src="/dummy-images/place-img-01.jpg"
                     position="-2 0 0.01"
                     scale="1 1 1"
                     width="3.5"
-                    height="3.5"
-                    rotation="0 0 0">
+                    height="3.5">
                 </a-image>
                 <a-text
-                    value="Wisata Alam Pantai Marina Lampung Selatan."
+                    :value="place.title"
                     position="0.1 1.55 0.01"
                     color="#000"
                     width="4"
@@ -70,8 +69,6 @@
                     >
                 </a-text>
                 <a-plane
-                    position="0 0 0"
-                    rotation="0 0 0"
                     width="8"
                     height="4"
                     material="color: #fff; opacity: 0.8">
@@ -83,12 +80,13 @@
 </template>
 
 <script lang="ts">
-import { getDistance } from 'geolib'
+import { getDistance, getGreatCircleBearing } from 'geolib'
 
 interface GeolibInputCoordinates {
     title?: string
     latitude: number
     longitude: number
+    circleBearing?: number
 }
 
 export default {
@@ -96,10 +94,13 @@ export default {
         placesRenderer () {
             return this.places.map((place: GeolibInputCoordinates) => {
                 const nearCoordinates: GeolibInputCoordinates = this.moveCloser(this.myCoordinates, place, 10)
-                const distance = getDistance(place, nearCoordinates)
+                const distance = getDistance(this.myCoordinates as GeolibInputCoordinates, nearCoordinates)
+                const circleBearing = getGreatCircleBearing(this.myCoordinates as GeolibInputCoordinates, nearCoordinates)
                 place.latitude = nearCoordinates.latitude
                 place.longitude = nearCoordinates.longitude
-                console.log(distance)
+                place.circleBearing = 360 - circleBearing
+                console.log({ distance })
+                console.log({ circleBearing })
                 return place
             })
         }
@@ -162,17 +163,20 @@ export default {
                 {
                     title: 'Wisata Alam Pantai Marina Lampung Selatan.',
                     latitude: -5.345760,
-                    longitude: 105.288434
+                    longitude: 105.288434,
+                    circleBearing: 0
                 },
                 {
                     title: 'Wisata Alam Pantai Mutun Lampung Selatan.',
                     latitude: -5.339436,
-                    longitude: 105.324334
+                    longitude: 105.324334,
+                    circleBearing: 0
                 },
                 {
                     title: 'Universitas Reden Inten Lampung.',
                     latitude: -5.386973,
-                    longitude: 105.307916
+                    longitude: 105.307916,
+                    circleBearing: 0
                 }
             ],
             myCoordinates: {
