@@ -1,3 +1,9 @@
+<script setup lang="ts">
+import MainLayout from '../layouts/MainLayout.vue'
+</script>
+
 <template>
-    <h1>Map</h1>
+    <MainLayout>
+        <div class="text-center mt-2">Map view. Coming soon!</div>
+    </MainLayout>
 </template>

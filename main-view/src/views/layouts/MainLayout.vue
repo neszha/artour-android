@@ -6,7 +6,7 @@
         <div class="bottom-navigation-bar">
             <ul class="navigation-bar nav nav-tabs">
                 <li class="nav-item">
-                    <RouterLink :to="{name: 'explore'}" class="nav-link waves-effect waves-dark active" href="javascript:void(0)">
+                    <RouterLink :to="{name: 'explore'}" class="nav-link waves-effect waves-dark" href="javascript:void(0)">
                         <div class="box-icon">
                             <i class="bi-compass-fill"></i>
                         </div>
@@ -14,15 +14,15 @@
                     </RouterLink>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-muted waves-effect waves-dark" href="javascript:void(0)">
+                    <RouterLink :to="{name: 'maps'}" class="nav-link waves-effect waves-dark" href="javascript:void(0)">
                         <div class="box-icon">
                             <i class="bi-geo-alt-fill"></i>
                         </div>
                         <span>Maps</span>
-                    </a>
+                    </RouterLink>
                 </li>
                 <li class="nav-item">
-                    <RouterLink :to="{name: 'ar-camera'}" class="nav-link text-muted waves-effect waves-dark" href="javascript:void(0)">
+                    <RouterLink :to="{name: 'ar-camera'}" class="nav-link waves-effect waves-dark" href="javascript:void(0)">
                         <div class="box-icon">
                             <i class="bi-vignette"></i>
                         </div>
@@ -30,7 +30,7 @@
                     </RouterLink>
                 </li>
                 <li class="nav-item">
-                    <RouterLink :to="{name: 'contribution'}" class="nav-link text-muted waves-effect waves-dark" href="javascript:void(0)">
+                    <RouterLink :to="{name: 'contribution'}" class="nav-link waves-effect waves-dark" href="javascript:void(0)">
                         <div class="box-icon">
                             <i class="bi-plus-square-fill"></i>
                         </div>
@@ -38,7 +38,7 @@
                     </RouterLink>
                 </li>
                 <li class="nav-item">
-                    <RouterLink :to="{name: 'profile'}" class="nav-link text-muted waves-effect waves-dark">
+                    <RouterLink :to="{name: 'profile'}" class="nav-link waves-effect waves-dark">
                         <div class="box-icon">
                             <i class="bi-person-circle"></i>
                         </div>
@@ -63,6 +63,9 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.router-link-exact-active {
+    color: var(--bs-primary) !important;
+}
 .main-layout {
     height: 100vh;
 

@@ -16,17 +16,20 @@ import MapsView from './views/main/MapsView.vue'
 import ArCameraView from './views/main/ArCameraView.vue'
 import ContributionView from './views/main/ContributionView.vue'
 
+// Place
+import PlaceDetailView from './views/main/places/PlaceDetailView.vue'
+
+// Contribution
+import AddPlaceView from './views/main/contribution/AddPlaceView.vue'
+// import DetailPlaceView from './views/main/contribution/DetailPlaceView.vue'
+// import EditPlaceView from './views/main/contribution/EditPlaceView.vue'
+
 // Profile
 import ProfileView from './views/main/ProfileView.vue'
 import ChangeAvatarView from './views/main/profile/ChangeAvatarView.vue'
 import ChangeNameView from './views/main/profile/ChangeNameView.vue'
 import InfomationView from './views/main/profile/InfomationView.vue'
 import AboutAppView from './views/main/profile/AboutAppView.vue'
-
-// Contribution
-import AddPlaceView from './views/main/contribution/AddPlaceView.vue'
-// import DetailPlaceView from './views/main/contribution/DetailPlaceView.vue'
-// import EditPlaceView from './views/main/contribution/EditPlaceView.vue'
 
 /**
  * Register page views to routes.
@@ -56,6 +59,19 @@ const routes: RouteRecordRaw [] = [
                 name: 'maps',
                 path: '/maps',
                 component: MapsView
+            },
+            {
+                name: 'place-layout',
+                path: '/places',
+                component: RouterLayout,
+                children: [
+                    {
+                        name: 'place:detail',
+                        path: ':placeId',
+                        component: PlaceDetailView
+                    }
+                ]
+
             },
             {
                 name: 'ar-camera',

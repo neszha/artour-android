@@ -151,26 +151,35 @@ export default {
         },
 
         toExploreView () {
-            window.location.href = '/index.html#/main'
-            window.location.reload()
+            this.$router.push({ name: 'explore' })
+            setTimeout(() => {
+                window.location.reload()
+            }, 10)
         }
     },
 
     mounted () {
+        // Set hight resolution.
         const width = window.innerWidth
         const vh100 = this.$refs.vh100 as HTMLElement
         const height = (16 / 9 * width)
         if (vh100 !== undefined) {
             vh100.style.height = `${height}px`
         }
-        window.AFRAME.registerComponent('place-entity', {
-            init: function () {
-                this.el.addEventListener('click', () => {
-                    console.log(this.el)
-                    alert('Box clicked!')
-                })
-            }
-        })
+
+        // Handle ar-scene.
+        try {
+            window.AFRAME.registerComponent('place-entity', {
+                init: function () {
+                    this.el.addEventListener('click', () => {
+                        console.log(this.el)
+                        alert('Box clicked!')
+                    })
+                }
+            })
+        } catch (error) {
+            window.location.reload()
+        }
     },
 
     data () {

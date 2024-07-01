@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import HeaderNavbar from '@components/common/HeaderNavbar.vue'
 </script>
 
@@ -103,9 +103,19 @@ import HeaderNavbar from '@components/common/HeaderNavbar.vue'
     <!-- logout -->
     <section class="container-fluid">
         <div class="d-grid">
-            <button type="button" class="btn btn-outline-danger waves-effect waves-dark">
+            <button @click="logout" type="button" class="btn btn-outline-danger waves-effect waves-dark">
                 Logout
             </button>
         </div>
     </section>
 </template>
+
+<script lang="ts">
+export default {
+    methods: {
+        logout () {
+            this.$router.push({ name: 'auth' })
+        }
+    }
+}
+</script>

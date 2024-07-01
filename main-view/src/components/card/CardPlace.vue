@@ -1,5 +1,7 @@
+import { lang } from "moment"
+
 <template>
-    <div class="card">
+    <div @click="toPlaceDetailView('id')" class="card">
         <div class="card-box-img">
             <img src="@assets/dummy-images/place-img-01.jpg" alt="..." class="card-img">
             <div class="badge-absolute">
@@ -47,6 +49,17 @@
         </div>
     </div>
 </template>
+
+<script lang="ts">
+export default {
+
+    methods: {
+        toPlaceDetailView (placeId: string) {
+            this.$router.push({ name: 'place:detail', params: { placeId } })
+        }
+    }
+}
+</script>
 
 <style scoped lang="scss">
 .card {

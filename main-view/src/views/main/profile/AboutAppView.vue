@@ -19,7 +19,7 @@ import HeaderNavbar from '@components/common/HeaderNavbar.vue'
             <img src="/logo/box_logo.png" alt="img">
         </div>
         <small class="text-muted mt-1">
-            @ 2023 oleh (Nama Pengembang)
+            @ 2024 oleh (Nama Pengembang)
         </small>
     </section>
 </template>

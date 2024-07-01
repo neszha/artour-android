@@ -2,6 +2,7 @@ package com.neszha.artour
 
 import android.content.ContentValues.TAG
 import android.content.Context
+import android.content.Intent
 import android.util.Log
 import android.webkit.JavascriptInterface
 import android.webkit.WebView
@@ -61,7 +62,7 @@ class JavaScriptInterface(
                 }
             } catch (e: GetCredentialException) {
                 if (e.message != null) Log.e(TAG, e.message.toString())
-                Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, e.message, Toast.LENGTH_LONG).show()
                 webView.post {
                     webView.evaluateJavascript("window.authGoogleAndroidCallback(null);") {}
                 }

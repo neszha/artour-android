@@ -18,7 +18,7 @@ import CardPlaceCategory from '@components/card/CardPlaceCategory.vue'
                             Explore
                         </h2>
                     </div>
-                    <button class="navbar-toggler" type="button">
+                    <button class="navbar-toggler text-dark" type="button">
                         <i class="bi bi-bookmark"></i>
                     </button>
                 </div>

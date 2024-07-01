@@ -29,7 +29,7 @@ import PageSpinner from '@components/common/PageSpinner.vue'
         </div>
         <div class="auth-footer pb-4">
             <p class="m-0 w-100 text-center">
-                <span>Lorem ipsum dolor sit, amet consectetur dolor adipisicing Lorem, ipsum dolor elit.</span>
+                <small>Lorem ipsum dolor sit, amet consectetur dolor adipisicing Lorem, ipsum dolor elit.</small>
             </p>
         </div>
     </div>
@@ -64,16 +64,19 @@ export default {
         loginWithGoogle () {
             this.authGoogle.loading = true
 
+            this.$router.push({ name: 'explore' })
+
             // Auth with Google in Android.
-            if (window.Android !== undefined) {
-                this.$router.push({ name: 'explore' })
-                // window.Android.loginWithGoogle(GOOGLE_AUTH_CLIENT_ID)
-                return
-            }
+            // if (window.Android !== undefined) {
+            //     window.Android.loginWithGoogle(GOOGLE_AUTH_CLIENT_ID)
+            //     return
+            // }
 
             // Auth with Google in Web.
-            const url = new URL(`${API_BASE_URL}/auth/google`)
-            window.location.href = url.toString()
+            // const url = new URL(`${API_BASE_URL}/auth/google`)
+            // this.$router.push({ name: 'explore' })
+            // console.log({ url })
+            // window.location.href = url.toString()
         },
 
         async handleAccessTokenQuery () {
@@ -92,6 +95,7 @@ export default {
 
         async authGoogleAndroidCallback (token: string): Promise<void> {
             this.authGoogle.loading = true
+            // this.$router.push({ name: 'explore' }) // for dev.
             try {
                 const url = new URL(`${API_BASE_URL}${API_URL_AUTH_GOOGLE_MOBILE_CALLBACK}`)
                 url.searchParams.append('code', token)
