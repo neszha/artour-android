@@ -14,6 +14,7 @@ import AuthView from './views/AuthView.vue'
 import ExploreView from './views/main/ExploreView.vue'
 import MapsView from './views/main/MapsView.vue'
 import ArCameraView from './views/main/ArCameraView.vue'
+import ContributionView from './views/main/ContributionView.vue'
 
 // Profile
 import ProfileView from './views/main/ProfileView.vue'
@@ -21,6 +22,11 @@ import ChangeAvatarView from './views/main/profile/ChangeAvatarView.vue'
 import ChangeNameView from './views/main/profile/ChangeNameView.vue'
 import InfomationView from './views/main/profile/InfomationView.vue'
 import AboutAppView from './views/main/profile/AboutAppView.vue'
+
+// Contribution
+import AddPlaceView from './views/main/contribution/AddPlaceView.vue'
+// import DetailPlaceView from './views/main/contribution/DetailPlaceView.vue'
+// import EditPlaceView from './views/main/contribution/EditPlaceView.vue'
 
 /**
  * Register page views to routes.
@@ -55,6 +61,23 @@ const routes: RouteRecordRaw [] = [
                 name: 'ar-camera',
                 path: '/ar-camera',
                 component: ArCameraView
+            },
+            {
+                name: 'contribution-layout',
+                path: '/contribution',
+                component: RouterLayout,
+                children: [
+                    {
+                        name: 'contribution',
+                        path: '',
+                        component: ContributionView
+                    },
+                    {
+                        name: 'add-place',
+                        path: 'add',
+                        component: AddPlaceView
+                    }
+                ]
             },
             {
                 path: 'profile',

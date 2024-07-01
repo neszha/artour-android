@@ -147,6 +147,7 @@ import CardPlaceCategory from '@components/card/CardPlaceCategory.vue'
 .navbar {
     .navbar-toggler {
         font-size: 22px;
+        box-shadow: none;
         &:focus {
             color: #6B7B93;
         }

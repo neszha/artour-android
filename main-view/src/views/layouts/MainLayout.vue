@@ -6,12 +6,12 @@
         <div class="bottom-navigation-bar">
             <ul class="navigation-bar nav nav-tabs">
                 <li class="nav-item">
-                    <a class="nav-link waves-effect waves-dark active" href="javascript:void(0)">
+                    <RouterLink :to="{name: 'explore'}" class="nav-link waves-effect waves-dark active" href="javascript:void(0)">
                         <div class="box-icon">
                             <i class="bi-compass-fill"></i>
                         </div>
                         <span>Explore</span>
-                    </a>
+                    </RouterLink>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link text-muted waves-effect waves-dark" href="javascript:void(0)">
@@ -30,12 +30,12 @@
                     </RouterLink>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-muted waves-effect waves-dark" href="javascript:void(0)">
+                    <RouterLink :to="{name: 'contribution'}" class="nav-link text-muted waves-effect waves-dark" href="javascript:void(0)">
                         <div class="box-icon">
                             <i class="bi-plus-square-fill"></i>
                         </div>
                         <span>Kontribusi</span>
-                    </a>
+                    </RouterLink>
                 </li>
                 <li class="nav-item">
                     <RouterLink :to="{name: 'profile'}" class="nav-link text-muted waves-effect waves-dark">

@@ -1,5 +1,10 @@
 <template>
-    <section class="ar-camera">
+    <section ref="vh100" class="ar-camera">
+        <div class="close-button">
+            <button @click="toExploreView" class="icon icon-shape bg-white text-dark text-lg rounded-circle waves-effect waves-dark">
+                <i class="bi bi-x-lg"></i>
+            </button>
+        </div>
         <a-scene
             vr-mode-ui='enabled: false'
             arjs='sourceType: webcam; videoTexture: true; debugUIEnabled: false'
@@ -16,7 +21,7 @@
                 v-for="place in placesRenderer"
                 :key="place.title"
                 :gps-new-entity-place="`latitude: ${place.latitude}; longitude: ${place.longitude}`"
-                :rotation="`0 ${place.circleBearing} 0`"
+                :rotation="`-10 ${place.circleBearing} 0`"
                 place-entity
                 look-at="[gps-new-camera]"
                 scale="1 1 1">
@@ -143,10 +148,21 @@ export default {
                 latitude: toDegrees(newLat),
                 longitude: toDegrees(newLon)
             }
+        },
+
+        toExploreView () {
+            window.location.href = '/index.html#/main'
+            window.location.reload()
         }
     },
 
     mounted () {
+        const width = window.innerWidth
+        const vh100 = this.$refs.vh100 as HTMLElement
+        const height = (16 / 9 * width)
+        if (vh100 !== undefined) {
+            vh100.style.height = `${height}px`
+        }
         window.AFRAME.registerComponent('place-entity', {
             init: function () {
                 this.el.addEventListener('click', () => {
@@ -188,12 +204,27 @@ export default {
 }
 </script>
 
+<style scoped lang="scss">
+.ar-camera {
+    position: relative;
+    width: 100%;
+
+    .close-button {
+        position: fixed;
+        z-index: 2;
+        right: 16px;
+        top: 16px;
+
+        .icon-shape {
+            width: 2.5rem;
+            height: 2.5rem;
+        }
+    }
+}
+</style>
+
 <style lang="scss">
 video {
     display: none;
-}
-.ar-camera {
-    width: 100%;
-    height: 800px;
 }
 </style>
