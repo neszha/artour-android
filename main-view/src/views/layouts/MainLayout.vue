@@ -53,11 +53,9 @@
 <script lang="ts">
 export default {
     mounted () {
-        setTimeout(() => {
-            if (window.Android !== undefined) {
-                window.Android.setupPermissions()
-            }
-        }, 1_500)
+        if (window.Android !== undefined) {
+            window.Android.setupPermissions()
+        }
     }
 }
 </script>

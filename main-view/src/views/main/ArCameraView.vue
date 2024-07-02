@@ -1,5 +1,6 @@
 <template>
-    <section ref="vh100" class="ar-camera">
+    <!-- ar-scene -->
+    <section ref="cameraHight" class="ar-camera">
         <div class="close-button">
             <button @click="toExploreView" class="icon icon-shape bg-white text-dark text-lg rounded-circle waves-effect waves-dark">
                 <i class="bi bi-x-lg"></i>
@@ -82,10 +83,50 @@
 
         </a-scene>
     </section>
+
+    <!-- absolute info -->
+    <section class="absolute-info">
+        <div id="absolute-info" class="card">
+            <div class="card-body p-0">
+                <div @click="expandAbsoluteInfoToggle" class="expand-control text-center">
+                    <i class="bi bi-chevron-up" style="font-size: 18px;"></i>
+                </div>
+                <h5 class="mb-2 pt-0 px-4 text-center">
+                    <strong>Lokasi Ditemukan (#)</strong>
+                </h5>
+                <div class="list-content pb-4">
+                    <div class="place-list">
+                        <div v-for="i of 10" :key="i" @click="toPlaceDetailView" class="d-flex align-items-center waves-effect waves-dark px-4 py-2">
+                            <div class="me-4">
+                                <i class="bi bi-globe text-muted" style="font-size: 24px;"></i>
+                            </div>
+                            <div class="flex-1">
+                                <span class="d-block font-semibold text-sm text-dark">Nama Tempat {{ i }}</span>
+                                <div class="text-xs text-muted line-clamp-1">
+                                    <div class="rating d-flex gap-1 align-items-end">
+                                        <i class="bi bi-star-fill text-warning"></i>
+                                        <i class="bi bi-star-fill text-warning"></i>
+                                        <i class="bi bi-star-half text-warning"></i>
+                                        <i class="bi bi-star text-warning"></i>
+                                        <i class="bi bi-star text-warning"></i>
+                                        <span>(3.4)</span>
+                                        <small>12 KM</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ms-auto text-end">
+                                <i class="bi bi-chevron-right text-dark" style="font-size: 22px;"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 </template>
 
 <script lang="ts">
-import { getDistance, getGreatCircleBearing } from 'geolib'
+import { getGreatCircleBearing } from 'geolib'
 
 interface GeolibInputCoordinates {
     title?: string
@@ -99,13 +140,11 @@ export default {
         placesRenderer () {
             return this.places.map((place: GeolibInputCoordinates) => {
                 const nearCoordinates: GeolibInputCoordinates = this.moveCloser(this.myCoordinates, place, 10)
-                const distance = getDistance(this.myCoordinates as GeolibInputCoordinates, nearCoordinates)
+                // const distance = getDistance(this.myCoordinates as GeolibInputCoordinates, nearCoordinates)
                 const circleBearing = getGreatCircleBearing(this.myCoordinates as GeolibInputCoordinates, nearCoordinates)
                 place.latitude = nearCoordinates.latitude
                 place.longitude = nearCoordinates.longitude
                 place.circleBearing = 360 - circleBearing
-                console.log({ distance })
-                console.log({ circleBearing })
                 return place
             })
         }
@@ -150,30 +189,43 @@ export default {
             }
         },
 
+        expandAbsoluteInfoToggle () {
+            const cardElement = document.getElementById('absolute-info')
+            cardElement?.classList.toggle('expaned')
+        },
+
         toExploreView () {
             this.$router.push({ name: 'explore' })
             setTimeout(() => {
                 window.location.reload()
             }, 10)
+        },
+
+        toPlaceDetailView () {
+            this.$router.push({ name: 'place:detail', params: { placeId: 'id_task_example' } })
         }
     },
 
     mounted () {
         // Set hight resolution.
+        const mexHight = 800
         const width = window.innerWidth
-        const vh100 = this.$refs.vh100 as HTMLElement
-        const height = (16 / 9 * width)
-        if (vh100 !== undefined) {
-            vh100.style.height = `${height}px`
+        const cameraHight = this.$refs.cameraHight as HTMLElement
+        let height = (16 / 9 * width)
+        if (height > mexHight) {
+            height = mexHight
+        }
+        if (cameraHight !== undefined) {
+            cameraHight.style.height = `${height}px`
         }
 
         // Handle ar-scene.
         try {
+            const router = this.$router
             window.AFRAME.registerComponent('place-entity', {
                 init: function () {
                     this.el.addEventListener('click', () => {
-                        console.log(this.el)
-                        alert('Box clicked!')
+                        router.push({ name: 'place:detail', params: { placeId: 'id_task_example' } })
                     })
                 }
             })
@@ -217,16 +269,40 @@ export default {
 .ar-camera {
     position: relative;
     width: 100%;
-
     .close-button {
         position: fixed;
         z-index: 2;
         right: 16px;
         top: 16px;
-
         .icon-shape {
             width: 2.5rem;
             height: 2.5rem;
+        }
+    }
+}
+.absolute-info {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    .card {
+        border-left: 0;
+        border-right: 0;
+        border-radius: 1rem;
+    }
+    .list-content {
+        overflow-y: scroll;
+        height: 150px;
+        transition: 0.5s ease;
+    }
+    .expaned {
+        .list-content {
+            height: 520px;
+        }
+        .expand-control {
+            i::before {
+                transform: rotate(180deg);
+            }
         }
     }
 }
