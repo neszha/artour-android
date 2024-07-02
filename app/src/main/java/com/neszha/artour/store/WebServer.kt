@@ -1,4 +1,4 @@
-package com.neszha.artour
+package com.neszha.artour.store
 
 object WebServer {
     var localHttpServerIsRunning: Boolean = false

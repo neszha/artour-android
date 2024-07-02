@@ -2,7 +2,6 @@ package com.neszha.artour
 
 import android.content.ContentValues.TAG
 import android.content.Context
-import android.content.Intent
 import android.util.Log
 import android.webkit.JavascriptInterface
 import android.webkit.WebView
