@@ -7,13 +7,13 @@ plugins {
 
 android {
     namespace = "com.neszha.artour"
-    compileSdk = 35
-    compileSdkPreview = "VanillaIceCream"
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.neszha.artour"
         minSdk = 26
-        targetSdk = 35
+        //noinspection OldTargetApi
+        targetSdk = 34
         versionCode = 1
         versionName = "0.1.0"
 
@@ -82,9 +82,8 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 
-    implementation("androidx.biometric:biometric:1.4.0-alpha01")
     implementation("io.ktor:ktor-server-jetty:2.3.8")
-    implementation("androidx.credentials:credentials:1.5.0-alpha02")
-    implementation("androidx.credentials:credentials-play-services-auth:1.5.0-alpha02")
+//    implementation("androidx.credentials:credentials:1.5.0-alpha01")
+//    implementation("androidx.credentials:credentials-play-services-auth:1.5.0-alpha01")
     implementation("com.google.android.libraries.identity.googleid:googleid:1.1.1")
 }
