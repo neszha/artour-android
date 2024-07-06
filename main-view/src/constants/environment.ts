@@ -8,3 +8,4 @@ export const LANDING_PAGE_BASE_URL: string = import.meta.env.VITE_APP_LANDING_PA
  * App keys.
 */
 export const GOOGLE_AUTH_CLIENT_ID: string = import.meta.env.VITE_APP_GOOGLE_AUTH_CLIENT_ID ?? ''
+export const GOOGLE_MAPS_API_KEY: string = import.meta.env.VITE_APP_GOOGLE_MAPS_API_KEY ?? ''
