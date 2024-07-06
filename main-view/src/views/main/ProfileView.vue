@@ -2,6 +2,8 @@
 import axios from '@/helpers/axios.helper'
 import { API_URL_LOGOUT } from '@/constants/api-url'
 import HeaderNavbar from '@components/common/HeaderNavbar.vue'
+import { mapState } from 'pinia'
+import { useUserStore } from '@/stores/user.store'
 </script>
 
 <template>
@@ -12,14 +14,13 @@ import HeaderNavbar from '@components/common/HeaderNavbar.vue'
         <div class="card border-0">
             <div class="card-body">
                 <div class="d-flex justify-content-center">
-                    <a href="#" class="avatar avatar-xl rounded-circle">
-                        <img alt="..."
-                            src="https://images.unsplash.com/photo-1579463148228-138296ac3b98?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=3&w=256&h=256&q=80">
-                    </a>
+                    <div class="avatar avatar-xl rounded-circle">
+                        <img alt="..." :src="myInfo.avatar">
+                    </div>
                 </div>
                 <div class="text-center my-3">
-                    <span class="d-block h5 mb-0">Julienne Moore</span>
-                    <span class="d-block text-sm text-muted">example@mail.com</span>
+                    <span class="d-block h5 mb-0">{{ myInfo.name || '-' }}</span>
+                    <span class="d-block text-sm text-muted">{{ myInfo.email || '-' }}</span>
                 </div>
             </div>
         </div>
@@ -114,6 +115,11 @@ import HeaderNavbar from '@components/common/HeaderNavbar.vue'
 
 <script lang="ts">
 export default {
+
+    computed: {
+        ...mapState(useUserStore, ['myInfo'])
+    },
+
     methods: {
         async logout () {
             try {
@@ -127,3 +133,9 @@ export default {
     }
 }
 </script>
+
+<style scoped lang="scss">
+.avatar {
+    overflow: hidden;
+}
+</style>

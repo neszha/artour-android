@@ -8,4 +8,5 @@ export const API_URL_LOGOUT: string = '/auth/logout'
 /**
  * User.
  */
-// export const API_URL_USER_MY_INFO: string = '/users/info'
+export const API_URL_USER_AVATAR: string = '/users/avatars'
+export const API_URL_USER_INFO: string = '/users/info'

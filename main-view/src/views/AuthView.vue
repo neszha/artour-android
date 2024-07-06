@@ -1,10 +1,11 @@
 <script setup lang="ts">
+import classNames from 'classnames'
 import PageSpinner from '@components/common/PageSpinner.vue'
 </script>
 
 <template>
     <PageSpinner :show="showPageSpinner" />
-    <div ref="authForm" class="auth-form container bg-surface-secondary d-flex">
+    <div ref="authForm" class="auth-form container bg-surface-secondary d-flex" :class="classNames({ 'd-none': showPageSpinner })">
         <div class="auth-header d-flex align-items-center justify-content-center">
             <div class="d-flex justify-content-center">
                 <img src="/logo/box_logo.png" alt="img">
@@ -43,7 +44,6 @@ import { API_URL_AUTH_GOOGLE_MOBILE_CALLBACK } from '@/constants/api-url'
 export default {
 
     methods: {
-
         async checkAuthSession () {
             await new Promise(resolve => {
                 const accessToken = localStorage.getItem('access_token')
