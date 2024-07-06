@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import axiosDefault, { type AxiosResponse } from 'axios'
 import axios from '@/helpers/axios.helper'
-import { API_URL_LOGOUT, API_URL_USER_MY_INFO } from '@/constants/api-url'
+import { API_URL_AUTH_SESSION_INFO } from '@/constants/api-url'
 
 export interface UserInfo {
     id: string
@@ -33,9 +33,9 @@ export const useUserStore = defineStore('user', {
      * Actions.
      */
     actions: {
-        async getMyInfo (): Promise<number> {
+        async getMySessionInfo (): Promise<number> {
             try {
-                const response: AxiosResponse = await axios.get(API_URL_USER_MY_INFO)
+                const response: AxiosResponse = await axios.get(API_URL_AUTH_SESSION_INFO)
                 this.myInfo = response.data.data as UserInfo
                 return 200
             } catch (error) {
@@ -44,16 +44,6 @@ export const useUserStore = defineStore('user', {
                     alert(error.message)
                 }
                 return 500
-            }
-        },
-
-        async logoutSession (): Promise<boolean> {
-            try {
-                await axios.delete(API_URL_LOGOUT)
-                localStorage.removeItem('access_token')
-                return true
-            } catch (error) {
-                return false
             }
         }
     }

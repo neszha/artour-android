@@ -30,6 +30,7 @@ import ChangeAvatarView from './views/main/profile/ChangeAvatarView.vue'
 import ChangeNameView from './views/main/profile/ChangeNameView.vue'
 import InfomationView from './views/main/profile/InfomationView.vue'
 import AboutAppView from './views/main/profile/AboutAppView.vue'
+import { userAuthenticated } from './middlewares/auth.middleware'
 
 /**
  * Register page views to routes.
@@ -48,6 +49,7 @@ const routes: RouteRecordRaw [] = [
     {
         name: 'main',
         path: '/main',
+        beforeEnter: userAuthenticated,
         component: RouterLayout,
         children: [
             {

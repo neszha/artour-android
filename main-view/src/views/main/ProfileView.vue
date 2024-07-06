@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import axios from '@/helpers/axios.helper'
+import { API_URL_LOGOUT } from '@/constants/api-url'
 import HeaderNavbar from '@components/common/HeaderNavbar.vue'
 </script>
 
@@ -101,7 +103,7 @@ import HeaderNavbar from '@components/common/HeaderNavbar.vue'
     </section>
 
     <!-- logout -->
-    <section class="container-fluid">
+    <section class="container-fluid mb-5">
         <div class="d-grid">
             <button @click="logout" type="button" class="btn btn-outline-danger waves-effect waves-dark">
                 Logout
@@ -113,8 +115,14 @@ import HeaderNavbar from '@components/common/HeaderNavbar.vue'
 <script lang="ts">
 export default {
     methods: {
-        logout () {
-            this.$router.push({ name: 'auth' })
+        async logout () {
+            try {
+                await axios.delete(API_URL_LOGOUT)
+                localStorage.removeItem('access_token')
+                this.$router.push({ name: 'auth' })
+            } catch (error) {
+                alert('Gagal keluar aplikasi.')
+            }
         }
     }
 }

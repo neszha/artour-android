@@ -36,16 +36,13 @@ import PageSpinner from '@components/common/PageSpinner.vue'
 </template>
 
 <script lang="ts">
-import { mapActions } from 'pinia'
-import { useTaskStore } from '@/stores/task.store'
+import { API_BASE_URL, GOOGLE_AUTH_CLIENT_ID } from '@/constants/environment'
 import axios, { axiosUpdateAuthorization } from '@/helpers/axios.helper'
 import { API_URL_AUTH_GOOGLE_MOBILE_CALLBACK } from '@/constants/api-url'
-import { API_BASE_URL } from '@/constants/environment'
 
 export default {
 
     methods: {
-        ...mapActions(useTaskStore, ['getTasks']),
 
         async checkAuthSession () {
             await new Promise(resolve => {
@@ -53,6 +50,7 @@ export default {
                 if (accessToken !== null) {
                     localStorage.setItem('access_token', accessToken)
                     axiosUpdateAuthorization()
+                    this.$router.push({ name: 'explore' })
                 }
                 setTimeout(() => {
                     this.showPageSpinner = false
@@ -64,19 +62,15 @@ export default {
         loginWithGoogle () {
             this.authGoogle.loading = true
 
-            this.$router.push({ name: 'explore' })
-
             // Auth with Google in Android.
-            // if (window.Android !== undefined) {
-            //     window.Android.loginWithGoogle(GOOGLE_AUTH_CLIENT_ID)
-            //     return
-            // }
+            if (window.Android !== undefined) {
+                window.Android.loginWithGoogle(GOOGLE_AUTH_CLIENT_ID)
+                return
+            }
 
             // Auth with Google in Web.
-            // const url = new URL(`${API_BASE_URL}/auth/google`)
-            // this.$router.push({ name: 'explore' })
-            // console.log({ url })
-            // window.location.href = url.toString()
+            const url = new URL(`${API_BASE_URL}/auth/google`)
+            window.location.href = url.toString()
         },
 
         async handleAccessTokenQuery () {
@@ -103,8 +97,7 @@ export default {
                 const authToken = response.data.data.authToken as string
                 localStorage.setItem('access_token', authToken)
                 axiosUpdateAuthorization()
-                await this.getTasks()
-                this.$router.push({ name: 'home' })
+                this.$router.push({ name: 'explore' })
             } catch (error) {
                 window.Android.showToast('Failed to login. Please try again.')
                 this.authGoogle.loading = false
