@@ -1,6 +1,6 @@
-export enum TaskFromEnum {
-    USER_DASHBOARD = 'USER_DASHBOARD',
-    CHECK_INSTANT = 'CHECK_INSTANT'
+export enum UserRoleEnum {
+    USER = 'USER',
+    ADMIN = 'ADMIN'
 }
 
 export enum AuthFromEnum {

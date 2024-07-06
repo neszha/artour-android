@@ -1,11 +1,13 @@
 import { defineStore } from 'pinia'
 import axiosDefault, { type AxiosResponse } from 'axios'
 import axios from '@/helpers/axios.helper'
+import { UserRoleEnum } from '@/interfaces/enums'
 import { API_URL_AUTH_SESSION_INFO } from '@/constants/api-url'
 
 export interface UserInfo {
     id: string
     avatar: string
+    role: UserRoleEnum
     name: string
     email: string
     active: boolean
@@ -23,6 +25,7 @@ export const useUserStore = defineStore('user', {
         myInfo: {
             id: '',
             avatar: 'avatar-1.jpg',
+            role: UserRoleEnum.USER,
             name: '',
             email: '',
             active: false

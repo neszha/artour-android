@@ -4,6 +4,7 @@ import { API_URL_LOGOUT } from '@/constants/api-url'
 import HeaderNavbar from '@components/common/HeaderNavbar.vue'
 import { mapState } from 'pinia'
 import { useUserStore } from '@/stores/user.store'
+import { UserRoleEnum } from '@/interfaces/enums'
 </script>
 
 <template>
@@ -20,7 +21,8 @@ import { useUserStore } from '@/stores/user.store'
                 </div>
                 <div class="text-center my-3">
                     <span class="d-block h5 mb-0">{{ myInfo.name || '-' }}</span>
-                    <span class="d-block text-sm text-muted">{{ myInfo.email || '-' }}</span>
+                    <span class="d-block text-sm text-muted mb-1">{{ myInfo.email || '-' }}</span>
+                    <span v-if="myInfo.role === UserRoleEnum.ADMIN" class="badge bg-white text-dark border border">Administrator</span>
                 </div>
             </div>
         </div>
