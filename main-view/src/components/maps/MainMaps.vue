@@ -3,27 +3,66 @@
 </template>
 
 <script lang="ts">
+import { mapActions, mapState } from 'pinia'
 import { GOOGLE_MAPS_API_KEY } from '@/constants/environment'
+import { useGeolocationStore } from '@/stores/geolocation.store'
 import { Loader as GoogleMapsLoader } from '@googlemaps/js-api-loader'
 
 export default {
+    computed: {
+        ...mapState(useGeolocationStore, ['coordinates'])
+    },
 
     methods: {
+        ...mapActions(useGeolocationStore, ['getCurrentGeolocation']),
+
         async initMap () {
             const mapContainer = this.$refs.googleMap as HTMLElement
             const loader = new GoogleMapsLoader({
                 apiKey: GOOGLE_MAPS_API_KEY,
                 version: 'weekly',
-                libraries: ['places']
+                libraries: ['marker']
             })
             const googleMaps = loader.importLibrary('maps')
-            googleMaps.then(({ Map }): void => {
-                const map = new Map(mapContainer, this.mapOptions as google.maps.MapOptions)
-                console.log(map)
+            await googleMaps.then(({ Map }): void => {
+                this.googleMap = new Map(mapContainer, this.mapOptions as google.maps.MapOptions)
+                this.setMapCenterAndMarkerToMyLocation().catch(console.error)
             }).catch((e) => {
                 console.error(e)
             })
+        },
+
+        async setMapCenterAndMarkerToMyLocation () {
+            if (this.googleMap !== null) {
+                // Set map center to my location.
+                this.googleMap.setCenter({
+                    lat: this.coordinates.latitude,
+                    lng: this.coordinates.longitude
+                })
+
+                // Add marker to my location.
+                const { Marker } = await google.maps.importLibrary('marker') as google.maps.MarkerLibrary
+                const marker = new Marker({
+                    position: {
+                        lat: this.coordinates.latitude,
+                        lng: this.coordinates.longitude
+                    },
+                    icon: {
+                        url: '/maps/marker-my-position.png',
+                        scaledSize: new google.maps.Size(30, 30)
+                    },
+                    title: 'A marker'
+                })
+                marker.setMap(this.googleMap as google.maps.Map)
+            }
         }
+    },
+
+    beforeMount () {
+        this.getCurrentGeolocation()
+        this.locationInterval = setInterval(() => {
+            this.getCurrentGeolocation()
+        }, 2_500)
     },
 
     mounted () {
@@ -37,29 +76,26 @@ export default {
         }
     },
 
+    beforeUnmount () {
+        if (this.locationInterval !== null) {
+            clearTimeout(this.locationInterval as NodeJS.Timeout)
+        }
+    },
+
     data () {
         return {
+            googleMap: null as google.maps.Map | null,
             mapOptions: {
                 center: {
-                    lat: 37.7749,
-                    lng: -122.4194
+                    lat: -6.301308,
+                    lng: 106.815842
                 },
                 zoom: 10,
                 fullscreenControl: false,
                 mapTypeControl: false,
-                zoomControl: false,
-                styles: [
-                    {
-                        featureType: 'poi',
-                        elementType: 'labels',
-                        stylers: [
-                            {
-                                visibility: 'off'
-                            }
-                        ]
-                    }
-                ]
-            } satisfies google.maps.MapOptions
+                zoomControl: false
+            } satisfies google.maps.MapOptions,
+            locationInterval: null as NodeJS.Timeout | null
         }
     }
 }

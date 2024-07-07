@@ -51,11 +51,19 @@
 </template>
 
 <script lang="ts">
+import { useGeolocationStore } from '@/stores/geolocation.store'
+import { mapActions } from 'pinia'
+
 export default {
+    methods: {
+        ...mapActions(useGeolocationStore, ['getCurrentGeolocation'])
+    },
+
     mounted () {
         if (window.Android !== undefined) {
             window.Android.setupPermissions()
         }
+        this.getCurrentGeolocation()
     }
 }
 </script>
