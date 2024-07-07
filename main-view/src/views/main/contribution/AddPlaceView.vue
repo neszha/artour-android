@@ -1,5 +1,6 @@
-<script setup>
+<script setup lang="ts">
 import HeaderNavbar from '@components/common/HeaderNavbar.vue'
+import MapPreviewMarker from '@components/maps/MapPreviewMarker.vue'
 </script>
 
 <template>
@@ -13,7 +14,7 @@ import HeaderNavbar from '@components/common/HeaderNavbar.vue'
                 <div class="col-12">
                     <div class="mb-3">
                         <h4 class="mb-1">Detail Tempat</h4>
-                        <p class="text-sm text-muted">Lorem ipsum dolor sit amet consectetur adipisicing.</p>
+                        <p class="text-sm text-muted">Masukan informasi tentang tempat ini yang akan ditampilkan secara publik.</p>
                     </div>
                 </div>
                 <div class="col-12 mb-3">
@@ -28,9 +29,7 @@ import HeaderNavbar from '@components/common/HeaderNavbar.vue'
                     <label class="form-label">Ketegori <span class="text-danger">*</span></label>
                     <select class="form-select" required>
                         <option value="">-- Pilih Kategory --</option>
-                        <option value="member">Ketegori 1</option>
-                        <option value="member">Ketegori 2</option>
-                        <option value="member">Ketegori 3</option>
+                        <option v-for="(category) in placeCategories" :key="category.id">{{ category.name }}</option>
                     </select>
                 </div>
                 <div class="col-12 mb-3">
@@ -39,16 +38,12 @@ import HeaderNavbar from '@components/common/HeaderNavbar.vue'
                 </div>
 
                 <div class="col-12 pt-2">
-                    <div class="mb-3">
+                    <!-- <div class="mb-3">
                         <h4 class="mb-1">Koordinat Tempat</h4>
                         <p class="text-sm text-muted">Lorem ipsum dolor sit amet consectetur adipisicing.</p>
-                    </div>
+                    </div> -->
                     <div class="col-12 mb-3">
-                        <div class="card">
-                            <div class="card-body text-center py-5">
-                                Akan tampil iframe google maps. coming soon!
-                            </div>
-                        </div>
+                        <MapPreviewMarker />
                     </div>
                 </div>
 
@@ -112,3 +107,22 @@ import HeaderNavbar from '@components/common/HeaderNavbar.vue'
         </form>
     </section>
 </template>
+
+<script lang="ts">
+import { mapActions, mapState } from 'pinia'
+import { usePlaceStore } from '@/stores/place.store'
+
+export default {
+    computed: {
+        ...mapState(usePlaceStore, ['placeCategories'])
+    },
+
+    methods: {
+        ...mapActions(usePlaceStore, ['getPlaceCategories'])
+    },
+
+    beforeMount () {
+        this.getPlaceCategories()
+    }
+}
+</script>

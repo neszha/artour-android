@@ -10,3 +10,15 @@ export const API_URL_LOGOUT: string = '/auth/logout'
  */
 export const API_URL_USER_AVATAR: string = '/users/avatars'
 export const API_URL_USER_INFO: string = '/users/info'
+
+/**
+ * File.
+ */
+export const API_URL_FILE_MAP_CONTENTS: string = '/files/map-contents'
+
+/**
+ * Place Category.
+ */
+export const API_URL_PLACE_CATEGORY_MAP_MARKERS: string = '/place-categories/map-markers'
+export const API_URL_PLACE_CATEGORIES: string = '/place-categories'
+export const API_URL_PLACE_CATEGORIES_ID: string = '/place-categories/:placeCategoryId'

@@ -1,10 +1,5 @@
 import { defineStore } from 'pinia'
-
-interface Coordinates {
-    latitude: number
-    longitude: number
-    accuracy: number
-}
+import { type Coordinates } from '@/interfaces/Geolocation'
 
 interface GeolocationState {
     coordinates: Coordinates

@@ -3,24 +3,10 @@ export enum UserRoleEnum {
     ADMIN = 'ADMIN'
 }
 
-export enum AuthFromEnum {
-    USER_TASK = 'USER_TASK',
-    GUEST_TASK = 'GUEST_TASK',
-    MOBILE_TASK = 'MOBILE_TASK'
-  }
-
-export enum FileTypeEnum {
-    ORIGINAL_FILE = 'ORIGINAL_FILE',
-    RESULT_FILE = 'RESULT_FILE',
-    SCREENSHOT_FILE = 'SCREENSHOT_FILE'
-}
-
-export enum TaskStatusEnum {
-    PENDING_PAYMENT = 'PENDING_PAYMENT',
-    READY = 'READY',
-    SUBMITING = 'SUBMITING',
-    WAITING = 'WAITING',
-    EXPORTING = 'EXPORTING',
-    FAILURE = 'FAILURE',
-    SUCCESS = 'SUCCESS'
+export enum MapMarkerEnum {
+    MAP_MARKER_00 = 'map-marker-00.png',
+    MAP_MARKER_01 = 'map-marker-01.png',
+    MAP_MARKER_02 = 'map-marker-02.png',
+    MAP_MARKER_03 = 'map-marker-03.png',
+    MAP_MARKER_04 = 'map-marker-04.png',
 }
