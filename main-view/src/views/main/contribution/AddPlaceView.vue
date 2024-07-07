@@ -8,7 +8,7 @@ import MapPreviewMarker from '@components/maps/MapPreviewMarker.vue'
 
     <!-- main content -->
     <section class="mt-4 mb-3">
-        <form action="#" class="container-fluid">
+        <form @submit.prevent="createPlace" class="container-fluid">
             <div class="row">
 
                 <div class="col-12">
@@ -19,85 +19,106 @@ import MapPreviewMarker from '@components/maps/MapPreviewMarker.vue'
                 </div>
                 <div class="col-12 mb-3">
                     <label class="form-label">Nama Tempat <span class="text-danger">*</span></label>
-                    <input type="text" class="form-control" placeholder="Tambahkan nama tempat" required>
+                    <input v-model="form.data.name" type="text" class="form-control" placeholder="Tambahkan nama tempat" required>
                 </div>
                 <div class="col-12 mb-3">
                     <label class="form-label">Deskripsi Tempat <span class="text-danger">*</span></label>
-                    <textarea name="" class="form-control" required placeholder="Deskripsi tempat"></textarea>
+                    <textarea v-model="form.data.description" class="form-control" required placeholder="Deskripsi tempat"></textarea>
                 </div>
                 <div class="col-12 mb-3">
                     <label class="form-label">Ketegori <span class="text-danger">*</span></label>
-                    <select class="form-select" required>
+                    <select v-model="form.data.categoryId" class="form-select" required>
                         <option value="">-- Pilih Kategory --</option>
-                        <option v-for="(category) in placeCategories" :key="category.id">{{ category.name }}</option>
+                        <option v-for="(category) in placeCategories" :key="category.id" :value="category.id">{{ category.name }}</option>
                     </select>
                 </div>
                 <div class="col-12 mb-3">
                     <label class="form-label">Alamat <span class="text-danger">*</span></label>
-                    <input type="text" class="form-control" placeholder="Masukan detail alamat" required>
+                    <input v-model="form.data.address" type="text" class="form-control" placeholder="Masukan detail alamat" required>
                 </div>
-
-                <div class="col-12 pt-2">
-                    <!-- <div class="mb-3">
-                        <h4 class="mb-1">Koordinat Tempat</h4>
-                        <p class="text-sm text-muted">Lorem ipsum dolor sit amet consectetur adipisicing.</p>
-                    </div> -->
-                    <div class="col-12 mb-3">
-                        <MapPreviewMarker />
-                    </div>
+                <div class="col-12 mb-3">
+                    <MapPreviewMarker @update:location="updateMarkerLocation" />
                 </div>
 
                 <div class="col-12 pt-2">
                     <div class="mb-3">
                         <h4 class="mb-1">Detail Lainnya</h4>
-                        <p class="text-sm text-muted">Lorem ipsum dolor sit amet consectetur adipisicing.</p>
+                        <p class="text-sm text-muted">Masukan informasi lokasi lainnya.</p>
                     </div>
                     <div class="col-12 mb-3">
                         <label class="form-label">Website</label>
-                        <input type="text" class="form-control" placeholder="Situs web" required>
+                        <input v-model="form.data.website" type="url" class="form-control" placeholder="Situs web">
                     </div>
                     <div class="col-12 mb-3">
                         <label class="form-label">Kontak</label>
-                        <input type="text" class="form-control" placeholder="Nomor telepon" required>
+                        <input v-model="form.data.phone" type="text" class="form-control" placeholder="Nomor telepon">
                     </div>
-                    <div class="col-12 mb-3">
+                    <!-- <div class="col-12 mb-3">
                         <label class="form-label">Jam Buka</label>
-                        <input type="text" class="form-control" placeholder="Jam Buka" required>
-                    </div>
-                    <div class="col-12 mb-3">
+                        <input type="text" class="form-control" placeholder="Jam Buka">
+                    </div> -->
+                    <!-- <div class="col-12 mb-3">
                         <label class="form-label">Biaya Pengunjung</label>
-                        <input type="text" class="form-control" placeholder="Biaya (Rp.)" required>
-                    </div>
+                        <input v-model="form.data.visitorFee" type="text" class="form-control" placeholder="Biaya (Rp.)">
+                    </div> -->
                 </div>
 
                 <div class="col-12 pt-2">
                     <div class="mb-3">
                         <h4 class="mb-1">Foto Tempat</h4>
-                        <p class="text-sm text-muted">Lorem ipsum dolor sit amet consectetur adipisicing.</p>
+                        <p class="text-sm text-muted">Tambahkan beberapa foto tempat mimimal 4 foto.</p>
                     </div>
                     <div class="col-12 mb-3">
-                        <a href="#" class="btn btn-sm btn-neutral border-base" data-bs-toggle="modal">
+                        <input ref="fileImageInput" @change="uploadImagePlace" type="file" class="d-none" multiple accept="image/*">
+                        <button @click="($refs.fileImageInput as HTMLInputElement).click()" type="button" class="btn btn-sm btn-neutral border-base waves-effect waves-dark">
                             <span class="pe-2">
                                 <i class="bi bi-images"></i>
                             </span>
                             <span>Tambahkan foto</span>
-                        </a>
-                        <div class="card mt-3">
-                            <div class="card-body text-center py-5">
-                                Foto akan tampil di sini. coming soon!
+                        </button>
+                    </div>
+                    <div class="col-12">
+                        <div class="mt-2 image-scrollable-x">
+                            <div class="d-flex gap-2">
+                                <div v-for="file of mapImages" :key="file.id" class="col-auto image-item">
+                                    <div @click="unusedPlaceImage(file.id)" class="close-button">
+                                        <i class="bi bi-x-circle"></i>
+                                    </div>
+                                    <img alt="..." :src="file.link" class="rounded">
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <div class="col-12 pt-2">
+                    <div class="mb-3">
+                        <h4 class="mb-1">Hashtags</h4>
+                        <p class="text-sm text-muted">Tambahkan beberapa hashtags untuk mempermudah pengguna mencari tempat berdasarkan hashtags.</p>
+                    </div>
+                    <div class="col-12 mb-3">
+                        <div class="col-12 mb-3">
+                            <div class="hashtag-preview mb-2">
+                                <small>
+                                    <strong v-for="(hashtag) of form.data.hashtags" :key="hashtag" class="me-2">#{{ hashtag }}</strong>
+                                </small>
+                            </div>
+                            <textarea @input="parsingHastagString" ref="textareaHahstag" class="form-control" placeholder="Contoh: #pantai #wisata_pantai"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 pt-4">
                     <div class="mb-2">
                         <div class="d-flex gap-3 justify-content-center">
                             <div class="d-grid w-100">
                                 <button class="btn btn-md btn-neutral border-base waves-effect waves-dark">Batal</button>
                             </div>
                             <div class="d-grid w-100">
-                                <button class="btn btn-md btn-primary waves-effect waves-light">Kirim</button>
+                                <button :disabled="form.loading" class="btn btn-md btn-primary waves-effect waves-light">
+                                    <span v-if="form.loading">Menyimpan...</span>
+                                    <span v-else>Kirim</span>
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -110,7 +131,13 @@ import MapPreviewMarker from '@components/maps/MapPreviewMarker.vue'
 
 <script lang="ts">
 import { mapActions, mapState } from 'pinia'
+import { isAxiosError, type AxiosResponse } from 'axios'
+import axios from '@/helpers/axios.helper'
+import { type File } from '@/interfaces/File'
 import { usePlaceStore } from '@/stores/place.store'
+import { type CreatePlaceDto } from '@/interfaces/Place'
+import { API_URL_FILE_MAP_CONTENTS, API_URL_PLACES } from '@/constants/api-url'
+import { type Coordinates } from '@/interfaces/Geolocation'
 
 export default {
     computed: {
@@ -118,11 +145,112 @@ export default {
     },
 
     methods: {
-        ...mapActions(usePlaceStore, ['getPlaceCategories'])
+        ...mapActions(usePlaceStore, ['getPlaceCategories']),
+
+        async uploadImagePlace (event: Event) {
+            const files = (event.target as HTMLInputElement).files
+            if (files === null) return
+
+            for (const file of files) {
+                const formData = new FormData()
+                formData.append('file', file)
+                try {
+                    const response: AxiosResponse = await axios.post(API_URL_FILE_MAP_CONTENTS, formData)
+                    const fileData = response.data.data as File
+                    this.mapImages.push(fileData)
+                    this.form.data.mapImageIds.push(fileData.id)
+                } catch (error) {
+                    console.error(error)
+                }
+            }
+        },
+
+        async createPlace () {
+            this.form.loading = true
+            try {
+                console.log(this.form.data)
+                await axios.post(API_URL_PLACES, this.form.data)
+                alert('Tempat berhasil ditambahkan.')
+                this.$router.push({ name: 'contribution' })
+            } catch (error) {
+                if (isAxiosError(error)) {
+                    const message = error.response?.data.message as string
+                    alert(message)
+                }
+                console.log(error)
+            }
+            this.form.loading = false
+        },
+
+        updateMarkerLocation (coordinates: Coordinates) {
+            this.form.data.latitude = coordinates.latitude
+            this.form.data.longitude = coordinates.longitude
+        },
+
+        unusedPlaceImage (fileId: string) {
+            this.form.data.mapImageIds = this.form.data.mapImageIds.filter((id) => id !== fileId)
+            this.mapImages = this.mapImages.filter((file) => file.id !== fileId)
+        },
+
+        parsingHastagString () {
+            const textareaElement = this.$refs.textareaHahstag as HTMLTextAreaElement
+            const hashtagString = textareaElement.value
+            const hashtags = hashtagString.match(/#[a-zA-Z0-9_]+/g) ?? []
+            const cleanHashtags = hashtags.map(tag => tag.slice(1))
+            const cleanDuplicates = new Set(cleanHashtags)
+            this.form.data.hashtags = [...cleanDuplicates]
+        }
     },
 
     beforeMount () {
         this.getPlaceCategories()
+    },
+
+    data () {
+        return {
+            form: {
+                data: {
+                    name: '',
+                    description: '',
+                    categoryId: '',
+                    address: '',
+                    latitude: 0,
+                    longitude: 0,
+                    mapImageIds: [],
+                    website: '',
+                    phone: '',
+                    hashtags: []
+                } as unknown as CreatePlaceDto,
+                loading: false
+            },
+            mapImages: [] as File[]
+        }
     }
 }
 </script>
+
+<style scoped lang="scss">
+.image-scrollable-x {
+    overflow-x: auto;
+    white-space: nowrap;
+    scroll-behavior: smooth;
+    .image-item {
+        position: relative;
+        display: inline-block;
+        width: 140px;
+        height: 100px;
+        .close-button {
+            position: absolute;
+            right: 8px;
+            top: 2px;
+            color: gray;
+            font-size: 18px;
+        }
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    }
+}
+</style>

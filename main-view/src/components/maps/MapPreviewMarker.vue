@@ -45,8 +45,10 @@ export default {
             this.googleMap.addListener('center_changed', () => {
                 const center = this.googleMap?.getCenter()
                 marker.setPosition(center as google.maps.LatLng)
-                this.location.latitude = center?.lat() as number
-                this.location.longitude = center?.lng() as number
+                this.location = {
+                    latitude: center?.lat() as number,
+                    longitude: center?.lng() as number
+                }
             })
         }
 
@@ -55,6 +57,14 @@ export default {
     async mounted () {
         await this.getCurrentGeolocation()
         await this.initMap()
+    },
+
+    watch: {
+        location: {
+            handler () {
+                this.$emit('update:location', this.location)
+            }
+        }
     },
 
     data () {

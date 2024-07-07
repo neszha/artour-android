@@ -13,3 +13,16 @@ export interface PlaceCategory {
     createdAt: Date
     updatedAt: Date
 }
+
+export interface CreatePlaceDto {
+    name: string
+    description: string
+    categoryId: string[]
+    address: string[]
+    latitude: number
+    longitude: number
+    mapImageIds: string[]
+    website: string
+    phone: string
+    hashtags: string[]
+}
