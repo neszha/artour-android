@@ -45,16 +45,14 @@ export interface PlaceEntity {
     phone?: string
     price: number
     rating: number
-    hit: number
+    viwes: number
     like: number
     dislike: number
+    saved: number
     createdAt: Date
     updatedAt: Date
 
+    category: PlaceCategory
     mapImages?: File[]
     mapImageCover?: File
-}
-
-export interface PlaceCardData extends PlaceEntity {
-    category: PlaceCategory
 }

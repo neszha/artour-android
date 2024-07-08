@@ -49,22 +49,16 @@ import classNames from 'classnames'
 <script lang="ts">
 import { mapState } from 'pinia'
 import { usePlaceStore } from '@/stores/place.store'
-import { type PlaceCategory, type PlaceCardData, type PlaceEntity } from '@/interfaces/Place'
+import { type PlaceEntity } from '@/interfaces/Place'
 import { toIdrCurrency } from '@/helpers/formater.helper'
 import { type File } from '@/interfaces/File'
 
 export default {
     computed: {
-        ...mapState(usePlaceStore, ['placeCategories', 'myPlaces']),
+        ...mapState(usePlaceStore, ['myPlaces']),
 
-        place (): PlaceCardData {
-            const placeData = this.myPlaces.find(place => place.id === this.placeId) as PlaceEntity
-            const placeCategory = this.placeCategories.find(category => category.id === placeData.categoryId) as PlaceCategory
-            const placeCardData: PlaceCardData = {
-                ...JSON.parse(JSON.stringify(placeData)),
-                category: placeCategory
-            }
-            return placeCardData
+        place (): PlaceEntity {
+            return this.myPlaces.find(place => place.id === this.placeId) as PlaceEntity
         },
 
         imageCoverLink (): string {

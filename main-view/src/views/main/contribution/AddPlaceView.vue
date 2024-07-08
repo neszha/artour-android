@@ -59,14 +59,14 @@ import MapPreviewMarker from '@components/maps/MapPreviewMarker.vue'
                         <input type="text" class="form-control" placeholder="Jam Buka">
                     </div> -->
                     <div class="col-12 mb-3">
-                        <label class="form-label">Biaya Pengunjung</label>
-                        <input v-model="form.data.price" type="number" class="form-control" placeholder="Biaya (Rp.)">
+                        <label class="form-label">Biaya Pengunjung <span class="text-danger">*</span></label>
+                        <input v-model="form.data.price" type="number" class="form-control" min="0" placeholder="Biaya (Rp.)" required>
                     </div>
                 </div>
 
                 <div class="col-12 pt-2">
                     <div class="mb-3">
-                        <h4 class="mb-1">Foto Tempat</h4>
+                        <h4 class="mb-1">Foto Tempat <span class="text-danger">*</span></h4>
                         <p class="text-sm text-muted">Tambahkan beberapa foto tempat mimimal 4 foto.</p>
                     </div>
                     <div class="col-12 mb-3">
@@ -142,8 +142,8 @@ import axios from '@/helpers/axios.helper'
 import { type File } from '@/interfaces/File'
 import { usePlaceStore } from '@/stores/place.store'
 import { type CreatePlaceDto } from '@/interfaces/Place'
-import { API_URL_FILE_MAP_CONTENTS, API_URL_PLACES } from '@/constants/api-url'
 import { type Coordinates } from '@/interfaces/Geolocation'
+import { API_URL_FILE_MAP_CONTENTS, API_URL_PLACES } from '@/constants/api-url'
 
 export default {
     computed: {

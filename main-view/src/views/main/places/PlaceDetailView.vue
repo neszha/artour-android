@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import numeral from 'numeral'
+import classNames from 'classnames'
 import CardPlaceReview from '@/components/card/CardPlaceReview.vue'
 </script>
 
@@ -7,7 +9,7 @@ import CardPlaceReview from '@/components/card/CardPlaceReview.vue'
     <section class="place-detail-header mb-3">
         <nav class="navbar navbar-light px-0 py-1">
             <div class="container-xl py-2 ps-1">
-                <button @click="closeView" class="navbar-toggler text-dark" type="button">
+                <button @click="$router.back()" class="navbar-toggler text-dark" type="button">
                     <i class="bi bi-chevron-left"></i>
                 </button>
                 <div class="d-flex gap-2">
@@ -25,35 +27,35 @@ import CardPlaceReview from '@/components/card/CardPlaceReview.vue'
     <!-- place title -->
     <section class="mb-3" style="margin-top: 70px;">
         <div class="container-fluid">
-            <h6 class="mb-1">Pasar Malam Bandar Lampung</h6>
+            <h6 class="mb-1">{{ place.name }}</h6>
             <div class="rating d-flex gap-1">
-                <span>3.4</span>
-                <i class="bi bi-star-fill text-warning"></i>
-                <i class="bi bi-star-fill text-warning"></i>
-                <i class="bi bi-star-half text-warning"></i>
-                <i class="bi bi-star text-warning"></i>
-                <i class="bi bi-star text-warning"></i>
-                <span>(200)</span>
+                <span>{{ place.rating || 0 }}</span>
+                <i v-for="i of 5" :key="i" :class="classNames({
+                    'bi-star': (place.rating <= i - 1),
+                    'bi-star-half': (place.rating > i - 1 && place.rating < i),
+                    'bi-star-fill': (place.rating >= i),
+                })" class="bi text-warning"></i>
+                <span>(?)</span>
             </div>
-            <small>Jarak 20 KM</small>
+            <small>Jarak {{ placeDistance.toFixed(1) }} KM</small>
         </div>
     </section>
 
     <!-- place image galery -->
     <section class="place-imae-galery mb-3">
         <div class="horizontal-scroll px-2 mx-1">
-            <div v-for="i in 5" :key="i" class="hs-item d-flex gap-2">
+            <div v-for="i in Math.floor(place.mapImages.length / 3)" :key="i" class="hs-item d-flex gap-2">
                 <div class="single-img">
                     <div class="box-img" data-v-bdb02ee3="">
-                        <img src="@assets/dummy-images/place-img-01.jpg" alt="..." class="card-img" >
+                        <img :src="place.mapImages[i - 1].link" alt="..." class="card-img" >
                     </div>
                 </div>
                 <div class="double-img d-flex flex-column gap-2">
                     <div class="box-img" data-v-bdb02ee3="">
-                        <img src="@assets/dummy-images/place-img-02.jpg" alt="..." class="card-img" >
+                        <img :src="place.mapImages[i].link" alt="..." class="card-img" >
                     </div>
                     <div class="box-img" data-v-bdb02ee3="">
-                        <img src="@assets/dummy-images/place-img-03.jpg" alt="..." class="card-img" >
+                        <img :src="place.mapImages[i + 1].link" alt="..." class="card-img" >
                     </div>
                 </div>
             </div>
@@ -69,11 +71,11 @@ import CardPlaceReview from '@/components/card/CardPlaceReview.vue'
             </button>
             <button class="btn btn-neutral border-primary text-primary waves-effect waves-dark">
                 <i class="bi bi-hand-thumbs-up-fill me-2"></i>
-                <span>Like (20K)</span>
+                <span>Like ({{ numeral(place.like || 0).format('0.[0]a').toUpperCase() }})</span>
             </button>
             <button class="btn btn-neutral border-dark waves-effect waves-dark">
                 <i class="bi bi-hand-thumbs-down me-2"></i>
-                <span>Dislike (92)</span>
+                <span>Dislike ({{ numeral(place.dislike || 0).format('0.[0]a').toUpperCase() }})</span>
             </button>
             <button class="btn btn-neutral border-primary text-primary waves-effect waves-dark">
                 <i class="bi bi-bookmark-plus-fill me-2"></i>
@@ -90,18 +92,22 @@ import CardPlaceReview from '@/components/card/CardPlaceReview.vue'
     <section class="mb-4">
         <div class="container-fluid">
             <div class="views">
-                <small>1.2K Pengunjung</small>
+                <small>{{ numeral(place.hit || 0).format('0.[0]a').toUpperCase() }} Pengunjung</small>
             </div>
             <p class="description mb-3">
-                Lorem ipsum dolor, sit amet consectetur adipisicing elit. Odit suscipit labore dolor laborum a. Totam.
+                {{ place.description }}
             </p>
             <div class="d-flex align-items-center mb-2">
                 <i class="bi bi-geo-alt me-2 text-primary"></i>
-                <span class="text-sm text-heading">San Francisco, California</span>
+                <span class="text-sm text-heading">
+                    {{ place.address }}
+                </span>
             </div>
             <div class="d-flex align-items-center mb-2">
                 <i class="bi bi-currency-dollar me-2 text-primary"></i>
-                <span class="text-sm text-heading">Rp 500.000,00</span>
+                <span class="text-sm text-heading">
+                    {{ toIdrCurrency(place.price || 0) }}
+                </span>
             </div>
             <div class="d-flex align-items-center mb-2">
                 <i class="bi bi-alarm me-2 text-primary"></i>
@@ -109,7 +115,9 @@ import CardPlaceReview from '@/components/card/CardPlaceReview.vue'
             </div>
             <div class="d-flex align-items-center mb-2">
                 <i class="bi bi-globe me-2 text-primary"></i>
-                <a href="#" class="text-sm text-heading text-primary-hover">https://mywebsite.com</a>
+                <a :href="place.website" target="_blank" class="text-sm text-heading text-primary-hover">
+                    {{ place.website }}
+                </a>
             </div>
         </div>
     </section>
@@ -132,9 +140,53 @@ import CardPlaceReview from '@/components/card/CardPlaceReview.vue'
 </template>
 
 <script lang="ts">
+import { getDistance } from 'geolib'
+import { mapActions, mapState } from 'pinia'
+import { usePlaceStore } from '@/stores/place.store'
+import { type PlaceEntity } from '@/interfaces/Place'
+import { toIdrCurrency } from '@/helpers/formater.helper'
+import { useGeolocationStore } from '@/stores/geolocation.store'
+
 export default {
+    computed: {
+        ...mapState(useGeolocationStore, ['coordinates']),
+        ...mapState(usePlaceStore, ['placeDetailObject']),
+
+        placeId (): string {
+            return this.$route.params.placeId as string
+        },
+
+        place (): PlaceEntity | any {
+            if (this.placeDetailObject === undefined) return {}
+            const placeData = this.placeDetailObject[this.placeId] as PlaceEntity | undefined
+            if (placeData === undefined) {
+                return {
+                    mapImages: [],
+                    latitude: 0,
+                    longitude: 0
+                }
+            }
+            return placeData
+        },
+
+        placeDistance (): number {
+            const distanceInMater = getDistance(
+                { latitude: this.coordinates.latitude, longitude: this.coordinates.longitude },
+                { latitude: this.place.latitude, longitude: this.place.longitude }
+            )
+            return distanceInMater / 1000
+        }
+    },
+
     methods: {
-        closeView () {
+        ...mapActions(useGeolocationStore, ['getCurrentGeolocation']),
+        ...mapActions(usePlaceStore, ['getPlaceDetail'])
+    },
+
+    async beforeMount () {
+        this.getCurrentGeolocation()
+        const getted = await this.getPlaceDetail(this.placeId)
+        if (getted === false) {
             this.$router.push({ name: 'explore' })
         }
     },
