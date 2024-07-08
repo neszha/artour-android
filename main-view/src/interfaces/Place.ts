@@ -1,4 +1,4 @@
-import { type MapMarkerEnum } from './enums'
+import { type PlaceStatusEnum, type MapMarkerEnum } from './enums'
 
 export interface MapMarker {
     mapMarker: MapMarkerEnum
@@ -22,7 +22,39 @@ export interface CreatePlaceDto {
     latitude: number
     longitude: number
     mapImageIds: string[]
+    mapImageCoverId: string
     website: string
     phone: string
+    price: number
     hashtags: string[]
+}
+
+export interface PlaceEntity {
+    id: string
+    userId: string
+    status: PlaceStatusEnum
+    name: string
+    description: string
+    categoryId: string
+    mapImageIds: any
+    latitude: number
+    longitude: number
+    address: string
+    openingHours?: any
+    website?: string
+    phone?: string
+    price: number
+    rating: number
+    hit: number
+    like: number
+    dislike: number
+    createdAt: Date
+    updatedAt: Date
+
+    mapImages?: File[]
+    mapImageCover?: File
+}
+
+export interface PlaceCardData extends PlaceEntity {
+    category: PlaceCategory
 }

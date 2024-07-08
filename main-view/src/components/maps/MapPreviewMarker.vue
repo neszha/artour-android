@@ -42,6 +42,14 @@ export default {
                 map: this.googleMap,
                 draggable: true
             })
+            marker.addListener('dragend', () => {
+                const position = marker.getPosition()
+                if (position === undefined || position === null) return
+                this.location = {
+                    latitude: position.lat(),
+                    longitude: position.lng()
+                }
+            })
             this.googleMap.addListener('center_changed', () => {
                 const center = this.googleMap?.getCenter()
                 marker.setPosition(center as google.maps.LatLng)
@@ -49,6 +57,7 @@ export default {
                     latitude: center?.lat() as number,
                     longitude: center?.lng() as number
                 }
+                console.log(this.location)
             })
         }
 

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import MainLayout from '../layouts/MainLayout.vue'
-import CardPlace from '@components/card/CardPlace.vue'
+import CardMyPlace from '@components/card/CardMyPlace.vue'
 </script>
 
 <template>
@@ -27,9 +27,9 @@ import CardPlace from '@components/card/CardPlace.vue'
         <!-- welcome -->
         <section class="pb-4">
             <div class="container-fluid">
-                <h5 class="mb-2">Halo, Fanesa Hadi Pramana</h5>
+                <h5 class="mb-2">Halo, {{ myInfo.name || '-' }}</h5>
                 <p class="text-sm lh-relaxed">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo culpa aperiam natus dolor reprehenderit eos dolorem!
+                    Anda dapat berkuntribusi dengan menambahkan tempat wisata yang anda kelola untuk diakses secara publik.
                 </p>
             </div>
         </section>
@@ -50,20 +50,17 @@ import CardPlace from '@components/card/CardPlace.vue'
             </div>
             <div class="vertical-infinite-scroll px-2">
                 <div class="row w-100">
-                    <div class="col-6 mb-3 px-2">
-                        <CardPlace class="card-place-sm" />
+                    <div v-for="(place) in myPlaces" :key="place.id" class="col-6 mb-3 px-2">
+                        <CardMyPlace :placeId="place.id" class="card-place-sm" />
                     </div>
-                    <div class="col-6 mb-3 px-2">
-                        <CardPlace class="card-place-sm" />
-                    </div>
-                    <div class="col-6 mb-3 px-2">
-                        <CardPlace class="card-place-sm" />
-                    </div>
-                    <div class="col-6 mb-3 px-2">
-                        <CardPlace class="card-place-sm" />
-                    </div>
-                    <div class="col-6 mb-3 px-2">
-                        <CardPlace class="card-place-sm" />
+                </div>
+            </div>
+            <div v-if="!myPlaces.length" class="no-card-list container-fluid">
+                <div class="card">
+                    <div class="card-body text-center py-5">
+                        <small>
+                            Anda belum memiliki tempat untuk dikeloka. Klik ikon plus untuk menambahkan tampat baru!
+                        </small>
                     </div>
                 </div>
             </div>
@@ -72,12 +69,35 @@ import CardPlace from '@components/card/CardPlace.vue'
 </template>
 
 <script lang="ts">
+import { mapActions, mapState } from 'pinia'
+import { useUserStore } from '@/stores/user.store'
+import { usePlaceStore } from '@/stores/place.store'
+
 export default {
 
+    computed: {
+        ...mapState(useUserStore, ['myInfo']),
+        ...mapState(usePlaceStore, ['myPlaces'])
+    },
+
     methods: {
+        ...mapActions(usePlaceStore, ['getPlaceCategories', 'getMyPlaces']),
+
         toAddPlaceView () {
             this.$router.push({ name: 'add-place' })
         }
+    },
+
+    async beforeMount () {
+        await this.getPlaceCategories()
+        await this.getMyPlaces()
+    },
+
+    mounted () {
+        window.scrollTo({
+            top: 0,
+            behavior: 'instant'
+        })
     }
 }
 </script>

@@ -4,11 +4,11 @@ import CardPlaceReview from '@/components/card/CardPlaceReview.vue'
 
 <template>
     <!-- header  -->
-    <section class="home-header mb-3">
+    <section class="place-detail-header mb-3">
         <nav class="navbar navbar-light px-0 py-1">
-            <div class="container-xl pt-2">
+            <div class="container-xl py-2 ps-1">
                 <button @click="closeView" class="navbar-toggler text-dark" type="button">
-                    <i class="bi bi-x-lg"></i>
+                    <i class="bi bi-chevron-left"></i>
                 </button>
                 <div class="d-flex gap-2">
                     <button class="navbar-toggler text-dark" type="button">
@@ -23,7 +23,7 @@ import CardPlaceReview from '@/components/card/CardPlaceReview.vue'
     </section>
 
     <!-- place title -->
-    <section class="mb-3">
+    <section class="mb-3" style="margin-top: 70px;">
         <div class="container-fluid">
             <h6 class="mb-1">Pasar Malam Bandar Lampung</h6>
             <div class="rating d-flex gap-1">
@@ -137,11 +137,27 @@ export default {
         closeView () {
             this.$router.push({ name: 'explore' })
         }
+    },
+
+    mounted () {
+        window.scrollTo({
+            top: 0,
+            behavior: 'instant'
+        })
     }
 }
 </script>
 
 <style scoped lang="scss">
+.place-detail-header {
+    position: fixed;
+    z-index: 3;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: #fff;
+    border-bottom: 1px solid var(--x-gray-200);
+}
 .navbar {
     .navbar-toggler {
         font-size: 22px;

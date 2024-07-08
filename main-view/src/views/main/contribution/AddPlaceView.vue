@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import classNames from 'classnames'
 import HeaderNavbar from '@components/common/HeaderNavbar.vue'
 import MapPreviewMarker from '@components/maps/MapPreviewMarker.vue'
 </script>
@@ -57,10 +58,10 @@ import MapPreviewMarker from '@components/maps/MapPreviewMarker.vue'
                         <label class="form-label">Jam Buka</label>
                         <input type="text" class="form-control" placeholder="Jam Buka">
                     </div> -->
-                    <!-- <div class="col-12 mb-3">
+                    <div class="col-12 mb-3">
                         <label class="form-label">Biaya Pengunjung</label>
-                        <input v-model="form.data.visitorFee" type="text" class="form-control" placeholder="Biaya (Rp.)">
-                    </div> -->
+                        <input v-model="form.data.price" type="number" class="form-control" placeholder="Biaya (Rp.)">
+                    </div>
                 </div>
 
                 <div class="col-12 pt-2">
@@ -80,11 +81,16 @@ import MapPreviewMarker from '@components/maps/MapPreviewMarker.vue'
                     <div class="col-12">
                         <div class="mt-2 image-scrollable-x">
                             <div class="d-flex gap-2">
-                                <div v-for="file of mapImages" :key="file.id" class="col-auto image-item">
+                                <div
+                                    v-for="file of mapImages"
+                                    :key="file.id"
+                                    :class="classNames({'map-image-cover': (file.id === form.data.mapImageCoverId)})"
+                                    @click="form.data.mapImageCoverId = file.id"
+                                    class="col-auto image-item rounded">
                                     <div @click="unusedPlaceImage(file.id)" class="close-button">
                                         <i class="bi bi-x-circle"></i>
                                     </div>
-                                    <img alt="..." :src="file.link" class="rounded">
+                                    <img alt="..." :src="file.link">
                                 </div>
                             </div>
                         </div>
@@ -145,7 +151,7 @@ export default {
     },
 
     methods: {
-        ...mapActions(usePlaceStore, ['getPlaceCategories']),
+        ...mapActions(usePlaceStore, ['getPlaceCategories', 'getMyPlaces']),
 
         async uploadImagePlace (event: Event) {
             const files = (event.target as HTMLInputElement).files
@@ -159,6 +165,9 @@ export default {
                     const fileData = response.data.data as File
                     this.mapImages.push(fileData)
                     this.form.data.mapImageIds.push(fileData.id)
+                    if (this.form.data.mapImageIds.length === 1) {
+                        this.form.data.mapImageCoverId = fileData.id
+                    }
                 } catch (error) {
                     console.error(error)
                 }
@@ -168,9 +177,13 @@ export default {
         async createPlace () {
             this.form.loading = true
             try {
-                console.log(this.form.data)
                 await axios.post(API_URL_PLACES, this.form.data)
-                alert('Tempat berhasil ditambahkan.')
+                await this.getMyPlaces()
+                if (window.Android !== undefined) {
+                    window.Android.showToast('Tempat baru ditambahkan')
+                } else {
+                    alert('Tempat berhasil ditambahkan.')
+                }
                 this.$router.push({ name: 'contribution' })
             } catch (error) {
                 if (isAxiosError(error)) {
@@ -217,8 +230,10 @@ export default {
                     latitude: 0,
                     longitude: 0,
                     mapImageIds: [],
+                    mapImageCoverId: '',
                     website: '',
                     phone: '',
+                    price: '',
                     hashtags: []
                 } as unknown as CreatePlaceDto,
                 loading: false
@@ -239,6 +254,9 @@ export default {
         display: inline-block;
         width: 140px;
         height: 100px;
+        border: 4px solid #fff;
+        border-radius: 0.7rem !important;
+        overflow: hidden;
         .close-button {
             position: absolute;
             right: 8px;
@@ -251,6 +269,9 @@ export default {
             height: 100%;
             object-fit: cover;
         }
+    }
+    .map-image-cover {
+        border-color: var(--x-blue-500);
     }
 }
 </style>

@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import MainLayout from '../layouts/MainLayout.vue'
 import CardPlace from '@components/card/CardPlace.vue'
 import CardPlaceCategory from '@components/card/CardPlaceCategory.vue'
@@ -142,6 +142,17 @@ import CardPlaceCategory from '@components/card/CardPlaceCategory.vue'
         </section>
     </MainLayout>
 </template>
+
+<script lang="ts">
+export default {
+    mounted () {
+        window.scrollTo({
+            top: 0,
+            behavior: 'instant'
+        })
+    }
+}
+</script>
 
 <style scoped lang="scss">
 .navbar {

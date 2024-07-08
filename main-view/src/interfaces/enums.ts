@@ -10,3 +10,8 @@ export enum MapMarkerEnum {
     MAP_MARKER_03 = 'map-marker-03.png',
     MAP_MARKER_04 = 'map-marker-04.png',
 }
+
+export enum PlaceStatusEnum {
+    PUBLISHED = 'PUBLISHED',
+    UNDER_REVIEW = 'UNDER_REVIEW',
+}

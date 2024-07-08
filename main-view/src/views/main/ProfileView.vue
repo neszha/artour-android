@@ -132,6 +132,13 @@ export default {
                 alert('Gagal keluar aplikasi.')
             }
         }
+    },
+
+    mounted () {
+        window.scrollTo({
+            top: 0,
+            behavior: 'instant'
+        })
     }
 }
 </script>
