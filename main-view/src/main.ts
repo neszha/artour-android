@@ -1,5 +1,6 @@
 import { createPinia } from 'pinia'
 import { type Plugin, createApp } from 'vue'
+import 'moment/dist/locale/id'
 import './scss/main.scss'
 import 'bootstrap-icons/font/bootstrap-icons.css'
 import App from './App.vue'

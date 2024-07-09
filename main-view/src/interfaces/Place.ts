@@ -14,6 +14,19 @@ export interface PlaceCategory {
     updatedAt: Date
 }
 
+export interface OpeningHoursDay {
+    dayIndex: number // 0 - 6
+    closed: boolean
+    fullOpeningHours: boolean // full open 24h
+    openingHours: string
+    closingHours: string
+}
+
+export interface OpeningHoursStatus {
+    open: boolean
+    content: string
+}
+
 export interface CreatePlaceDto {
     name: string
     description: string
@@ -23,6 +36,7 @@ export interface CreatePlaceDto {
     longitude: number
     mapImageIds: string[]
     mapImageCoverId: string
+    openingHours: OpeningHoursDay[]
     website: string
     phone: string
     price: number
@@ -40,7 +54,7 @@ export interface PlaceEntity {
     latitude: number
     longitude: number
     address: string
-    openingHours?: any
+    openingHours: OpeningHoursDay[]
     website?: string
     phone?: string
     price: number

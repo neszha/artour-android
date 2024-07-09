@@ -1,7 +1,9 @@
 <script setup lang="ts">
+import moment from 'moment'
 import classNames from 'classnames'
 import HeaderNavbar from '@components/common/HeaderNavbar.vue'
 import MapPreviewMarker from '@components/maps/MapPreviewMarker.vue'
+import ModalOpeningHoursDay from '@components/modals/ModalOpeningHoursDay.vue'
 </script>
 
 <template>
@@ -47,20 +49,38 @@ import MapPreviewMarker from '@components/maps/MapPreviewMarker.vue'
                         <p class="text-sm text-muted">Masukan informasi lokasi lainnya.</p>
                     </div>
                     <div class="col-12 mb-3">
+                        <label class="form-label">Jam Buka <span class="text-danger">*</span></label>
+                        <div class="card" style="border-radius: 8px;">
+                            <div class="card-body d-flex flex-column gap-2">
+                                <div v-for="item of form.data.openingHours" :key="item.dayIndex" class="d-flex gap-3 justify-content-between">
+                                    <div>
+                                        {{ moment().locale('id').day(item.dayIndex).format('dddd') }}
+                                    </div>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <small class="text-primary d-flex align-items-center">
+                                            <span v-if="item.closed" class="text-danger">Tutup</span>
+                                            <span v-else-if="item.fullOpeningHours">Buka 24 Jam</span>
+                                            <span v-else>{{ item.openingHours }} - {{ item.closingHours }}</span>
+                                        </small>
+                                        <button @click="openModalOpeningHours(item.dayIndex)" type="button" class="btn btn-sm btn-light border-0 shadow-none waves-effect waves-dark">
+                                            <i class="bi bi-pencil"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 mb-3">
+                        <label class="form-label">Biaya Pengunjung <span class="text-danger">*</span></label>
+                        <input v-model="form.data.price" type="number" class="form-control" min="0" placeholder="Biaya (Rp.)" required>
+                    </div>
+                    <div class="col-12 mb-3">
                         <label class="form-label">Website</label>
                         <input v-model="form.data.website" type="url" class="form-control" placeholder="Situs web">
                     </div>
                     <div class="col-12 mb-3">
                         <label class="form-label">Kontak</label>
                         <input v-model="form.data.phone" type="text" class="form-control" placeholder="Nomor telepon">
-                    </div>
-                    <!-- <div class="col-12 mb-3">
-                        <label class="form-label">Jam Buka</label>
-                        <input type="text" class="form-control" placeholder="Jam Buka">
-                    </div> -->
-                    <div class="col-12 mb-3">
-                        <label class="form-label">Biaya Pengunjung <span class="text-danger">*</span></label>
-                        <input v-model="form.data.price" type="number" class="form-control" min="0" placeholder="Biaya (Rp.)" required>
                     </div>
                 </div>
 
@@ -133,6 +153,9 @@ import MapPreviewMarker from '@components/maps/MapPreviewMarker.vue'
             </div>
         </form>
     </section>
+
+    <!-- modals  -->
+     <ModalOpeningHoursDay id="modal_opening_hours_day" @saved="setNewOpeningHoursDay" />
 </template>
 
 <script lang="ts">
@@ -141,17 +164,20 @@ import { isAxiosError, type AxiosResponse } from 'axios'
 import axios from '@/helpers/axios.helper'
 import { type File } from '@/interfaces/File'
 import { usePlaceStore } from '@/stores/place.store'
-import { type CreatePlaceDto } from '@/interfaces/Place'
+import { type OpeningHoursDay, type CreatePlaceDto } from '@/interfaces/Place'
 import { type Coordinates } from '@/interfaces/Geolocation'
 import { API_URL_FILE_MAP_CONTENTS, API_URL_PLACES } from '@/constants/api-url'
+import { useModalStore } from '@/stores/modal.store'
 
 export default {
     computed: {
-        ...mapState(usePlaceStore, ['placeCategories'])
+        ...mapState(usePlaceStore, ['placeCategories']),
+        ...mapState(useModalStore, ['openingHoursDay'])
     },
 
     methods: {
         ...mapActions(usePlaceStore, ['getPlaceCategories', 'getMyPlaces']),
+        ...mapActions(useModalStore, ['setOpenHoursDayData']),
 
         async uploadImagePlace (event: Event) {
             const files = (event.target as HTMLInputElement).files
@@ -200,6 +226,20 @@ export default {
             this.form.data.longitude = coordinates.longitude
         },
 
+        openModalOpeningHours (dayIndex: number) {
+            const data = this.form.data.openingHours[dayIndex] as OpeningHoursDay
+            this.setOpenHoursDayData(data)
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-expect-error
+            const modal = new bootstrap.Modal(document.getElementById('modal_opening_hours_day'))
+            modal.show()
+        },
+
+        setNewOpeningHoursDay (dayIndex: number) {
+            this.form.data.openingHours[dayIndex] = { ...this.openingHoursDay }
+            console.log(this.form.data.openingHours)
+        },
+
         unusedPlaceImage (fileId: string) {
             this.form.data.mapImageIds = this.form.data.mapImageIds.filter((id) => id !== fileId)
             this.mapImages = this.mapImages.filter((file) => file.id !== fileId)
@@ -231,6 +271,57 @@ export default {
                     longitude: 0,
                     mapImageIds: [],
                     mapImageCoverId: '',
+                    openingHours: [
+                        {
+                            dayIndex: 0,
+                            closed: true,
+                            fullOpeningHours: false,
+                            openingHours: '00:00',
+                            closingHours: '00:00'
+                        },
+                        {
+                            dayIndex: 1,
+                            closed: true,
+                            fullOpeningHours: false,
+                            openingHours: '00:00',
+                            closingHours: '00:00'
+                        },
+                        {
+                            dayIndex: 2,
+                            closed: true,
+                            fullOpeningHours: false,
+                            openingHours: '00:00',
+                            closingHours: '00:00'
+                        },
+                        {
+                            dayIndex: 3,
+                            closed: true,
+                            fullOpeningHours: false,
+                            openingHours: '00:00',
+                            closingHours: '00:00'
+                        },
+                        {
+                            dayIndex: 4,
+                            closed: true,
+                            fullOpeningHours: false,
+                            openingHours: '00:00',
+                            closingHours: '00:00'
+                        },
+                        {
+                            dayIndex: 5,
+                            closed: true,
+                            fullOpeningHours: false,
+                            openingHours: '00:00',
+                            closingHours: '00:00'
+                        },
+                        {
+                            dayIndex: 6,
+                            closed: true,
+                            fullOpeningHours: false,
+                            openingHours: '00:00',
+                            closingHours: '00:00'
+                        }
+                    ],
                     website: '',
                     phone: '',
                     price: '',

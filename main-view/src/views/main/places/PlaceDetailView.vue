@@ -104,14 +104,19 @@ import CardPlaceReview from '@/components/card/CardPlaceReview.vue'
                 </span>
             </div>
             <div class="d-flex align-items-center mb-2">
+                <i class="bi bi-alarm me-2 text-primary"></i>
+                <div class="text-sm text-heading">
+                    <span :class="classNames({
+                            'text-primary': (openingHoursStatus.open === true),
+                            'text-danger': (openingHoursStatus.open === false),
+                        })">{{ openingHoursStatus.content }}</span>
+                </div>
+            </div>
+            <div class="d-flex align-items-center mb-2">
                 <i class="bi bi-currency-dollar me-2 text-primary"></i>
                 <span class="text-sm text-heading">
                     {{ toIdrCurrency(place.price || 0) }}
                 </span>
-            </div>
-            <div class="d-flex align-items-center mb-2">
-                <i class="bi bi-alarm me-2 text-primary"></i>
-                <span class="text-sm text-heading">00.00 - 00.00 (Buka)</span>
             </div>
             <div class="d-flex align-items-center mb-2">
                 <i class="bi bi-globe me-2 text-primary"></i>
@@ -143,9 +148,10 @@ import CardPlaceReview from '@/components/card/CardPlaceReview.vue'
 import { getDistance } from 'geolib'
 import { mapActions, mapState } from 'pinia'
 import { usePlaceStore } from '@/stores/place.store'
-import { type PlaceEntity } from '@/interfaces/Place'
+import { type OpeningHoursDay, type OpeningHoursStatus, type PlaceEntity } from '@/interfaces/Place'
 import { toIdrCurrency } from '@/helpers/formater.helper'
 import { useGeolocationStore } from '@/stores/geolocation.store'
+import { getPlaceOpenHourStatus } from '@/helpers/time.helper'
 
 export default {
     computed: {
@@ -167,6 +173,17 @@ export default {
                 }
             }
             return placeData
+        },
+
+        openingHoursStatus (): OpeningHoursStatus {
+            if (this.place.id === undefined) {
+                return {
+                    open: false,
+                    content: 'Tidak Buka'
+                } satisfies OpeningHoursStatus
+            }
+            const openingHours = this.place.openingHours.find((item: OpeningHoursDay) => item.dayIndex === this.dayIndex) as OpeningHoursDay
+            return getPlaceOpenHourStatus(openingHours)
         },
 
         placeDistance (): number {
@@ -196,6 +213,12 @@ export default {
             top: 0,
             behavior: 'instant'
         })
+    },
+
+    data () {
+        return {
+            dayIndex: new Date().getDay()
+        }
     }
 }
 </script>

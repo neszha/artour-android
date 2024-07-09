@@ -26,9 +26,12 @@ import classNames from 'classnames'
                 </div>
                 <div class="d-flex align-items-center">
                     <i class="bi bi-alarm-fill me-2 text-muted"></i>
-                    <span class="text-sm text-heading text-primary-hover">
-                        00.00 - 00.00 (Buka)
-                    </span>
+                    <div class="text-sm text-heading text-primary-hover">
+                        <span :class="classNames({
+                            'text-primary': (openingHoursStatus.open === true),
+                            'text-danger': (openingHoursStatus.open === false),
+                        })">{{ openingHoursStatus.content }}</span>
+                    </div>
                 </div>
             </div>
             <div class="rating d-flex gap-1">
@@ -48,10 +51,11 @@ import classNames from 'classnames'
 
 <script lang="ts">
 import { mapState } from 'pinia'
-import { usePlaceStore } from '@/stores/place.store'
-import { type PlaceEntity } from '@/interfaces/Place'
-import { toIdrCurrency } from '@/helpers/formater.helper'
 import { type File } from '@/interfaces/File'
+import { toIdrCurrency } from '@/helpers/formater.helper'
+import { usePlaceStore } from '@/stores/place.store'
+import { type OpeningHoursStatus, type OpeningHoursDay, type PlaceEntity } from '@/interfaces/Place'
+import { getPlaceOpenHourStatus } from '@/helpers/time.helper'
 
 export default {
     computed: {
@@ -65,12 +69,23 @@ export default {
             if (this.place.mapImageCover === undefined) return ''
             const fileData = this.place.mapImageCover as unknown as File
             return fileData.link ?? ''
+        },
+
+        openingHoursStatus (): OpeningHoursStatus {
+            const openingHours = this.place.openingHours.find(openingHours => openingHours.dayIndex === this.dayIndex) as OpeningHoursDay
+            return getPlaceOpenHourStatus(openingHours)
         }
     },
 
     methods: {
         toPlaceDetailView () {
             this.$router.push({ name: 'place:detail', params: { placeId: this.placeId } })
+        }
+    },
+
+    data () {
+        return {
+            dayIndex: new Date().getDay()
         }
     },
 
