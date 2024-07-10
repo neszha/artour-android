@@ -1,3 +1,7 @@
+<script setup lang="ts">
+import classNames from 'classnames'
+</script>
+
 <template>
     <!-- ar-scene -->
     <section ref="cameraHight" class="ar-camera">
@@ -13,14 +17,16 @@
             cursor='rayOrigin: mouse;'
             raycaster='near: 0; far: 50000;'
             embedded>
+
             <a-camera
                 rotation-reader
                 :gps-new-camera="`gpsMinDistance: 10; simulateLatitude: ${myCoordinates.latitude}; simulateLongitude: ${myCoordinates.longitude};`">
             </a-camera>
 
             <a-entity
-                v-for="place in placesRenderer"
-                :key="place.title"
+                v-for="place in places"
+                :placeId="place.id"
+                :key="place.id"
                 :gps-new-entity-place="`latitude: ${place.latitude}; longitude: ${place.longitude}`"
                 :rotation="`-10 ${place.circleBearing} 0`"
                 place-entity
@@ -34,7 +40,7 @@
                     height="3.5">
                 </a-image>
                 <a-text
-                    :value="place.title"
+                    :value="place.name"
                     position="0.1 1.55 0.01"
                     color="#000"
                     width="4"
@@ -48,7 +54,7 @@
                     >
                 </a-text>
                 <a-text
-                    value="Lorem ipsum dolor sit, amet consectetur adipisicing elit. Repudiandae quidem reprehenderit optio accusantium quaerat laboriosam sapiente harum quasi odio nobis."
+                    :value="place.description"
                     position="0.1 0.9 0.01"
                     color="#000"
                     width="4"
@@ -62,7 +68,7 @@
                     >
                 </a-text>
                 <a-text
-                    value="20 KM"
+                    :value="`${place.distance.toFixed(1)} KM`"
                     position="0 -1.6 0.01"
                     color="#000"
                     width="15"
@@ -92,25 +98,25 @@
                     <i class="bi bi-chevron-up" style="font-size: 18px;"></i>
                 </div>
                 <h5 class="mb-2 pt-0 px-4 text-center">
-                    <strong>Lokasi Ditemukan (#)</strong>
+                    <strong>Lokasi Ditemukan ({{ places.length }})</strong>
                 </h5>
                 <div class="list-content pb-4">
                     <div class="place-list">
-                        <div v-for="i of 10" :key="i" @click="toPlaceDetailView" class="d-flex align-items-center waves-effect waves-dark px-4 py-2">
+                        <div v-for="place in places" :key="place.id" @click="toPlaceDetailView(place.id)" class="d-flex align-items-center waves-effect waves-dark px-4 py-2">
                             <div class="me-4">
                                 <i class="bi bi-globe text-muted" style="font-size: 24px;"></i>
                             </div>
                             <div class="flex-1">
-                                <span class="d-block font-semibold text-sm text-dark">Nama Tempat {{ i }}</span>
+                                <span class="d-block font-semibold text-sm text-dark">{{ place.name }}</span>
                                 <div class="text-xs text-muted line-clamp-1">
                                     <div class="rating d-flex gap-1 align-items-end">
-                                        <i class="bi bi-star-fill text-warning"></i>
-                                        <i class="bi bi-star-fill text-warning"></i>
-                                        <i class="bi bi-star-half text-warning"></i>
-                                        <i class="bi bi-star text-warning"></i>
-                                        <i class="bi bi-star text-warning"></i>
-                                        <span>(3.4)</span>
-                                        <small>12 KM</small>
+                                        <i v-for="i of 5" :key="i" :class="classNames({
+                                            'bi-star': (place.rating <= i - 1),
+                                            'bi-star-half': (place.rating > i - 1 && place.rating < i),
+                                            'bi-star-fill': (place.rating >= i),
+                                        })" class="bi text-warning"></i>
+                                        <span>({{ place.rating }})</span>
+                                        <small>{{ place.distance.toFixed(1) }} KM</small>
                                     </div>
                                 </div>
                             </div>
@@ -126,7 +132,12 @@
 </template>
 
 <script lang="ts">
-import { getGreatCircleBearing } from 'geolib'
+import { mapActions, mapState } from 'pinia'
+import { getDistance, getGreatCircleBearing } from 'geolib'
+import { type PlaceEntity } from '@/interfaces/Place'
+import { useGeolocationStore } from '@/stores/geolocation.store'
+import { usePlaceStore } from '@/stores/place.store'
+import { type Coordinates } from '@/interfaces/Geolocation'
 
 interface GeolibInputCoordinates {
     title?: string
@@ -135,22 +146,21 @@ interface GeolibInputCoordinates {
     circleBearing?: number
 }
 
+interface VrPlace extends PlaceEntity {
+    distance: number // in KM
+    circleBearing: number
+}
+
 export default {
     computed: {
-        placesRenderer () {
-            return this.places.map((place: GeolibInputCoordinates) => {
-                const nearCoordinates: GeolibInputCoordinates = this.moveCloser(this.myCoordinates, place, 10)
-                // const distance = getDistance(this.myCoordinates as GeolibInputCoordinates, nearCoordinates)
-                const circleBearing = getGreatCircleBearing(this.myCoordinates as GeolibInputCoordinates, nearCoordinates)
-                place.latitude = nearCoordinates.latitude
-                place.longitude = nearCoordinates.longitude
-                place.circleBearing = 360 - circleBearing
-                return place
-            })
-        }
+        ...mapState(useGeolocationStore, ['coordinates']),
+        ...mapState(usePlaceStore, ['placeArSearchList'])
     },
 
     methods: {
+        ...mapActions(useGeolocationStore, ['getCurrentGeolocation']),
+        ...mapActions(usePlaceStore, ['getPlaceArMapSearch']),
+
         moveCloser (
             start: GeolibInputCoordinates,
             target: GeolibInputCoordinates,
@@ -201,9 +211,39 @@ export default {
             }, 10)
         },
 
-        toPlaceDetailView () {
-            this.$router.push({ name: 'place:detail', params: { placeId: 'id_task_example' } })
+        toPlaceDetailView (placeId: string) {
+            this.$router.push({ name: 'place:detail', params: { placeId } })
         }
+    },
+
+    async beforeMount () {
+        await this.getCurrentGeolocation()
+        this.myCoordinates.latitude = this.coordinates.latitude
+        this.myCoordinates.longitude = this.coordinates.longitude
+        await this.getPlaceArMapSearch(this.myCoordinates)
+
+        // Render places.
+        this.places = this.placeArSearchList.map((place, index) => {
+            const distanceInMeter = getDistance(
+                { latitude: this.myCoordinates.latitude, longitude: this.myCoordinates.longitude },
+                { latitude: place.latitude, longitude: place.longitude }
+            )
+            const placeCoord: Coordinates = { latitude: place.latitude, longitude: place.longitude }
+            const nearDistanceInMeter = 12 + (index * 2)
+            const nearCoordinates: GeolibInputCoordinates = this.moveCloser(this.myCoordinates, placeCoord, nearDistanceInMeter)
+            const circleBearing = getGreatCircleBearing(this.myCoordinates as GeolibInputCoordinates, nearCoordinates)
+            const vrPlace: VrPlace = {
+                ...place,
+                latitude: nearCoordinates.latitude,
+                longitude: nearCoordinates.longitude,
+                distance: distanceInMeter / 1000,
+                circleBearing: 360 - circleBearing
+            }
+            if (place.description.length > 160) {
+                place.description = place.description.slice(0, 160) + '...'
+            }
+            return vrPlace
+        })
     },
 
     mounted () {
@@ -224,8 +264,11 @@ export default {
             const router = this.$router
             window.AFRAME.registerComponent('place-entity', {
                 init: function () {
-                    this.el.addEventListener('click', () => {
-                        router.push({ name: 'place:detail', params: { placeId: 'id_task_example' } })
+                    this.el.addEventListener('click', (event: Event) => {
+                        if (event.target === null) return
+                        const parentEl = (event.target as HTMLElement).parentElement
+                        const placeId = parentEl?.getAttribute('placeId')
+                        router.push({ name: 'place:detail', params: { placeId } })
                     })
                 }
             })
@@ -236,29 +279,10 @@ export default {
 
     data () {
         return {
-            places: [
-                {
-                    title: 'Wisata Alam Pantai Marina Lampung Selatan.',
-                    latitude: -5.345760,
-                    longitude: 105.288434,
-                    circleBearing: 0
-                },
-                {
-                    title: 'Wisata Alam Pantai Mutun Lampung Selatan.',
-                    latitude: -5.339436,
-                    longitude: 105.324334,
-                    circleBearing: 0
-                },
-                {
-                    title: 'Universitas Reden Inten Lampung.',
-                    latitude: -5.386973,
-                    longitude: 105.307916,
-                    circleBearing: 0
-                }
-            ],
+            places: [] as VrPlace[],
             myCoordinates: {
-                latitude: -5.363689,
-                longitude: 105.315599
+                latitude: -5.3636897,
+                longitude: 105.2957217
             } satisfies GeolibInputCoordinates
         }
     }
@@ -292,12 +316,12 @@ export default {
     }
     .list-content {
         overflow-y: scroll;
-        height: 150px;
+        height: 140px;
         transition: 0.5s ease;
     }
     .expaned {
         .list-content {
-            height: 520px;
+            height: 300px;
         }
         .expand-control {
             i::before {

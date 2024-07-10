@@ -1,8 +1,9 @@
 import { defineStore } from 'pinia'
 import { type AxiosResponse } from 'axios'
 import axios from '@/helpers/axios.helper'
-import { API_URL_PLACES, API_URL_PLACES_ID, API_URL_PLACE_CATEGORIES, API_URL_PLACE_CATEGORY_MAP_MARKERS, API_URL_PLACE_MAP_SEARCH } from '@/constants/api-url'
+import { API_URL_PLACES, API_URL_PLACES_ID, API_URL_PLACE_AR_MAP_SEARCH, API_URL_PLACE_CATEGORIES, API_URL_PLACE_CATEGORY_MAP_MARKERS, API_URL_PLACE_MAP_SEARCH } from '@/constants/api-url'
 import { type PlaceCategory, type MapMarker, type PlaceEntity } from '@/interfaces/Place'
+import { type Coordinates } from '@/interfaces/Geolocation'
 
 interface PlaceState {
     mapMarkers: MapMarker[]
@@ -10,6 +11,7 @@ interface PlaceState {
     myPlaces: PlaceEntity[]
     placeDetailObject?: Record<string, PlaceEntity>
     placeSearchList: PlaceEntity[]
+    placeArSearchList: PlaceEntity[]
 }
 
 export const usePlaceStore = defineStore('place', {
@@ -21,7 +23,8 @@ export const usePlaceStore = defineStore('place', {
         placeCategories: [],
         myPlaces: [],
         placeDetailObject: {},
-        placeSearchList: []
+        placeSearchList: [],
+        placeArSearchList: []
     }),
 
     /**
@@ -71,6 +74,22 @@ export const usePlaceStore = defineStore('place', {
                 this.placeSearchList = data
             } catch (error) {
                 this.placeSearchList = []
+                console.error(error)
+            }
+        },
+
+        async getPlaceArMapSearch (myCoord: Coordinates) {
+            try {
+                const response: AxiosResponse = await axios.post(API_URL_PLACE_AR_MAP_SEARCH, myCoord)
+                const data = response.data.data as PlaceEntity[]
+                if (data.length === 0) {
+                    if (window.Android !== undefined) {
+                        window.Android.showToast('Tidak ada tempat wisata yang ditemukan.')
+                    }
+                }
+                this.placeArSearchList = data
+            } catch (error) {
+                this.placeArSearchList = []
                 console.error(error)
             }
         },
