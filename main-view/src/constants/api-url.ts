@@ -28,3 +28,8 @@ export const API_URL_PLACE_CATEGORIES_ID: string = '/place-categories/:placeCate
  */
 export const API_URL_PLACES: string = '/places'
 export const API_URL_PLACES_ID: string = '/places/:placeId'
+
+/**
+ * Place Sarchs
+ */
+export const API_URL_PLACE_MAP_SEARCH: string = '/places/map-search' // ?keyword={#1}

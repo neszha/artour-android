@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { type AxiosResponse } from 'axios'
 import axios from '@/helpers/axios.helper'
-import { API_URL_PLACES, API_URL_PLACES_ID, API_URL_PLACE_CATEGORIES, API_URL_PLACE_CATEGORY_MAP_MARKERS } from '@/constants/api-url'
+import { API_URL_PLACES, API_URL_PLACES_ID, API_URL_PLACE_CATEGORIES, API_URL_PLACE_CATEGORY_MAP_MARKERS, API_URL_PLACE_MAP_SEARCH } from '@/constants/api-url'
 import { type PlaceCategory, type MapMarker, type PlaceEntity } from '@/interfaces/Place'
 
 interface PlaceState {
@@ -9,6 +9,7 @@ interface PlaceState {
     placeCategories: PlaceCategory[]
     myPlaces: PlaceEntity[]
     placeDetailObject?: Record<string, PlaceEntity>
+    placeSearchList: PlaceEntity[]
 }
 
 export const usePlaceStore = defineStore('place', {
@@ -19,7 +20,8 @@ export const usePlaceStore = defineStore('place', {
         mapMarkers: [],
         placeCategories: [],
         myPlaces: [],
-        placeDetailObject: {}
+        placeDetailObject: {},
+        placeSearchList: []
     }),
 
     /**
@@ -52,6 +54,18 @@ export const usePlaceStore = defineStore('place', {
                 const data = response.data.data as PlaceEntity[]
                 this.myPlaces = data
             } catch (error) {
+                console.error(error)
+            }
+        },
+
+        async searchPlacesByKeyword (keyword: string) {
+            try {
+                const url = `${API_URL_PLACE_MAP_SEARCH}?keyword=${keyword}`
+                const response: AxiosResponse = await axios.get(url)
+                const data = response.data.data as PlaceEntity[]
+                this.placeSearchList = data
+            } catch (error) {
+                this.placeSearchList = []
                 console.error(error)
             }
         },

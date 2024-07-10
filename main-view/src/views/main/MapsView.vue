@@ -7,21 +7,28 @@ import MainMaps from '@components/maps/MainMaps.vue'
     <MainLayout>
         <div class="map-container">
             <div class="map-search">
-                <form class="">
-                    <div class="input-group input-group-md input-group-inline shadow border-none">
+                <form @submit.prevent="searchPlaces">
+                    <div class="input-group input-group-md input-group-inline shadow border-none" style="height: 50px;">
                         <span class="input-group-text pe-2 rounded-start-pill">
-                            <i class="bi bi-geo-alt text-dark"></i>
+                            <div v-if="form.loading" class="spinner-border spinner-border-sm text-gray" role="status"></div>
+                            <i v-else class="bi bi-geo-alt text-dark"></i>
                         </span>
-                        <input type="text"
+                        <input
+                            v-model="form.keyword"
+                            ref="inputSearch"
+                            type="text"
                             class="form-control text-md shadow-none rounded-end-pill"
-                            placeholder="Apa yang sedang anda cari?" aria-label="Search">
+                            placeholder="Apa yang sedang anda cari?"
+                        />
                     </div>
                 </form>
                 <div class="category-list">
                     <div class="d-flex gap-2 px-2 ms-1">
-                        <div v-for="i of 10" :key="i" class="category-item">
-                            <span class="badge bg-white text-dark border border-gray waves-effect waves-dark">
-                                Wisata Alam
+                        <div v-for="(category) of placeCategories" :key="category.id" class="category-item">
+                            <span
+                                @click="searchByCategory(category.name)"
+                                class="badge bg-white text-dark border border-gray waves-effect waves-dark">
+                                {{ category.name }}
                             </span>
                         </div>
                         <div class="invisible">..</div>
@@ -30,9 +37,62 @@ import MainMaps from '@components/maps/MainMaps.vue'
             </div>
 
             <MainMaps />
+
         </div>
     </MainLayout>
 </template>
+
+<script lang="ts">
+import { mapActions, mapState } from 'pinia'
+import { usePlaceStore } from '@/stores/place.store'
+
+export default {
+    computed: {
+        ...mapState(usePlaceStore, ['placeCategories'])
+    },
+
+    methods: {
+        ...mapActions(usePlaceStore, ['getPlaceCategories', 'searchPlacesByKeyword']),
+
+        async searchPlaces () {
+            if (this.form.keyword.trim() === '') return
+            this.form.loading = true
+            this.$router.push({ name: 'maps', query: { keyword: this.form.keyword } })
+            await this.searchPlacesByKeyword(this.form.keyword as string)
+            setTimeout(() => {
+                this.form.loading = false
+            }, 500)
+        },
+
+        async searchByCategory (categoryName: string) {
+            this.form.keyword = categoryName
+            await this.searchPlaces()
+        }
+    },
+
+    async beforeMount () {
+        await this.getPlaceCategories()
+        const queryKeyword = this.$route.query.keyword as string | undefined
+        if (queryKeyword !== undefined) {
+            this.form.keyword = queryKeyword
+            this.searchPlaces()
+        }
+    },
+
+    mounted () {
+        (this.$refs.inputSearch as HTMLInputElement).focus()
+    },
+
+    data () {
+        return {
+            form: {
+                keyword: '',
+                loading: false
+            }
+        }
+    }
+}
+</script>
 
 <style scoped lang="scss">
 .maps-container {

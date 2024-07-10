@@ -33,9 +33,11 @@ import CardPlaceCategory from '@components/card/CardPlaceCategory.vue'
                         <span class="input-group-text pe-2 rounded-start-pill">
                             <i class="bi bi-geo-alt"></i>
                         </span>
-                        <input type="text"
+                        <input
+                            @click="toMapView"
+                            type="text"
                             class="form-control text-md shadow-none rounded-end-pill"
-                            placeholder="Apa yang sedang anda cari?" aria-label="Search">
+                            placeholder="Apa yang sedang anda cari?">
                     </div>
                 </form>
             </div>
@@ -145,6 +147,13 @@ import CardPlaceCategory from '@components/card/CardPlaceCategory.vue'
 
 <script lang="ts">
 export default {
+
+    methods: {
+        toMapView () {
+            this.$router.push({ name: 'maps' })
+        }
+    },
+
     mounted () {
         window.scrollTo({
             top: 0,
