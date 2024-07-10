@@ -39,7 +39,7 @@ import ModalDeletePlace from '@components/modals/ModalDeletePlace.vue'
                             <div class="d-flex mx-n1"></div>
                         </div>
                         <div class="ms-auto text-end">
-                            <RouterLink :to="{ name: 'place:edit', params: { placeId } }" class="btn btn-sm btn-neutral">Edit</RouterLink>
+                            <RouterLink :to="{ name: 'place:edit', params: { placeId } }" class="btn btn-sm btn-neutral">Edit Tempat</RouterLink>
                         </div>
                     </div>
                     <div class="list-group-item d-flex align-items-center px-0">

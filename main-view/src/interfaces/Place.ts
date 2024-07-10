@@ -37,7 +37,7 @@ export interface CreatePlaceDto {
     mapImageIds: string[]
     mapImageCoverId: string
     openingHours: OpeningHoursDay[]
-    website: string
+    website?: string
     phone: string
     price: number
     hashtags: string[]

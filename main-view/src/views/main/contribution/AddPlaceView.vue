@@ -75,12 +75,12 @@ import ModalOpeningHoursDay from '@components/modals/ModalOpeningHoursDay.vue'
                         <input v-model="form.data.price" type="number" class="form-control" min="0" placeholder="Biaya (Rp.)" required>
                     </div>
                     <div class="col-12 mb-3">
-                        <label class="form-label">Website</label>
-                        <input v-model="form.data.website" type="url" class="form-control" placeholder="Situs web">
+                        <label class="form-label">Kontak <span class="text-danger">*</span></label>
+                        <input v-model="form.data.phone" type="text" class="form-control" placeholder="Nomor telepon" required>
                     </div>
                     <div class="col-12 mb-3">
-                        <label class="form-label">Kontak</label>
-                        <input v-model="form.data.phone" type="text" class="form-control" placeholder="Nomor telepon">
+                        <label class="form-label">Website</label>
+                        <input v-model="form.data.website" type="url" class="form-control" placeholder="Situs web">
                     </div>
                 </div>
 
@@ -203,6 +203,7 @@ export default {
         async createPlace () {
             this.form.loading = true
             try {
+                if (this.form.data.website === '') delete this.form.data.website
                 await axios.post(API_URL_PLACES, this.form.data)
                 await this.getMyPlaces()
                 if (window.Android !== undefined) {

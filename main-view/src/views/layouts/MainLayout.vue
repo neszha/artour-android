@@ -1,9 +1,9 @@
 <template>
-    <div class="main-layout">
+    <div class="main-layout position-relative">
         <div class="main-content">
             <slot></slot>
         </div>
-        <div class="bottom-navigation-bar">
+        <div id="bottom-navbar" class="bottom-navigation-bar">
             <ul class="navigation-bar nav nav-tabs">
                 <li class="nav-item">
                     <RouterLink :to="{name: 'explore'}" class="nav-link waves-effect waves-dark" href="javascript:void(0)">
@@ -74,6 +74,7 @@ export default {
 }
 .main-layout {
     height: 100vh;
+    min-height: 720px;
 
     .main-content {
         padding-bottom: 70px;

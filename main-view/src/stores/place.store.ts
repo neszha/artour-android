@@ -63,6 +63,11 @@ export const usePlaceStore = defineStore('place', {
                 const url = `${API_URL_PLACE_MAP_SEARCH}?keyword=${keyword}`
                 const response: AxiosResponse = await axios.get(url)
                 const data = response.data.data as PlaceEntity[]
+                if (data.length === 0) {
+                    if (window.Android !== undefined) {
+                        window.Android.showToast('Tidak ada tempat wisata yang ditemukan.')
+                    }
+                }
                 this.placeSearchList = data
             } catch (error) {
                 this.placeSearchList = []

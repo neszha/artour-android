@@ -100,6 +100,6 @@ export default {
 <style scoped lang="scss">
 .google-map-preview-marker {
     width: 100%;
-    height: 180px;
+    height: 220px;
 }
 </style>

@@ -126,7 +126,7 @@ import CardPlaceReview from '@components/card/CardPlaceReview.vue'
                     {{ toIdrCurrency(place.price || 0) }}
                 </span>
             </div>
-            <div class="d-flex align-items-center mb-2">
+            <div v-if="place.website" class="d-flex align-items-center mb-2">
                 <i class="bi bi-globe me-2 text-primary"></i>
                 <a :href="place.website" target="_blank" class="text-sm text-heading text-primary-hover">
                     {{ place.website }}
