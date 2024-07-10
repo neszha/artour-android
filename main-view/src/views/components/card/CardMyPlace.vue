@@ -3,7 +3,7 @@ import classNames from 'classnames'
 </script>
 
 <template>
-    <div @click="toPlaceDetailView()" class="card">
+    <div @click="toManagePlaceView()" class="card">
         <div class="card-box-img">
             <img :src="imageCoverLink" alt="..." class="card-img">
         </div>
@@ -78,8 +78,8 @@ export default {
     },
 
     methods: {
-        toPlaceDetailView () {
-            this.$router.push({ name: 'place:detail', params: { placeId: this.placeId } })
+        toManagePlaceView () {
+            this.$router.push({ name: 'place:manage', params: { placeId: this.placeId } })
         }
     },
 

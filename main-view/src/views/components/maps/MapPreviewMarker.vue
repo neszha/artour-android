@@ -24,7 +24,11 @@ export default {
                 version: 'weekly',
                 libraries: ['marker']
             })
-            this.location = this.coordinates
+            if (this.defaultLocation === undefined) {
+                this.location = this.coordinates
+            } else {
+                this.location = this.defaultLocation as Coordinates
+            }
             const { Map } = await loader.importLibrary('maps')
             this.googleMap = new Map(mapContainer, {
                 center: {
@@ -57,7 +61,6 @@ export default {
                     latitude: center?.lat() as number,
                     longitude: center?.lng() as number
                 }
-                console.log(this.location)
             })
         }
 
@@ -83,6 +86,12 @@ export default {
                 longitude: 0
             } satisfies Coordinates,
             googleMap: null as google.maps.Map | null
+        }
+    },
+
+    props: {
+        defaultLocation: {
+            type: Object
         }
     }
 }

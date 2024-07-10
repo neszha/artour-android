@@ -22,8 +22,8 @@ export default defineConfig({
             '@assets': resolve(__dirname, 'src/assets'),
             '@stores': resolve(__dirname, 'src/stores'),
             '@interfaces': resolve(__dirname, 'src/interfaces'),
-            '@components': resolve(__dirname, 'src/components'),
-            '@api-urls': resolve(__dirname, 'src/constants/api-url.ts')
+            '@api-urls': resolve(__dirname, 'src/constants/api-url.ts'),
+            '@components': resolve(__dirname, 'src/views/components')
         }
     },
     build: {

@@ -27,9 +27,9 @@
       "@enums/*": ["src/enums/*"],
       "@stores/*": ["src/stores/*"],
       "@assets/*": ["src/assets/*"],
-      "@components/*": ["src/components/*"],
       "@interfaces/*": ["src/interfacess/*"],
-      "@api-urls": ["src/constants/api-url.ts"]
+      "@api-urls": ["src/constants/api-url.ts"],
+      "@components/*": ["src/views/components/*"]
     }
   },
   "include": [

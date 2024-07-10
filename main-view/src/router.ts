@@ -21,8 +21,8 @@ import PlaceDetailView from './views/main/places/PlaceDetailView.vue'
 
 // Contribution
 import AddPlaceView from './views/main/contribution/AddPlaceView.vue'
-// import DetailPlaceView from './views/main/contribution/DetailPlaceView.vue'
-// import EditPlaceView from './views/main/contribution/EditPlaceView.vue'
+import ManagePlaceView from './views/main/contribution/ManagePlaceView.vue'
+import EditPlaceView from './views/main/contribution/EditPlaceView.vue'
 
 // Profile
 import ProfileView from './views/main/ProfileView.vue'
@@ -91,9 +91,19 @@ const routes: RouteRecordRaw [] = [
                         component: ContributionView
                     },
                     {
-                        name: 'add-place',
-                        path: 'add',
+                        name: 'place:add',
+                        path: 'place',
                         component: AddPlaceView
+                    },
+                    {
+                        name: 'place:manage',
+                        path: 'place/:placeId',
+                        component: ManagePlaceView
+                    },
+                    {
+                        name: 'place:edit',
+                        path: 'place/:placeId/edit',
+                        component: EditPlaceView
                     }
                 ]
             },

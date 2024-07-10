@@ -42,9 +42,9 @@ import CardMyPlace from '@components/card/CardMyPlace.vue'
                         <h1 class="font-bold h3" style="font-weight: bold;">
                             Kelola Tempat
                         </h1>
-                        <p class="text-sm text-muted mt-1">
-                            Daftar Tempat Wisata yang Saya Kelola
-                        </p>
+                        <span class="text-sm text-muted mt-1">
+                            Daftar tempat wisata yang anda kelola
+                        </span>
                     </div>
                 </div>
             </div>
@@ -84,7 +84,7 @@ export default {
         ...mapActions(usePlaceStore, ['getPlaceCategories', 'getMyPlaces']),
 
         toAddPlaceView () {
-            this.$router.push({ name: 'add-place' })
+            this.$router.push({ name: 'place:add' })
         }
     },
 

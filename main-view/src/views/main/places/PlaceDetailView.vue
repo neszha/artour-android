@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import numeral from 'numeral'
 import classNames from 'classnames'
-import CardPlaceReview from '@/components/card/CardPlaceReview.vue'
+import CardPlaceReview from '@components/card/CardPlaceReview.vue'
 </script>
 
 <template>
@@ -13,10 +13,10 @@ import CardPlaceReview from '@/components/card/CardPlaceReview.vue'
                     <i class="bi bi-chevron-left"></i>
                 </button>
                 <div class="d-flex gap-2">
-                    <button class="navbar-toggler text-dark" type="button">
+                    <button class="navbar-toggler text-dark waves-effect waves-dark" type="button">
                         <i class="bi bi-geo-alt"></i>
                     </button>
-                    <button class="navbar-toggler text-dark" type="button">
+                    <button class="navbar-toggler text-dark waves-effect waves-dark" type="button">
                         <i class="bi bi-share-fill"></i>
                     </button>
                 </div>
@@ -65,6 +65,14 @@ import CardPlaceReview from '@/components/card/CardPlaceReview.vue'
     <!-- action buttons -->
     <section class="action-button mb-2 pt-1">
         <div class="action-item d-flex gap-2 mb-2">
+            <RouterLink
+                v-if="isPlaceOwner"
+                :to="{ name: 'place:manage', params: { placeId }}"
+                class="btn btn-outline-primary border-base waves-effect waves-light"
+                style="border-style: dashed;">
+                <i class="bi bi-pencil-square Tempat me-2"></i>
+                <span>Kelola</span>
+            </RouterLink>
             <button class="btn btn-primary border-base waves-effect waves-light">
                 <i class="bi bi-sign-turn-right-fill me-2"></i>
                 <span>Buka Rute</span>
@@ -152,10 +160,12 @@ import { type OpeningHoursDay, type OpeningHoursStatus, type PlaceEntity } from 
 import { toIdrCurrency } from '@/helpers/formater.helper'
 import { useGeolocationStore } from '@/stores/geolocation.store'
 import { getPlaceOpenHourStatus } from '@/helpers/time.helper'
+import { useUserStore } from '@/stores/user.store'
 
 export default {
     computed: {
         ...mapState(useGeolocationStore, ['coordinates']),
+        ...mapState(useUserStore, ['myInfo']),
         ...mapState(usePlaceStore, ['placeDetailObject']),
 
         placeId (): string {
@@ -163,15 +173,17 @@ export default {
         },
 
         place (): PlaceEntity | any {
-            if (this.placeDetailObject === undefined) return {}
-            const placeData = this.placeDetailObject[this.placeId] as PlaceEntity | undefined
-            if (placeData === undefined) {
-                return {
-                    mapImages: [],
-                    latitude: 0,
-                    longitude: 0
-                }
+            const defaultData = {
+                user: {
+                    id: ''
+                },
+                mapImages: [],
+                latitude: 0,
+                longitude: 0
             }
+            if (this.placeDetailObject === undefined) return defaultData
+            const placeData = this.placeDetailObject[this.placeId] as PlaceEntity | undefined
+            if (placeData === undefined) return defaultData
             return placeData
         },
 
@@ -179,7 +191,7 @@ export default {
             if (this.place.id === undefined) {
                 return {
                     open: false,
-                    content: 'Tidak Buka'
+                    content: 'Tutup'
                 } satisfies OpeningHoursStatus
             }
             const openingHours = this.place.openingHours.find((item: OpeningHoursDay) => item.dayIndex === this.dayIndex) as OpeningHoursDay
@@ -192,6 +204,10 @@ export default {
                 { latitude: this.place.latitude, longitude: this.place.longitude }
             )
             return distanceInMater / 1000
+        },
+
+        isPlaceOwner (): boolean {
+            return (this.place.user.id === this.myInfo.id)
         }
     },
 
@@ -283,9 +299,13 @@ export default {
 .action-button {
     overflow-x: scroll;
     scroll-behavior: smooth;
+    display: grid;
     .action-item {
-        width: 800px;
         padding: 0 1rem;
+        .btn{
+            display: flex;
+            text-wrap: nowrap;
+        }
     }
 }
 </style>

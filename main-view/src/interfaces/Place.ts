@@ -30,8 +30,8 @@ export interface OpeningHoursStatus {
 export interface CreatePlaceDto {
     name: string
     description: string
-    categoryId: string[]
-    address: string[]
+    categoryId: string
+    address: string
     latitude: number
     longitude: number
     mapImageIds: string[]
@@ -43,6 +43,8 @@ export interface CreatePlaceDto {
     hashtags: string[]
 }
 
+export interface EditPlaceDto extends CreatePlaceDto {}
+
 export interface PlaceEntity {
     id: string
     userId: string
@@ -51,10 +53,12 @@ export interface PlaceEntity {
     description: string
     categoryId: string
     mapImageIds: any
+    mapImageCoverId: string
     latitude: number
     longitude: number
     address: string
     openingHours: OpeningHoursDay[]
+    hashtags: string[]
     website?: string
     phone?: string
     price: number
