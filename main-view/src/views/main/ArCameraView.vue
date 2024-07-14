@@ -19,8 +19,10 @@ import classNames from 'classnames'
             embedded>
 
             <a-camera
+                v-if="coordLoaded"
+                look-controls
                 rotation-reader
-                :gps-new-camera="`gpsMinDistance: 10; simulateLatitude: ${myCoordinates.latitude}; simulateLongitude: ${myCoordinates.longitude};`">
+                :gps-new-camera="`gpsMinDistance: 5; simulateLatitude: ${myCoordinates.latitude}; simulateLongitude: ${myCoordinates.longitude};`">
             </a-camera>
 
             <a-entity
@@ -220,6 +222,7 @@ export default {
         await this.getCurrentGeolocation()
         this.myCoordinates.latitude = this.coordinates.latitude
         this.myCoordinates.longitude = this.coordinates.longitude
+        this.coordLoaded = true
         await this.getPlaceArMapSearch(this.myCoordinates)
 
         // Render places.
@@ -281,9 +284,10 @@ export default {
         return {
             places: [] as VrPlace[],
             myCoordinates: {
-                latitude: -5.3636897,
+                latitude: 0,
                 longitude: 105.2957217
-            } satisfies GeolibInputCoordinates
+            } satisfies GeolibInputCoordinates,
+            coordLoaded: false
         }
     }
 }
