@@ -22,12 +22,12 @@
                     </RouterLink>
                 </li>
                 <li class="nav-item">
-                    <RouterLink :to="{name: 'ar-camera'}" class="nav-link waves-effect waves-dark" href="javascript:void(0)">
+                    <a class="nav-link waves-effect waves-dark" href="to-ar-cam.html">
                         <div class="box-icon">
                             <i class="bi-vignette"></i>
                         </div>
                         <span>AR Cam</span>
-                    </RouterLink>
+                    </a>
                 </li>
                 <li class="nav-item">
                     <RouterLink :to="{name: 'contribution'}" class="nav-link waves-effect waves-dark" href="javascript:void(0)">

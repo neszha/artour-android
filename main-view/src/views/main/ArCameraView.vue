@@ -34,6 +34,7 @@ import classNames from 'classnames'
                 look-at="[gps-new-camera]"
                 scale="1 1 1">
                 <a-entity
+                    :placeId="place.id"
                     :rotation="place.rotation"
                     :position="place.position"
                     scale="1 1 1"
@@ -215,17 +216,17 @@ export default {
 
         toExploreView () {
             this.$router.push({ name: 'explore' })
-            setTimeout(() => {
-                window.location.reload()
-            }, 10)
         },
 
         toPlaceDetailView (placeId: string) {
-            this.$router.push({ name: 'place:detail', params: { placeId } })
+            setTimeout(() => {
+                this.$router.push({ name: 'place:detail', params: { placeId } })
+            }, 150)
         }
     },
 
     async beforeMount () {
+        // Get my location.
         await this.getCurrentGeolocation()
         this.myCoordinates.latitude = this.coordinates.latitude
         this.myCoordinates.longitude = this.coordinates.longitude
@@ -281,14 +282,15 @@ export default {
 
         // Handle ar-scene.
         try {
-            const router = this.$router
+            const toPlaceDetailView = this.toPlaceDetailView as any
             window.AFRAME.registerComponent('place-entity', {
                 init: function () {
                     this.el.addEventListener('click', (event: Event) => {
                         if (event.target === null) return
                         const parentEl = (event.target as HTMLElement).parentElement
                         const placeId = parentEl?.getAttribute('placeId')
-                        router.push({ name: 'place:detail', params: { placeId } })
+                        if (placeId === null) return
+                        toPlaceDetailView(placeId)
                     })
                 }
             })

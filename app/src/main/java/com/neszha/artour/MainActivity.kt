@@ -300,6 +300,7 @@ fun WebViewScreen(webUrl: String) {
                     settings.useWideViewPort = true
                     settings.textZoom = 100
                     settings.domStorageEnabled = true
+                    settings.mediaPlaybackRequiresUserGesture = false
 
                     // Custom chrome function.
                     webChromeClient = contextActivity.createWebChromeClient()
