@@ -26,67 +26,72 @@ import classNames from 'classnames'
             </a-camera>
 
             <a-entity
-                v-for="place in places"
+                v-for="(place) in places"
                 :placeId="place.id"
                 :key="place.id"
                 :gps-new-entity-place="`latitude: ${place.latitude}; longitude: ${place.longitude}`"
-                :rotation="`-10 ${place.circleBearing} 0`"
                 place-entity
                 look-at="[gps-new-camera]"
                 scale="1 1 1">
-                <a-image
-                    src="/dummy-images/place-img-01.jpg"
-                    position="-2 0 0.01"
+                <a-entity
+                    :rotation="place.rotation"
+                    :position="place.position"
                     scale="1 1 1"
-                    width="3.5"
-                    height="3.5">
-                </a-image>
-                <a-text
-                    :value="place.name"
-                    position="0.1 1.55 0.01"
-                    color="#000"
-                    width="4"
-                    line-height="50"
-                    letter-spacing="2"
-                    wrap-count="30"
-                    align="left"
-                    anchor="left"
-                    baseline="top"
-                    side="double"
-                    >
-                </a-text>
-                <a-text
-                    :value="place.description"
-                    position="0.1 0.9 0.01"
-                    color="#000"
-                    width="4"
-                    line-height="50"
-                    letter-spacing="2"
-                    wrap-count="35"
-                    align="left"
-                    anchor="left"
-                    baseline="top"
-                    side="double"
-                    >
-                </a-text>
-                <a-text
-                    :value="`${place.distance.toFixed(1)} KM`"
-                    position="0 -1.6 0.01"
-                    color="#000"
-                    width="15"
-                    line-height="50"
-                    letter-spacing="2"
-                    align="left"
-                    anchor="left"
-                    baseline="bottom"
-                    side="double"
-                    >
-                </a-text>
-                <a-plane
-                    width="8"
-                    height="4"
-                    material="color: #fff; opacity: 0.8">
-                </a-plane>
+                >
+                    <a-image
+                        :src="place.mapArImageCover?.link"
+                        position="-2 0 0.01"
+                        scale="1 1 1"
+                        width="3.5"
+                        height="3.5">
+                    </a-image>
+                    <a-text
+                        :value="place.name"
+                        position="0.1 1.55 0.01"
+                        color="#000"
+                        width="4"
+                        line-height="50"
+                        letter-spacing="2"
+                        wrap-count="30"
+                        align="left"
+                        anchor="left"
+                        baseline="top"
+                        side="double"
+                        >
+                    </a-text>
+                    <a-text
+                        :value="place.description"
+                        position="0.1 0.9 0.01"
+                        color="#000"
+                        width="4"
+                        line-height="50"
+                        letter-spacing="2"
+                        wrap-count="35"
+                        align="left"
+                        anchor="left"
+                        baseline="top"
+                        side="double"
+                        >
+                    </a-text>
+                    <a-text
+                        :value="`${place.distance.toFixed(1)} KM`"
+                        position="0 -1.6 0.01"
+                        color="#000"
+                        width="15"
+                        line-height="50"
+                        letter-spacing="2"
+                        align="left"
+                        anchor="left"
+                        baseline="bottom"
+                        side="double"
+                        >
+                    </a-text>
+                    <a-plane
+                        width="8"
+                        height="4"
+                        material="color: #fff; opacity: 0.9">
+                    </a-plane>
+                </a-entity>
             </a-entity>
 
         </a-scene>
@@ -151,6 +156,8 @@ interface GeolibInputCoordinates {
 interface VrPlace extends PlaceEntity {
     distance: number // in KM
     circleBearing: number
+    position: string
+    rotation: string
 }
 
 export default {
@@ -232,15 +239,25 @@ export default {
                 { latitude: place.latitude, longitude: place.longitude }
             )
             const placeCoord: Coordinates = { latitude: place.latitude, longitude: place.longitude }
-            const nearDistanceInMeter = 12 + (index * 2)
+            const nearDistanceInMeter = 12 + (index)
             const nearCoordinates: GeolibInputCoordinates = this.moveCloser(this.myCoordinates, placeCoord, nearDistanceInMeter)
-            const circleBearing = getGreatCircleBearing(this.myCoordinates as GeolibInputCoordinates, nearCoordinates)
+            const circleBearing = 360 - getGreatCircleBearing(this.myCoordinates as GeolibInputCoordinates, nearCoordinates)
             const vrPlace: VrPlace = {
                 ...place,
                 latitude: nearCoordinates.latitude,
                 longitude: nearCoordinates.longitude,
                 distance: distanceInMeter / 1000,
-                circleBearing: 360 - circleBearing
+                circleBearing,
+                position: '0 -4 0',
+                rotation: `-20 ${circleBearing} 0`
+            }
+            if (index === 1) {
+                vrPlace.position = '0 0 0'
+                vrPlace.rotation = `0 ${circleBearing} 0`
+            }
+            if (index >= 2) {
+                vrPlace.position = '0 4.5 0'
+                vrPlace.rotation = `0 ${circleBearing} 0`
             }
             if (place.description.length > 160) {
                 place.description = place.description.slice(0, 160) + '...'

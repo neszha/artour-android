@@ -1,3 +1,4 @@
+import { type File } from './File'
 import { type PlaceStatusEnum, type MapMarkerEnum } from './enums'
 
 export interface MapMarker {
@@ -54,6 +55,7 @@ export interface PlaceEntity {
     categoryId: string
     mapImageIds: any
     mapImageCoverId: string
+    mapArImageCoverId: string
     latitude: number
     longitude: number
     address: string
@@ -73,4 +75,5 @@ export interface PlaceEntity {
     category: PlaceCategory
     mapImages?: File[]
     mapImageCover?: File
+    mapArImageCover?: File
 }

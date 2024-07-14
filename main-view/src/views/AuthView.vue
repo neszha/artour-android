@@ -89,6 +89,10 @@ export default {
 
         async authGoogleAndroidCallback (token: string): Promise<void> {
             this.authGoogle.loading = true
+            const timeout = setTimeout(() => {
+                this.authGoogle.loading = false
+                window.Android.showToast('Login timeout. Please try again.')
+            }, 5_000)
             // this.$router.push({ name: 'explore' }) // for dev.
             try {
                 const url = new URL(`${API_BASE_URL}${API_URL_AUTH_GOOGLE_MOBILE_CALLBACK}`)
@@ -97,10 +101,12 @@ export default {
                 const authToken = response.data.data.authToken as string
                 localStorage.setItem('access_token', authToken)
                 axiosUpdateAuthorization()
+                clearTimeout(timeout)
                 this.$router.push({ name: 'explore' })
             } catch (error) {
                 window.Android.showToast('Failed to login. Please try again.')
                 this.authGoogle.loading = false
+                clearTimeout(timeout)
             }
         }
     },
