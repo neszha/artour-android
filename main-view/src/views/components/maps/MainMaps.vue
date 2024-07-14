@@ -1,5 +1,17 @@
 <template>
     <div ref="googleMap" class="google-map"></div>
+
+    <!-- popup marker template -->
+    <div id="marker-popup" class="d-none" style="position: absolute; top: 0; left: 0; z-index: 100; background-color: white; max-width: 240px;">
+        <div class="marker-popup">
+            <div class="col-auto image-item rounded mb-3">
+                <img alt="..." src="//:image">
+            </div>
+            <h4 class="mb-2">:title</h4>
+            <p class="mb-2">:description</p>
+            <a class="mb-1" href=":link">Selengkapnya</a>
+        </div>
+    </div>
 </template>
 
 <script lang="ts">
@@ -88,6 +100,29 @@ export default {
                 })
                 marker.setMap(this.googleMap as google.maps.Map)
                 placeMarkers.push(marker)
+
+                // Info window.
+                const markerContent = document.getElementById('marker-popup')
+                const htmlContent = markerContent?.innerHTML
+                    .replace('//:image', place.mapImageCover?.link as string)
+                    .replace(':title', place.name as string)
+                    .replace(':description', place.description as string)
+                    .replace(':link', `/#/places/${place.id}`)
+                const infowindow = new google.maps.InfoWindow({
+                    content: htmlContent,
+                    maxWidth: 200
+                })
+
+                // Handle click event.
+                marker.addListener('click', () => {
+                    if (marker.getAnimation() !== 1) {
+                        marker.setAnimation(google.maps.Animation.BOUNCE)
+                    }
+                    infowindow.open(this.googleMap as google.maps.Map, marker)
+                    setTimeout(() => {
+                        marker.setAnimation(null)
+                    }, 1_500)
+                })
             }
 
             // Set maps center.
@@ -194,11 +229,21 @@ export default {
 }
 </style>
 
-<style>
+<style lang="scss">
 .gmnoprint {
     display: none;
 }
 .gm-style-cc {
     display: none;
+}
+.marker-popup {
+    img {
+        width: 100%;
+        border-radius: 8px;
+    }
+    p {
+        font-size: 14px;
+        line-height: 22px;
+    }
 }
 </style>

@@ -67,7 +67,7 @@ import classNames from 'classnames'
                         width="4"
                         line-height="50"
                         letter-spacing="2"
-                        wrap-count="35"
+                        wrap-count="37"
                         align="left"
                         anchor="left"
                         baseline="top"
