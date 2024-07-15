@@ -2,6 +2,7 @@
 import numeral from 'numeral'
 import classNames from 'classnames'
 import CardPlaceReview from '@components/card/CardPlaceReview.vue'
+import PlaceActionButton from '@components/place/PlaceActionButton.vue'
 </script>
 
 <template>
@@ -63,44 +64,13 @@ import CardPlaceReview from '@components/card/CardPlaceReview.vue'
     </section>
 
     <!-- action buttons -->
-    <section class="action-button mb-2 pt-1">
-        <div class="action-item d-flex gap-2 mb-2">
-            <RouterLink
-                v-if="isPlaceOwner"
-                :to="{ name: 'place:manage', params: { placeId }}"
-                class="btn btn-outline-primary border-base waves-effect waves-light"
-                style="border-style: dashed;">
-                <i class="bi bi-pencil-square Tempat me-2"></i>
-                <span>Kelola</span>
-            </RouterLink>
-            <button class="btn btn-primary border-base waves-effect waves-light">
-                <i class="bi bi-sign-turn-right-fill me-2"></i>
-                <span>Buka Rute</span>
-            </button>
-            <button class="btn btn-neutral border-primary text-primary waves-effect waves-dark">
-                <i class="bi bi-hand-thumbs-up-fill me-2"></i>
-                <span>Like ({{ numeral(place.like || 0).format('0.[0]a').toUpperCase() }})</span>
-            </button>
-            <button class="btn btn-neutral border-dark waves-effect waves-dark">
-                <i class="bi bi-hand-thumbs-down me-2"></i>
-                <span>Dislike ({{ numeral(place.dislike || 0).format('0.[0]a').toUpperCase() }})</span>
-            </button>
-            <button class="btn btn-neutral border-primary text-primary waves-effect waves-dark">
-                <i class="bi bi-bookmark-plus-fill me-2"></i>
-                <span>Simpan (2)</span>
-            </button>
-            <button class="btn btn-neutral border-dark waves-effect waves-dark">
-                <i class="bi bi-share-fill me-2"></i>
-                <span>Bagikan</span>
-            </button>
-        </div>
-    </section>
+    <PlaceActionButton v-if="place.id" :placeData="place" />
 
     <!-- place description -->
     <section class="mb-4">
         <div class="container-fluid">
             <div class="views">
-                <small>{{ numeral(place.hit || 0).format('0.[0]a').toUpperCase() }} Pengunjung</small>
+                <small>{{ numeral(place.viwes || 0).format('0.[0]a').toUpperCase() }} Pengunjung</small>
             </div>
             <p class="description mb-3">
                 {{ place.description }}
@@ -204,10 +174,6 @@ export default {
                 { latitude: this.place.latitude, longitude: this.place.longitude }
             )
             return distanceInMater / 1000
-        },
-
-        isPlaceOwner (): boolean {
-            return (this.place.user.id === this.myInfo.id)
         }
     },
 
@@ -293,18 +259,6 @@ export default {
         .box-img {
             width: 180px;
             aspect-ratio: 1/1;
-        }
-    }
-}
-.action-button {
-    overflow-x: scroll;
-    scroll-behavior: smooth;
-    display: grid;
-    .action-item {
-        padding: 0 1rem;
-        .btn{
-            display: flex;
-            text-wrap: nowrap;
         }
     }
 }

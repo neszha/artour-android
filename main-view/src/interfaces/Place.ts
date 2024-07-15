@@ -1,4 +1,5 @@
 import { type File } from './File'
+import { type UserEntity } from './User'
 import { type PlaceStatusEnum, type MapMarkerEnum } from './enums'
 
 export interface MapMarker {
@@ -72,6 +73,7 @@ export interface PlaceEntity {
     createdAt: Date
     updatedAt: Date
 
+    user?: UserEntity
     category: PlaceCategory
     mapImages?: File[]
     mapImageCover?: File
