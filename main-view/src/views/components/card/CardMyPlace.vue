@@ -40,7 +40,7 @@ import classNames from 'classnames'
                     'bi-star-half': (place.rating > i - 1 && place.rating < i),
                     'bi-star-fill': (place.rating >= i),
                 })" class="bi text-warning"></i>
-                <span>({{ place.rating }})</span>
+                <span>({{ place.rating.toFixed(1) }})</span>
             </div>
             <p class="price text-primary">
                 {{ toIdrCurrency(place.price) }}

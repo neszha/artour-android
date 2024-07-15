@@ -29,7 +29,7 @@ import CardPlaceReview from '@components/card/CardPlaceReview.vue'
         <div class="container-fluid">
             <h6 class="mb-1">{{ place.name }}</h6>
             <div class="rating d-flex gap-1">
-                <span>{{ place.rating || 0 }}</span>
+                <span v-if="place.rating !== undefined">{{ place.rating.toFixed(1) || 0 }}</span>
                 <i v-for="i of 5" :key="i" :class="classNames({
                     'bi-star': (place.rating <= i - 1),
                     'bi-star-half': (place.rating > i - 1 && place.rating < i),
