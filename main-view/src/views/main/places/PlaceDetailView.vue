@@ -30,13 +30,13 @@ import PlaceActionButton from '@components/place/PlaceActionButton.vue'
         <div class="container-fluid">
             <h6 class="mb-1">{{ place.name }}</h6>
             <div class="rating d-flex gap-1">
-                <span v-if="place.rating !== undefined">{{ place.rating.toFixed(1) || 0 }}</span>
                 <i v-for="i of 5" :key="i" :class="classNames({
                     'bi-star': (place.rating <= i - 1),
                     'bi-star-half': (place.rating > i - 1 && place.rating < i),
                     'bi-star-fill': (place.rating >= i),
                 })" class="bi text-warning"></i>
-                <span>(?)</span>
+                <span v-if="place.rating !== undefined">({{ place.rating.toFixed(2) || 0 }})</span>
+                <span>22K Ulasan</span>
             </div>
             <small>Jarak {{ placeDistance.toFixed(2) }} KM</small>
         </div>
@@ -70,7 +70,7 @@ import PlaceActionButton from '@components/place/PlaceActionButton.vue'
     <section class="mb-4">
         <div class="container-fluid">
             <div class="views">
-                <small>{{ numeral(place.viwes || 0).format('0.[0]a').toUpperCase() }} Pengunjung</small>
+                <small>{{ numeral(place.views || 0).format('0.[0]a').toUpperCase() }} Pengunjung</small>
             </div>
             <p class="description mb-3">
                 {{ place.description }}
@@ -131,6 +131,8 @@ import { toIdrCurrency } from '@/helpers/formater.helper'
 import { useGeolocationStore } from '@/stores/geolocation.store'
 import { getPlaceOpenHourStatus } from '@/helpers/time.helper'
 import { useUserStore } from '@/stores/user.store'
+import { API_URL_PLACE_INC_VIEWS } from '@/constants/api-url'
+import axios from '@/helpers/axios.helper'
 
 export default {
     computed: {
@@ -179,7 +181,16 @@ export default {
 
     methods: {
         ...mapActions(useGeolocationStore, ['getCurrentGeolocation']),
-        ...mapActions(usePlaceStore, ['getPlaceDetail'])
+        ...mapActions(usePlaceStore, ['getPlaceDetail']),
+
+        async incPlaceViews () {
+            try {
+                const url = API_URL_PLACE_INC_VIEWS.replace(':placeId', this.place.id as string)
+                await axios.post(url)
+            } catch (error) {
+                console.error(error)
+            }
+        }
     },
 
     async beforeMount () {
@@ -195,11 +206,21 @@ export default {
             top: 0,
             behavior: 'instant'
         })
+        this.incPlaceViwesTimeout = setTimeout(() => {
+            this.incPlaceViews()
+        }, 10_000)
+    },
+
+    beforeUnmount () {
+        if (this.incPlaceViwesTimeout !== null) {
+            clearTimeout(this.incPlaceViwesTimeout as NodeJS.Timeout)
+        }
     },
 
     data () {
         return {
-            dayIndex: new Date().getDay()
+            dayIndex: new Date().getDay(),
+            incPlaceViwesTimeout: null as NodeJS.Timeout | null
         }
     }
 }

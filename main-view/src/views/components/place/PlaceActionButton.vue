@@ -12,7 +12,7 @@ import numeral from 'numeral'
                 <span>Kelola</span>
             </RouterLink>
 
-            <button class="btn btn-primary border-base waves-effect waves-light">
+            <button @click="openGoogleMapDirectionLink()" class="btn btn-primary border-base waves-effect waves-light">
                 <i class="bi bi-sign-turn-right-fill me-2"></i>
                 <span>Buka Rute</span>
             </button>
@@ -47,9 +47,19 @@ import numeral from 'numeral'
                 <span>Dislike ({{ numeral(metaData.dislike.count || 0).format('0.[0]a').toUpperCase() }})</span>
             </button>
 
-            <button class="btn btn-neutral border-primary text-primary waves-effect waves-dark">
+            <button
+                v-if="metaData.saved.setted"
+                @click="addToBookmark()"
+                class="btn btn-neutral border-primary text-primary waves-effect waves-dark">
                 <i class="bi bi-bookmark-plus-fill me-2"></i>
-                <span>Simpan (2)</span>
+                <span>Simpan ({{ numeral(metaData.saved.count || 0).format('0.[0]a').toUpperCase() }})</span>
+            </button>
+            <button
+                v-else
+                  @click="addToBookmark()"
+                class="btn btn-neutral border-dark waves-effect waves-dark">
+                <i class="bi bi-bookmark-plus me-2"></i>
+                <span>Simpan ({{ numeral(metaData.saved.count || 0).format('0.[0]a').toUpperCase() }})</span>
             </button>
 
             <button class="btn btn-neutral border-dark waves-effect waves-dark">
@@ -65,7 +75,7 @@ import numeral from 'numeral'
 import { mapState } from 'pinia'
 import { useUserStore } from '@/stores/user.store'
 import { type PlaceEntity } from '@/interfaces/Place'
-import { API_URL_PLACE_ACTION_METADATA, API_URL_PLACE_DISLIKE, API_URL_PLACE_LIKE } from '@/constants/api-url'
+import { API_URL_PLACE_ACTION_METADATA, API_URL_PLACE_ADD_BOOKMARKS, API_URL_PLACE_DISLIKE, API_URL_PLACE_LIKE } from '@/constants/api-url'
 import axios from '@/helpers/axios.helper'
 import { type AxiosResponse } from 'axios'
 
@@ -95,6 +105,10 @@ export default {
             }
         },
 
+        openGoogleMapDirectionLink () {
+            window.open(`https://www.google.com/maps/dir/?api=1&destination=${this.place.latitude},${this.place.longitude}`)
+        },
+
         async likePlace () {
             try {
                 const url = API_URL_PLACE_LIKE.replace(':placeId', this.place.id as string)
@@ -108,6 +122,16 @@ export default {
         async dislikePlace () {
             try {
                 const url = API_URL_PLACE_DISLIKE.replace(':placeId', this.place.id as string)
+                await axios.post(url)
+            } catch (error) {
+                console.error(error)
+            }
+            await this.getActionMetaData()
+        },
+
+        async addToBookmark () {
+            try {
+                const url = API_URL_PLACE_ADD_BOOKMARKS.replace(':placeId', this.place.id as string)
                 await axios.post(url)
             } catch (error) {
                 console.error(error)

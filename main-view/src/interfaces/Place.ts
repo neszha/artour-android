@@ -66,7 +66,7 @@ export interface PlaceEntity {
     phone?: string
     price: number
     rating: number
-    viwes: number
+    views: number
     like: number
     dislike: number
     saved: number
