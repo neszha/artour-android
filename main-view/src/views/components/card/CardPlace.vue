@@ -1,5 +1,3 @@
-import { lang } from "moment"
-
 <template>
     <div @click="toPlaceDetailView('id')" class="card">
         <div class="card-box-img">

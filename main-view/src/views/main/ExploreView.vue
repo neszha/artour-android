@@ -2,6 +2,7 @@
 import MainLayout from '../layouts/MainLayout.vue'
 import CardPlace from '@components/card/CardPlace.vue'
 import CardPlaceCategory from '@components/card/CardPlaceCategory.vue'
+import CardPlaceHightlight from '@components/card/CardPlaceHightlight.vue'
 </script>
 
 <template>
@@ -58,15 +59,8 @@ import CardPlaceCategory from '@components/card/CardPlaceCategory.vue'
                 </div>
             </div>
             <div class="horizontal-scroll">
-                <div class="hs-item px-3">
-                    <CardPlace />
-                    <CardPlace />
-                    <CardPlace />
-                    <CardPlace />
-                    <CardPlace />
-                    <CardPlace />
-                    <CardPlace />
-                    <CardPlace />
+                <div v-for="place in hightlightPlaces" :key="place.id" class="hs-item px-3">
+                    <CardPlaceHightlight :placeId="place.id" />
                 </div>
             </div>
         </section>
@@ -146,12 +140,25 @@ import CardPlaceCategory from '@components/card/CardPlaceCategory.vue'
 </template>
 
 <script lang="ts">
+import { mapActions, mapState } from 'pinia'
+import { usePlaceStore } from '@/stores/place.store'
+
 export default {
 
+    computed: {
+        ...mapState(usePlaceStore, ['hightlightPlaces'])
+    },
+
     methods: {
+        ...mapActions(usePlaceStore, ['getHighlightPlaces']),
+
         toMapView () {
             this.$router.push({ name: 'maps' })
         }
+    },
+
+    beforeMount () {
+        this.getHighlightPlaces()
     },
 
     mounted () {

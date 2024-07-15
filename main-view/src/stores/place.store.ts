@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { type AxiosResponse } from 'axios'
 import axios from '@/helpers/axios.helper'
-import { API_URL_PLACES, API_URL_PLACES_ID, API_URL_PLACE_AR_MAP_SEARCH, API_URL_PLACE_CATEGORIES, API_URL_PLACE_CATEGORY_MAP_MARKERS, API_URL_PLACE_MAP_SEARCH } from '@/constants/api-url'
+import { API_URL_PLACES, API_URL_PLACES_ID, API_URL_PLACE_AR_MAP_SEARCH, API_URL_PLACE_CATEGORIES, API_URL_PLACE_CATEGORY_MAP_MARKERS, API_URL_PLACE_HIGHLIGHT, API_URL_PLACE_MAP_SEARCH } from '@/constants/api-url'
 import { type PlaceCategory, type MapMarker, type PlaceEntity } from '@/interfaces/Place'
 import { type Coordinates } from '@/interfaces/Geolocation'
 
@@ -12,6 +12,7 @@ interface PlaceState {
     placeDetailObject?: Record<string, PlaceEntity>
     placeSearchList: PlaceEntity[]
     placeArSearchList: PlaceEntity[]
+    hightlightPlaces: PlaceEntity[]
 }
 
 export const usePlaceStore = defineStore('place', {
@@ -24,7 +25,8 @@ export const usePlaceStore = defineStore('place', {
         myPlaces: [],
         placeDetailObject: {},
         placeSearchList: [],
-        placeArSearchList: []
+        placeArSearchList: [],
+        hightlightPlaces: []
     }),
 
     /**
@@ -90,6 +92,17 @@ export const usePlaceStore = defineStore('place', {
                 this.placeArSearchList = data
             } catch (error) {
                 this.placeArSearchList = []
+                console.error(error)
+            }
+        },
+
+        async getHighlightPlaces () {
+            try {
+                const response: AxiosResponse = await axios.get(API_URL_PLACE_HIGHLIGHT)
+                const data = response.data.data as PlaceEntity[]
+                this.hightlightPlaces = data
+            } catch (error) {
+                this.hightlightPlaces = []
                 console.error(error)
             }
         },

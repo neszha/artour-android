@@ -37,7 +37,7 @@ import CardPlaceReview from '@components/card/CardPlaceReview.vue'
                 })" class="bi text-warning"></i>
                 <span>(?)</span>
             </div>
-            <small>Jarak {{ placeDistance.toFixed(1) }} KM</small>
+            <small>Jarak {{ placeDistance.toFixed(2) }} KM</small>
         </div>
     </section>
 

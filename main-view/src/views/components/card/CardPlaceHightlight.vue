@@ -1,11 +1,17 @@
 <script setup lang="ts">
 import classNames from 'classnames'
+import { toIdrCurrency } from '@/helpers/formater.helper'
 </script>
 
 <template>
-    <div @click="toManagePlaceView()" class="card">
+    <div @click="toPlaceDetailView('id')" class="card">
         <div class="card-box-img">
             <img :src="imageCoverLink" alt="..." class="card-img">
+            <div class="badge-absolute">
+                <span class="badge bg-light text-dark border mb-2">
+                    {{ placeDistance.toFixed(1) }} KM
+                </span>
+            </div>
         </div>
         <div class="card-body">
             <span class="badge bg-white text-dark border mb-2">
@@ -50,19 +56,30 @@ import classNames from 'classnames'
 </template>
 
 <script lang="ts">
-import { mapState } from 'pinia'
+import { mapActions, mapState } from 'pinia'
+import { getDistance } from 'geolib'
 import { type File } from '@/interfaces/File'
 import { usePlaceStore } from '@/stores/place.store'
-import { toIdrCurrency } from '@/helpers/formater.helper'
 import { getPlaceOpenHourStatus } from '@/helpers/time.helper'
+import { useGeolocationStore } from '@/stores/geolocation.store'
 import { type OpeningHoursStatus, type OpeningHoursDay, type PlaceEntity } from '@/interfaces/Place'
 
 export default {
+
     computed: {
-        ...mapState(usePlaceStore, ['myPlaces']),
+        ...mapState(usePlaceStore, ['hightlightPlaces']),
+        ...mapState(useGeolocationStore, ['coordinates']),
 
         place (): PlaceEntity {
-            return this.myPlaces.find(place => place.id === this.placeId) as PlaceEntity
+            return this.hightlightPlaces.find(place => place.id === this.placeId) as PlaceEntity
+        },
+
+        placeDistance (): number {
+            const distanceInMater = getDistance(
+                { latitude: this.coordinates.latitude, longitude: this.coordinates.longitude },
+                { latitude: this.place.latitude, longitude: this.place.longitude }
+            )
+            return distanceInMater / 1000
         },
 
         imageCoverLink (): string {
@@ -78,9 +95,15 @@ export default {
     },
 
     methods: {
-        toManagePlaceView () {
-            this.$router.push({ name: 'place:manage', params: { placeId: this.placeId } })
+        ...mapActions(useGeolocationStore, ['getCurrentGeolocation']),
+
+        toPlaceDetailView (placeId: string) {
+            this.$router.push({ name: 'place:detail', params: { placeId } })
         }
+    },
+
+    beforeMount () {
+        this.getCurrentGeolocation()
     },
 
     data () {
@@ -104,6 +127,12 @@ export default {
         .card-img {
             border-radius: 0;
         }
+        .badge-absolute {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            z-index: 2;
+        }
     }
     .card-body {
         padding: 16px;
@@ -111,7 +140,6 @@ export default {
             font-weight: bold;
             overflow: hidden;
             text-overflow: ellipsis;
-            text-wrap: nowrap;
         }
         .description {
             font-size: 14px;
@@ -120,11 +148,6 @@ export default {
         }
         .list-info {
             font-size: 12px;
-            span {
-                overflow: hidden;
-                text-wrap: nowrap;
-                text-overflow: ellipsis;
-            }
         }
         .rating {
             font-size: 16px;
@@ -140,19 +163,12 @@ export default {
 .card.card-place-sm {
     border-radius: calc(var(--x-card-border-radius) - 0.1rem);
     .card-box-img {
-        width: 100%;
-        height: 140px;
         .badge-absolute {
             top: 10px;
             right: 10px;
             .badge {
                 font-size: 10px;
             }
-        }
-        img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
         }
     }
     .card-body {
