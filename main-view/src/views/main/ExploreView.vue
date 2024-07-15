@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import MainLayout from '../layouts/MainLayout.vue'
-import CardPlace from '@components/card/CardPlace.vue'
+import CardPlaceNearest from '@components/card/CardPlaceNearest.vue'
 import CardPlaceCategory from '@components/card/CardPlaceCategory.vue'
 import CardPlaceHightlight from '@components/card/CardPlaceHightlight.vue'
 </script>
@@ -59,8 +59,8 @@ import CardPlaceHightlight from '@components/card/CardPlaceHightlight.vue'
                 </div>
             </div>
             <div class="horizontal-scroll">
-                <div v-for="place in hightlightPlaces" :key="place.id" class="hs-item px-3">
-                    <CardPlaceHightlight :placeId="place.id" />
+                <div class="hs-item px-3">
+                    <CardPlaceHightlight v-for="place in hightlightPlaces" :key="place.id" :placeId="place.id" />
                 </div>
             </div>
         </section>
@@ -109,29 +109,8 @@ import CardPlaceHightlight from '@components/card/CardPlaceHightlight.vue'
             </div>
             <div class="vertical-infinite-scroll px-2">
                 <div class="row w-100">
-                    <div class="col-6 mb-3 px-2">
-                        <CardPlace class="card-place-sm" />
-                    </div>
-                    <div class="col-6 mb-3 px-2">
-                        <CardPlace class="card-place-sm" />
-                    </div>
-                    <div class="col-6 mb-3 px-2">
-                        <CardPlace class="card-place-sm" />
-                    </div>
-                    <div class="col-6 mb-3 px-2">
-                        <CardPlace class="card-place-sm" />
-                    </div>
-                    <div class="col-6 mb-3 px-2">
-                        <CardPlace class="card-place-sm" />
-                    </div>
-                    <div class="col-6 mb-3 px-2">
-                        <CardPlace class="card-place-sm" />
-                    </div>
-                    <div class="col-6 mb-3 px-2">
-                        <CardPlace class="card-place-sm" />
-                    </div>
-                    <div class="col-6 mb-3 px-2">
-                        <CardPlace class="card-place-sm" />
+                    <div  v-for="place in nearestPlaces" :key="place.id" class="col-6 mb-3 px-2">
+                        <CardPlaceNearest :placeId="place.id" class="card-place-sm" />
                     </div>
                 </div>
             </div>
@@ -142,23 +121,28 @@ import CardPlaceHightlight from '@components/card/CardPlaceHightlight.vue'
 <script lang="ts">
 import { mapActions, mapState } from 'pinia'
 import { usePlaceStore } from '@/stores/place.store'
+import { useGeolocationStore } from '@/stores/geolocation.store'
 
 export default {
 
     computed: {
-        ...mapState(usePlaceStore, ['hightlightPlaces'])
+        ...mapState(usePlaceStore, ['hightlightPlaces', 'nearestPlaces']),
+        ...mapState(useGeolocationStore, ['coordinates'])
     },
 
     methods: {
-        ...mapActions(usePlaceStore, ['getHighlightPlaces']),
+        ...mapActions(useGeolocationStore, ['getCurrentGeolocation']),
+        ...mapActions(usePlaceStore, ['getHighlightPlaces', 'getNearestPlaces']),
 
         toMapView () {
             this.$router.push({ name: 'maps' })
         }
     },
 
-    beforeMount () {
+    async beforeMount () {
         this.getHighlightPlaces()
+        await this.getCurrentGeolocation()
+        this.getNearestPlaces(this.coordinates)
     },
 
     mounted () {

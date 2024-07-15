@@ -67,11 +67,11 @@ import { type OpeningHoursStatus, type OpeningHoursDay, type PlaceEntity } from 
 export default {
 
     computed: {
-        ...mapState(usePlaceStore, ['hightlightPlaces']),
+        ...mapState(usePlaceStore, ['nearestPlaces']),
         ...mapState(useGeolocationStore, ['coordinates']),
 
         place (): PlaceEntity {
-            return this.hightlightPlaces.find(place => place.id === this.placeId) as PlaceEntity
+            return this.nearestPlaces.find(place => place.id === this.placeId) as PlaceEntity
         },
 
         placeDistance (): number {
@@ -118,8 +118,6 @@ export default {
     overflow: hidden;
     .card-box-img {
         position: relative;
-        width: 100%;
-        height: 160px;
         .card-img {
             border-radius: 0;
         }
@@ -129,11 +127,6 @@ export default {
             right: 16px;
             z-index: 2;
         }
-        img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
     }
     .card-body {
         padding: 16px;
@@ -141,6 +134,7 @@ export default {
             font-weight: bold;
             overflow: hidden;
             text-overflow: ellipsis;
+            text-wrap: nowrap;
         }
         .description {
             font-size: 14px;

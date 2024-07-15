@@ -20,9 +20,8 @@ import classNames from 'classnames'
 
             <a-camera
                 v-if="coordLoaded"
-                look-controls
                 rotation-reader
-                :gps-new-camera="`gpsMinDistance: 5; simulateLatitude: ${myCoordinates.latitude}; simulateLongitude: ${myCoordinates.longitude};`">
+                :gps-new-camera="`gpsMinDistance: 10; simulateLatitude: ${myCoordinates.latitude}; simulateLongitude: ${myCoordinates.longitude};`">
             </a-camera>
 
             <a-entity
@@ -123,7 +122,7 @@ import classNames from 'classnames'
                                             'bi-star-half': (place.rating > i - 1 && place.rating < i),
                                             'bi-star-fill': (place.rating >= i),
                                         })" class="bi text-warning"></i>
-                                        <span>({{ place.rating }})</span>
+                                        <span>({{ place.rating.toFixed(2) }})</span>
                                         <small>{{ place.distance.toFixed(1) }} KM</small>
                                     </div>
                                 </div>
@@ -242,6 +241,10 @@ export default {
             const placeCoord: Coordinates = { latitude: place.latitude, longitude: place.longitude }
             const nearDistanceInMeter = 12 + (index)
             const nearCoordinates: GeolibInputCoordinates = this.moveCloser(this.myCoordinates, placeCoord, nearDistanceInMeter)
+            // const newNearDistanceInMeter = getDistance(
+            //     { latitude: this.myCoordinates.latitude, longitude: this.myCoordinates.longitude },
+            //     { latitude: nearCoordinates.latitude, longitude: nearCoordinates.longitude }
+            // )
             const circleBearing = 360 - getGreatCircleBearing(this.myCoordinates as GeolibInputCoordinates, nearCoordinates)
             const vrPlace: VrPlace = {
                 ...place,
@@ -261,8 +264,10 @@ export default {
                 vrPlace.rotation = `0 ${circleBearing} 0`
             }
             if (place.description.length > 160) {
-                place.description = place.description.slice(0, 160) + '...'
+                vrPlace.description = place.description.slice(0, 160) + '...'
             }
+            // console.log(vrPlace.distance, nearDistanceInMeter, newNearDistanceInMeter, vrPlace.position, vrPlace.rotation)
+            // console.log({ ...vrPlace })
             return vrPlace
         })
     },

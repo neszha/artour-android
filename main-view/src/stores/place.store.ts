@@ -1,9 +1,9 @@
 import { defineStore } from 'pinia'
 import { type AxiosResponse } from 'axios'
 import axios from '@/helpers/axios.helper'
-import { API_URL_PLACES, API_URL_PLACES_ID, API_URL_PLACE_AR_MAP_SEARCH, API_URL_PLACE_CATEGORIES, API_URL_PLACE_CATEGORY_MAP_MARKERS, API_URL_PLACE_HIGHLIGHT, API_URL_PLACE_MAP_SEARCH } from '@/constants/api-url'
-import { type PlaceCategory, type MapMarker, type PlaceEntity } from '@/interfaces/Place'
 import { type Coordinates } from '@/interfaces/Geolocation'
+import { type PlaceCategory, type MapMarker, type PlaceEntity } from '@/interfaces/Place'
+import { API_URL_PLACES, API_URL_PLACES_ID, API_URL_PLACE_AR_MAP_SEARCH, API_URL_PLACE_CATEGORIES, API_URL_PLACE_CATEGORY_MAP_MARKERS, API_URL_PLACE_HIGHLIGHT, API_URL_PLACE_MAP_SEARCH, API_URL_PLACE_NEAREST } from '@/constants/api-url'
 
 interface PlaceState {
     mapMarkers: MapMarker[]
@@ -13,6 +13,7 @@ interface PlaceState {
     placeSearchList: PlaceEntity[]
     placeArSearchList: PlaceEntity[]
     hightlightPlaces: PlaceEntity[]
+    nearestPlaces: PlaceEntity[]
 }
 
 export const usePlaceStore = defineStore('place', {
@@ -26,7 +27,8 @@ export const usePlaceStore = defineStore('place', {
         placeDetailObject: {},
         placeSearchList: [],
         placeArSearchList: [],
-        hightlightPlaces: []
+        hightlightPlaces: [],
+        nearestPlaces: []
     }),
 
     /**
@@ -103,6 +105,20 @@ export const usePlaceStore = defineStore('place', {
                 this.hightlightPlaces = data
             } catch (error) {
                 this.hightlightPlaces = []
+                console.error(error)
+            }
+        },
+
+        async getNearestPlaces (coord: Coordinates) {
+            try {
+                const response: AxiosResponse = await axios.post(API_URL_PLACE_NEAREST, {
+                    latitude: coord.latitude,
+                    longitude: coord.longitude
+                })
+                const data = response.data.data as PlaceEntity[]
+                this.nearestPlaces = data
+            } catch (error) {
+                this.nearestPlaces = []
                 console.error(error)
             }
         },

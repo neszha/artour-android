@@ -33,5 +33,6 @@ export const API_URL_PLACES_ID: string = '/places/:placeId'
  * Place Search
  */
 export const API_URL_PLACE_HIGHLIGHT: string = '/places/highlight'
+export const API_URL_PLACE_NEAREST: string = '/places/nearest'
 export const API_URL_PLACE_MAP_SEARCH: string = '/places/map-search' // ?keyword={#1}
 export const API_URL_PLACE_AR_MAP_SEARCH: string = '/places/ar-map-search'
