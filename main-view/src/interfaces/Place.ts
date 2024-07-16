@@ -7,13 +7,15 @@ export interface MapMarker {
     url: string
 }
 
-export interface PlaceCategory {
+export interface PlaceCategoryEntity {
     id: string
     name: string
     description: string
     mapMarker: string
     createdAt: Date
     updatedAt: Date
+
+    popularPlace?: PlaceEntity
 }
 
 export interface OpeningHoursDay {

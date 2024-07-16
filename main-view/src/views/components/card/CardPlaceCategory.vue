@@ -1,29 +1,60 @@
 <template>
     <div class="card">
         <div class="card-box-img">
-            <img src="@assets/dummy-images/place-img-02.jpg" alt="..." class="card-img">
+            <img :src="category.popularPlace?.mapImageCover?.link" alt="..." class="card-img">
         </div>
         <div class="card-body p-3">
             <h3 class="title h4 mb-2">
-                Lorem ipsum
+                {{ category.name }}
             </h3>
             <p class="description mb-2">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ornare pretium placerat ut
-                platea.
+                {{ category.description }}
             </p>
-            <a href="javascript:void(0)" class="text-primary">
+            <RouterLink
+                :to="{ name: 'maps', query: { keyword: category.name.toLocaleLowerCase() } }"
+                class="text-primary">
                 <strong>EXPLORE</strong>
-            </a>
+            </RouterLink>
         </div>
     </div>
 </template>
+
+<script lang="ts">
+import { mapState } from 'pinia'
+import { usePlaceStore } from '@/stores/place.store'
+import { type PlaceCategoryEntity } from '@/interfaces/Place'
+
+export default {
+    computed: {
+        ...mapState(usePlaceStore, ['placePreviewCategories']),
+
+        category (): PlaceCategoryEntity {
+            return this.placePreviewCategories.find((item: PlaceCategoryEntity) => item.id === this.categoryId) as PlaceCategoryEntity
+        }
+    },
+
+    props: {
+        categoryId: {
+            type: String,
+            required: true
+        }
+    }
+}
+</script>
 
 <style scoped lang="scss">
 .card {
     width: 250px;
     overflow: hidden;
+    .card-box-img {
+        width: 100%;
+        height: 160px;
+    }
     .card-img {
         border-radius: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
     }
     .card-body {
         .title {

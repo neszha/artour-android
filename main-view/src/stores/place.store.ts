@@ -8,6 +8,7 @@ import { API_URL_PLACES, API_URL_PLACES_BOOKMARKS, API_URL_PLACES_ID, API_URL_PL
 interface PlaceState {
     mapMarkers: MapMarker[]
     placeCategories: PlaceCategory[]
+    placePreviewCategories: PlaceCategory[] // For category preview in explore page
     myPlaces: PlaceEntity[]
     placeDetailObject?: Record<string, PlaceEntity>
     placeSearchList: PlaceEntity[]
@@ -24,6 +25,7 @@ export const usePlaceStore = defineStore('place', {
     state: (): PlaceState => ({
         mapMarkers: [],
         placeCategories: [],
+        placePreviewCategories: [],
         myPlaces: [],
         placeDetailObject: {},
         placeSearchList: [],
@@ -54,6 +56,17 @@ export const usePlaceStore = defineStore('place', {
                 this.placeCategories = data
             } catch (error) {
                 console.error(error)
+            }
+        },
+
+        async getPlacePreviewCategories () {
+            try {
+                const response: AxiosResponse = await axios.get(`${API_URL_PLACE_CATEGORIES}?with-popular-place=true`)
+                const data = response.data.data as PlaceCategory[]
+                this.placePreviewCategories = data
+            } catch (error) {
+                console.error(error)
+                this.placePreviewCategories = []
             }
         },
 

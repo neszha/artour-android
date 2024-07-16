@@ -94,14 +94,18 @@ import CardPlaceHightlight from '@components/card/CardPlaceHightlight.vue'
             </div>
             <div class="horizontal-scroll">
                 <div class="hs-item px-3">
-                    <CardPlaceCategory />
-                    <CardPlaceCategory />
-                    <CardPlaceCategory />
-                    <CardPlaceCategory />
-                    <CardPlaceCategory />
-                    <CardPlaceCategory />
-                    <CardPlaceCategory />
-                    <CardPlaceCategory />
+                    <CardPlaceCategory v-for="category in placePreviewCategoriesWithPopularPlace" :key="category.id" :categoryId="category.id" />
+                </div>
+            </div>
+            <div v-if="!hightlightPlaces.length" class="no-card-list container-fluid">
+                <div class="card">
+                    <div class="card-body text-center py-5">
+                        <div class="mb-3">
+                            <small>
+                                Tidak ada daftar kategori ditampilkan.
+                            </small>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -152,17 +156,22 @@ import CardPlaceHightlight from '@components/card/CardPlaceHightlight.vue'
 import { mapActions, mapState } from 'pinia'
 import { usePlaceStore } from '@/stores/place.store'
 import { useGeolocationStore } from '@/stores/geolocation.store'
+import { type PlaceCategoryEntity } from '@/interfaces/Place'
 
 export default {
 
     computed: {
-        ...mapState(usePlaceStore, ['hightlightPlaces', 'nearestPlaces']),
-        ...mapState(useGeolocationStore, ['coordinates'])
+        ...mapState(usePlaceStore, ['hightlightPlaces', 'placePreviewCategories', 'nearestPlaces']),
+        ...mapState(useGeolocationStore, ['coordinates']),
+
+        placePreviewCategoriesWithPopularPlace (): PlaceCategoryEntity[] {
+            return this.placePreviewCategories.filter((item: PlaceCategoryEntity) => item.popularPlace !== undefined)
+        }
     },
 
     methods: {
         ...mapActions(useGeolocationStore, ['getCurrentGeolocation']),
-        ...mapActions(usePlaceStore, ['getHighlightPlaces', 'getNearestPlaces']),
+        ...mapActions(usePlaceStore, ['getHighlightPlaces', 'getPlacePreviewCategories', 'getNearestPlaces']),
 
         toMapView () {
             this.$router.push({ name: 'maps' })
@@ -171,6 +180,7 @@ export default {
 
     async beforeMount () {
         this.getHighlightPlaces()
+        this.getPlacePreviewCategories()
         await this.getCurrentGeolocation()
         this.getNearestPlaces(this.coordinates)
     },
