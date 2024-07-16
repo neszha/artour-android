@@ -16,7 +16,7 @@
 
 <script lang="ts">
 import { mapActions, mapState } from 'pinia'
-import { getCenter, isPointWithinRadius } from 'geolib'
+import { getCenter, getDistance } from 'geolib'
 import { GOOGLE_MAPS_API_KEY } from '@/constants/environment'
 import { useGeolocationStore } from '@/stores/geolocation.store'
 import { Loader as GoogleMapsLoader } from '@googlemaps/js-api-loader'
@@ -139,26 +139,28 @@ export default {
             })
 
             // Set map zoom.
-            if (coords.length === 1) {
-                this.googleMap.setZoom(11)
-            } else {
-                const zoomLevels: number[] = []
-                for (const place of this.placeSearchList) {
-                    const coordPlace = { latitude: place.latitude, longitude: place.longitude }
-                    let radiusInMeter = 10 * 1000 // 10km
-                    let coordInRadius = false
-                    let googleMapZoomLevel = 13
-                    do {
-                        radiusInMeter += 10 * 1000 // 10km
-                        coordInRadius = isPointWithinRadius(coordPlace as Coordinates, centerCoord, radiusInMeter)
-                        googleMapZoomLevel -= 0.5
-                        // console.log(place.name, { radiusInMeter, coordInRadius, googleMapZoomLevel })
-                    } while (!coordInRadius)
-                    if (googleMapZoomLevel <= 7) googleMapZoomLevel = 7
-                    zoomLevels.push(Math.floor(googleMapZoomLevel))
-                }
-                this.googleMap.setZoom(Math.min(...zoomLevels))
+            const markerDistances: number[] = [] // in KM
+            for (const place of this.placeSearchList) {
+                const distanceInMeter = getDistance(
+                    { latitude: centerCoord.latitude, longitude: centerCoord.longitude },
+                    { latitude: place.latitude, longitude: place.longitude }
+                )
+                markerDistances.push(distanceInMeter / 1000)
             }
+            let zoomLevel = 12
+            const maxDistance = Math.max(...markerDistances)
+            if (maxDistance >= 10 && maxDistance < 20) {
+                zoomLevel = 11
+            } else if (maxDistance >= 20 && maxDistance < 150) {
+                zoomLevel = 8
+            } else if (maxDistance >= 150 && maxDistance < 300) {
+                zoomLevel = 7
+            } else if (maxDistance >= 300 && maxDistance < 1000) {
+                zoomLevel = 5
+            } else {
+                zoomLevel = 4
+            }
+            this.googleMap.setZoom(zoomLevel)
         }
     },
 
