@@ -18,6 +18,7 @@ import ContributionView from './views/main/ContributionView.vue'
 
 // Place
 import PlaceDetailView from './views/main/places/PlaceDetailView.vue'
+import PlaceUserBookmarkView from './views/main/places/PlaceUserBookmarkView.vue'
 
 // Contribution
 import AddPlaceView from './views/main/contribution/AddPlaceView.vue'
@@ -68,6 +69,11 @@ const routes: RouteRecordRaw [] = [
                 component: RouterLayout,
                 children: [
                     {
+                        name: 'place:bookmarks',
+                        path: 'bookmarks',
+                        component: PlaceUserBookmarkView
+                    },
+                    {
                         name: 'place:detail',
                         path: ':placeId',
                         component: PlaceDetailView
@@ -92,17 +98,17 @@ const routes: RouteRecordRaw [] = [
                     },
                     {
                         name: 'place:add',
-                        path: 'place',
+                        path: 'places',
                         component: AddPlaceView
                     },
                     {
                         name: 'place:manage',
-                        path: 'place/:placeId',
+                        path: 'places/:placeId',
                         component: ManagePlaceView
                     },
                     {
                         name: 'place:edit',
-                        path: 'place/:placeId/edit',
+                        path: 'places/:placeId/edit',
                         component: EditPlaceView
                     }
                 ]

@@ -7,6 +7,7 @@ import CardPlaceHightlight from '@components/card/CardPlaceHightlight.vue'
 
 <template>
     <MainLayout>
+
         <!-- header  -->
         <section class="home-header mb-3">
             <nav class="navbar navbar-light px-0 py-1">
@@ -19,9 +20,9 @@ import CardPlaceHightlight from '@components/card/CardPlaceHightlight.vue'
                             Explore
                         </h2>
                     </div>
-                    <button class="navbar-toggler text-dark" type="button">
-                        <i class="bi bi-bookmark"></i>
-                    </button>
+                    <RouterLink :to="{name: 'place:bookmarks'}" class="navbar-toggler text-dark" type="button">
+                        <i class="bi bi-bookmarks"></i>
+                    </RouterLink>
                 </div>
             </nav>
         </section>
@@ -61,6 +62,18 @@ import CardPlaceHightlight from '@components/card/CardPlaceHightlight.vue'
             <div class="horizontal-scroll">
                 <div class="hs-item px-3">
                     <CardPlaceHightlight v-for="place in hightlightPlaces" :key="place.id" :placeId="place.id" />
+                </div>
+            </div>
+            <div v-if="!hightlightPlaces.length" class="no-card-list container-fluid">
+                <div class="card">
+                    <div class="card-body text-center py-5">
+                        <div class="mb-3">
+                            <small>
+                                Tidak ada daftar tempat wisata. Kontribusi untuk menambahkan tempat baru!
+                            </small>
+                        </div>
+                        <RouterLink :to="{ name: 'contribution' }" class="btn btn-sm font-bold btn-neutral text-nowrap shadow-none">Kontribusi</RouterLink>
+                    </div>
                 </div>
             </div>
         </section>
@@ -112,6 +125,23 @@ import CardPlaceHightlight from '@components/card/CardPlaceHightlight.vue'
                     <div  v-for="place in nearestPlaces" :key="place.id" class="col-6 mb-3 px-2">
                         <CardPlaceNearest :placeId="place.id" class="card-place-sm" />
                     </div>
+                </div>
+            </div>
+            <div v-if="!nearestPlaces.length" class="no-card-list container-fluid">
+                <div class="card">
+                    <div class="card-body text-center py-5">
+                        <div class="mb-3">
+                            <small>
+                                Tidak ada daftar tempat wisata. Kontribusi untuk menambahkan tempat baru!
+                            </small>
+                        </div>
+                        <RouterLink :to="{ name: 'contribution' }" class="btn btn-sm font-bold btn-neutral text-nowrap shadow-none">Kontribusi</RouterLink>
+                    </div>
+                </div>
+            </div>
+            <div class="explore-maps container-fluid mt-4 mb-5">
+                <div class="d-grid">
+                    <RouterLink :to="{ name: 'maps' }" class="btn font-bold btn-neutral text-nowrap shadow-none">Explore via Maps</RouterLink>
                 </div>
             </div>
         </section>

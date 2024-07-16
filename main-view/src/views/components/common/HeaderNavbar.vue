@@ -1,9 +1,9 @@
 <template>
     <nav class="navbar navbar-light border-bottom px-0 py-1">
         <div class="container-xl">
-            <RouterLink :to="navBackTo" class="navbar-brand p-0">
+            <div @click="backAction()" class="navbar-brand p-0">
                 <i class="bi bi-arrow-left"></i>
-            </RouterLink>
+            </div>
             <div class="title text-center">
                 <h2 class="font-bold h3" style="font-style: bold !important;">
                     {{ navTitle }}
@@ -16,11 +16,21 @@
 <script lang="ts">
 import { type RouteLocationRaw } from 'vue-router'
 export default {
+
+    methods: {
+        backAction () {
+            if (this.navBackTo !== undefined) {
+                this.$router.push(this.navBackTo)
+                return
+            }
+            this.$router.back()
+        }
+    },
+
     props: {
         navTitle: String,
         navBackTo: {
-            type: Object as () => RouteLocationRaw,
-            default: () => ({ name: 'explore' })
+            type: Object as () => RouteLocationRaw | undefined
         }
     }
 }

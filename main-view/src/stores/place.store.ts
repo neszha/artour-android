@@ -3,7 +3,7 @@ import { type AxiosResponse } from 'axios'
 import axios from '@/helpers/axios.helper'
 import { type Coordinates } from '@/interfaces/Geolocation'
 import { type PlaceCategory, type MapMarker, type PlaceEntity } from '@/interfaces/Place'
-import { API_URL_PLACES, API_URL_PLACES_ID, API_URL_PLACE_AR_MAP_SEARCH, API_URL_PLACE_CATEGORIES, API_URL_PLACE_CATEGORY_MAP_MARKERS, API_URL_PLACE_HIGHLIGHT, API_URL_PLACE_MAP_SEARCH, API_URL_PLACE_NEAREST } from '@/constants/api-url'
+import { API_URL_PLACES, API_URL_PLACES_BOOKMARKS, API_URL_PLACES_ID, API_URL_PLACE_AR_MAP_SEARCH, API_URL_PLACE_CATEGORIES, API_URL_PLACE_CATEGORY_MAP_MARKERS, API_URL_PLACE_HIGHLIGHT, API_URL_PLACE_MAP_SEARCH, API_URL_PLACE_NEAREST } from '@/constants/api-url'
 
 interface PlaceState {
     mapMarkers: MapMarker[]
@@ -12,6 +12,7 @@ interface PlaceState {
     placeDetailObject?: Record<string, PlaceEntity>
     placeSearchList: PlaceEntity[]
     placeArSearchList: PlaceEntity[]
+    placeBookmarks: PlaceEntity[]
     hightlightPlaces: PlaceEntity[]
     nearestPlaces: PlaceEntity[]
 }
@@ -27,6 +28,7 @@ export const usePlaceStore = defineStore('place', {
         placeDetailObject: {},
         placeSearchList: [],
         placeArSearchList: [],
+        placeBookmarks: [],
         hightlightPlaces: [],
         nearestPlaces: []
     }),
@@ -94,6 +96,17 @@ export const usePlaceStore = defineStore('place', {
                 this.placeArSearchList = data
             } catch (error) {
                 this.placeArSearchList = []
+                console.error(error)
+            }
+        },
+
+        async getPlaceBookmarks () {
+            try {
+                const response: AxiosResponse = await axios.get(API_URL_PLACES_BOOKMARKS)
+                const data = response.data.data as PlaceEntity[]
+                this.placeBookmarks = data
+            } catch (error) {
+                this.placeBookmarks = []
                 console.error(error)
             }
         },

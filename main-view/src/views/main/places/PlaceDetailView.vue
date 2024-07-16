@@ -17,6 +17,9 @@ import PlaceActionButton from '@components/place/PlaceActionButton.vue'
                     <button class="navbar-toggler text-dark waves-effect waves-dark" type="button">
                         <i class="bi bi-geo-alt"></i>
                     </button>
+                    <RouterLink :to="{name: 'place:bookmarks'}" class="navbar-toggler text-dark waves-effect waves-dark" type="button">
+                        <i class="bi bi-bookmarks"></i>
+                    </RouterLink>
                     <button class="navbar-toggler text-dark waves-effect waves-dark" type="button">
                         <i class="bi bi-share-fill"></i>
                     </button>
