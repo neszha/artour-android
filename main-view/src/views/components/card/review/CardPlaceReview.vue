@@ -1,74 +1,74 @@
+<script setup lang="ts">
+import classNames from 'classnames'
+</script>
+
 <template>
     <div class="card place-review-item py-4">
         <div class="container-fluid">
             <div class="d-flex align-items-center mb-3">
                 <div class="me-2">
                     <div class="avatar avatar-md rounded-circle">
-                        <img alt="..." src="https://clever.webpixels.io/img/people/img-1.jpg">
+                        <img v-if="review.user !== undefined" alt="..." :src="review.user?.avatar">
                     </div>
                 </div>
                 <div class="flex-fill">
-                    <div class="d-block h6 font-semibold mb-1">Norman Mohrbacher</div>
+                    <div class="d-block h6 font-semibold mb-1">{{ review.user?.name }}</div>
                     <div class="d-flex align-items-center gap-1">
-                        <div class="rating d-flex gap-1">
-                            <i class="bi bi-star-fill text-warning"></i>
-                            <i class="bi bi-star-fill text-warning"></i>
-                            <i class="bi bi-star-fill text-warning"></i>
-                            <i class="bi bi-star text-warning"></i>
-                            <i class="bi bi-star text-warning"></i>
-                        </div>
-                        <small>sebulan yang lalu</small>
+                        <i v-for="i of 5" :key="i" :class="classNames({
+                            'bi-star': (review.rating <= i - 1),
+                            'bi-star-half': (review.rating > i - 1 && review.rating < i),
+                            'bi-star-fill': (review.rating >= i),
+                        })" class="bi text-warning"></i>
+                        <small>{{ getTimeString(review.updatedAt) }}</small>
                     </div>
                 </div>
             </div>
             <div class="review-description">
-                <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Tenetur animi, aspernatur facere quae beatae?</p>
-                <p>Lorem ipsum dolor sit amet...</p>
-                <a href="#" class="text-decoration-underline">Selengkapnya</a>
+                <p>{{ review.content }}</p>
             </div>
         </div>
         <div class="image-review mt-3">
-            <div v-if="imageCount === 1" class="d-flex gap-1">
+            <div v-if="review.images?.length === 1" class="d-flex gap-1">
                 <div class="image-review-item w-100" style="height: auto;">
-                    <img class="w-100" src="@assets/dummy-images/place-img-01.jpg" alt="...">
+                    <img class="w-100" :src="review.images[0].link" alt="...">
                 </div>
             </div>
-            <div v-if="imageCount === 2" class="d-flex gap-1">
+            <div v-if="review.images?.length === 2" class="d-flex gap-1">
                 <div class="image-review-item">
-                    <img class="w-100" src="@assets/dummy-images/place-img-01.jpg" alt="...">
+                    <img class="w-100" :src="review.images[0].link" alt="...">
                 </div>
                 <div class="image-review-item">
-                    <img class="w-100" src="@assets/dummy-images/place-img-02.jpg" alt="...">
+                    <img class="w-100" :src="review.images[1].link" alt="...">
                 </div>
             </div>
-            <div v-if="imageCount === 3" class="d-flex gap-1">
+            <div v-if="review.images?.length === 3" class="d-flex gap-1">
                 <div class="image-review-item">
-                    <img class="w-100" src="@assets/dummy-images/place-img-01.jpg" alt="...">
+                    <img class="w-100" :src="review.images[0].link" alt="...">
                 </div>
                 <div class="image-review-col">
                     <div class="image-review-item">
-                        <img class="w-100" src="@assets/dummy-images/place-img-02.jpg" alt="...">
+                        <img class="w-100" :src="review.images[1].link" alt="...">
                     </div>
                     <div class="image-review-item">
-                        <img class="w-100" src="@assets/dummy-images/place-img-03.jpg" alt="...">
+                        <img class="w-100" :src="review.images[2].link" alt="...">
                     </div>
                 </div>
             </div>
-            <div v-if="imageCount === 4" class="d-flex gap-1">
+            <div v-if="review.images?.length === 4" class="d-flex gap-1">
                 <div class="image-review-col">
                     <div class="image-review-item">
-                        <img class="w-100" src="@assets/dummy-images/place-img-02.jpg" alt="...">
+                        <img class="w-100" :src="review.images[0].link" alt="...">
                     </div>
                     <div class="image-review-item">
-                        <img class="w-100" src="@assets/dummy-images/place-img-03.jpg" alt="...">
+                        <img class="w-100" :src="review.images[1].link" alt="...">
                     </div>
                 </div>
                 <div class="image-review-col">
                     <div class="image-review-item">
-                        <img class="w-100" src="@assets/dummy-images/place-img-02.jpg" alt="...">
+                        <img class="w-100" :src="review.images[2].link" alt="...">
                     </div>
                     <div class="image-review-item">
-                        <img class="w-100" src="@assets/dummy-images/place-img-03.jpg" alt="...">
+                        <img class="w-100" :src="review.images[3].link" alt="...">
                     </div>
                 </div>
             </div>
@@ -77,19 +77,27 @@
 </template>
 
 <script lang="ts">
+import moment from 'moment'
+import { type PlaceReviewEntity } from '@/interfaces/PlaceReview'
+
 export default {
 
-    methods: {
-        randomInt (min: number, max: number) {
-            min = Math.ceil(min)
-            max = Math.floor(max)
-            return Math.floor(Math.random() * (max - min + 1)) + min
+    computed: {
+        review (): PlaceReviewEntity {
+            return this.reviewData as PlaceReviewEntity
         }
     },
 
-    data () {
-        return {
-            imageCount: this.randomInt(1, 4)
+    methods: {
+        getTimeString (updatedAt: Date): string {
+            return moment(updatedAt).fromNow()
+        }
+    },
+
+    props: {
+        reviewData: {
+            type: Object,
+            required: true
         }
     }
 }

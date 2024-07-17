@@ -41,7 +41,7 @@ import CardPlaceReview from '@components/card/review/CardPlaceReview.vue'
                     'bi-star-fill': (place.rating >= i),
                 })" class="bi text-warning"></i>
                 <span v-if="place.rating !== undefined">({{ place.rating.toFixed(2) || 0 }})</span>
-                <span>22K Ulasan</span>
+                <span>{{ numeral(placeReviews.length || 0).format('0.[0]a').toUpperCase() }} Ulasan</span>
             </div>
             <small>Jarak {{ placeDistance.toFixed(2) }} KM</small>
         </div>
@@ -129,12 +129,18 @@ import CardPlaceReview from '@components/card/review/CardPlaceReview.vue'
             <h5 class="mb-0">Ulasan Pengunjung</h5>
         </div>
         <div class="place-review-list">
-            <CardPlaceReview />
-            <CardPlaceReview />
-            <CardPlaceReview />
-            <CardPlaceReview />
-            <CardPlaceReview />
-            <CardPlaceReview />
+            <CardPlaceReview v-for="review of placeReviews" :key="review.id" :review-data="review" />
+        </div>
+        <div v-if="!placeReviews.length" class="no-card-list container-fluid">
+            <div class="card mb-5">
+                <div class="card-body text-center py-5">
+                    <div class="mb-3">
+                        <small>
+                            Tidak ada ulasan pengunjung lainnya.
+                        </small>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -158,7 +164,7 @@ export default {
         ...mapState(useGeolocationStore, ['coordinates']),
         ...mapState(useUserStore, ['myInfo']),
         ...mapState(usePlaceStore, ['placeDetailObject']),
-        ...mapState(usePlaceReviewStore, ['myReview']),
+        ...mapState(usePlaceReviewStore, ['myReview', 'placeReviews']),
 
         placeId (): string {
             return this.$route.params.placeId as string
@@ -202,7 +208,7 @@ export default {
     methods: {
         ...mapActions(useGeolocationStore, ['getCurrentGeolocation']),
         ...mapActions(usePlaceStore, ['getPlaceDetail']),
-        ...mapActions(usePlaceReviewStore, ['getMyPlaceReview']),
+        ...mapActions(usePlaceReviewStore, ['getMyPlaceReview', 'getPlaceReviews']),
 
         async incPlaceViews () {
             try {
@@ -216,11 +222,12 @@ export default {
 
     async beforeMount () {
         this.getCurrentGeolocation()
-        this.getMyPlaceReview(this.placeId, true)
         const getted = await this.getPlaceDetail(this.placeId)
         if (getted === false) {
             this.$router.push({ name: 'explore' })
         }
+        this.getMyPlaceReview(this.placeId, true)
+        this.getPlaceReviews(this.placeId, true)
     },
 
     mounted () {

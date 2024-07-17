@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import classNames from 'classnames'
 import ModalDeletePlaceReview from '@components/modals/ModalDeletePlaceReview.vue'
 </script>
 
@@ -15,13 +16,11 @@ import ModalDeletePlaceReview from '@components/modals/ModalDeletePlaceReview.vu
                     <div class="flex-fill">
                         <div class="d-block h6 font-semibold mb-1">{{ myInfo.name }}</div>
                         <div class="d-flex align-items-center gap-1">
-                            <div class="rating d-flex gap-1">
-                                <i class="bi bi-star-fill text-warning"></i>
-                                <i class="bi bi-star-fill text-warning"></i>
-                                <i class="bi bi-star-fill text-warning"></i>
-                                <i class="bi bi-star text-warning"></i>
-                                <i class="bi bi-star text-warning"></i>
-                            </div>
+                            <i v-for="i of 5" :key="i" :class="classNames({
+                                'bi-star': (review.rating <= i - 1),
+                                'bi-star-half': (review.rating > i - 1 && review.rating < i),
+                                'bi-star-fill': (review.rating >= i),
+                            })" class="bi text-warning"></i>
                             <small>{{ getTimeString(review.updatedAt) }}</small>
                         </div>
                     </div>
@@ -32,7 +31,7 @@ import ModalDeletePlaceReview from '@components/modals/ModalDeletePlaceReview.vu
                             <i class="bi bi-three-dots-vertical"></i>
                         </a>
                         <div class="dropdown-menu" style="">
-                            <a href="#!" class="dropdown-item">Edit Ulasan</a>
+                            <RouterLink :to="{name: 'review:edit-review'}" class="dropdown-item">Edit Ulasan</RouterLink>
                             <a @click="openModalDeletePlaceReview()" href="javascript:void(0);" class="dropdown-item">Hapus Ulasan</a>
                         </div>
                     </div>
@@ -100,6 +99,7 @@ import moment from 'moment'
 import { mapState } from 'pinia'
 import { useUserStore } from '@/stores/user.store'
 import { type PlaceReviewEntity } from '@/interfaces/PlaceReview'
+import { RouterLink } from 'vue-router'
 
 export default {
     computed: {
@@ -107,10 +107,6 @@ export default {
 
         review (): PlaceReviewEntity {
             return this.reviewData as PlaceReviewEntity
-        },
-
-        imageCount (): number {
-            return this.review.imageIds.length
         }
     },
 

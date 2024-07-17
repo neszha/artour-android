@@ -22,6 +22,7 @@ import PlaceUserBookmarkView from './views/main/places/PlaceUserBookmarkView.vue
 
 // Place Review.
 import AddPlaceReviewView from './views/main/places/reviews/AddPlaceReviewView.vue'
+import EditPlaceReviewView from './views/main/places/reviews/EditPlaceReviewView.vue'
 
 // Contribution
 import AddPlaceView from './views/main/contribution/AddPlaceView.vue'
@@ -90,6 +91,11 @@ const routes: RouteRecordRaw [] = [
                                 name: 'place:add-review',
                                 path: 'reviews',
                                 component: AddPlaceReviewView
+                            },
+                            {
+                                name: 'review:edit-review',
+                                path: 'edit-reviews',
+                                component: EditPlaceReviewView
                             }
                         ]
                     }

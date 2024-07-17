@@ -12,7 +12,7 @@ import CardPlaceBookmark from '@/views/components/card/CardPlaceBookmark.vue'
             <div class="row mb-3">
                 <div class="col">
                     <h1 class="font-bold h3" style="font-weight: bold;">
-                        Bookmark
+                        Bookmarks
                     </h1>
                     <p class="text-sm text-muted mt-1">
                         Tempat wisata yang anda simpan

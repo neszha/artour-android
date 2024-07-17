@@ -4,7 +4,7 @@ import HeaderNavbar from '@components/common/HeaderNavbar.vue'
 </script>
 
 <template>
-    <HeaderNavbar nav-title="Tambah Ulasan" />
+    <HeaderNavbar nav-title="Edit Ulasan" />
 
     <!-- star ratings -->
     <div class="d-flex justify-content-center mt-4 mb-4">
@@ -61,7 +61,7 @@ import HeaderNavbar from '@components/common/HeaderNavbar.vue'
     <!-- post button -->
     <div class="container-fluid mt-4">
         <div class="d-grid w-100">
-            <button @click="postReview()" :disabled="form.loading" type="button" class="btn btn-md btn-primary waves-effect waves-light">
+            <button @click="editReview()" :disabled="form.loading" type="button" class="btn btn-md btn-primary waves-effect waves-light">
                 <span>Posting</span>
                 <span v-if="form.loading">...</span>
             </button>
@@ -71,19 +71,25 @@ import HeaderNavbar from '@components/common/HeaderNavbar.vue'
 
 <script lang="ts">
 import { type AxiosResponse } from 'axios'
+import { mapActions, mapState } from 'pinia'
 import axios from '@/helpers/axios.helper'
 import { type File } from '@/interfaces/File'
-import { API_URL_FILE_MAP_CONTENTS, API_URL_PLACE_REVIEWS } from '@/constants/api-url'
+import { API_URL_FILE_MAP_CONTENTS, API_URL_PLACE_REVIEWS_ID } from '@/constants/api-url'
+import { usePlaceReviewStore } from '@/stores/place-review.store'
 
 export default {
 
     computed: {
+        ...mapState(usePlaceReviewStore, ['myReview']),
+
         placeId (): string {
             return this.$route.params.placeId as string
         }
     },
 
     methods: {
+        ...mapActions(usePlaceReviewStore, ['getMyPlaceReview']),
+
         async uploadImagePlace (event: Event) {
             const files = (event.target as HTMLInputElement).files
             if (files === null) return
@@ -107,32 +113,48 @@ export default {
             this.images = this.images.filter((file) => file.id !== fileId)
         },
 
-        async postReview () {
+        async editReview () {
             try {
                 this.form.loading = true
-                const url = `${API_URL_PLACE_REVIEWS}?placeId=${this.placeId}`
+                const url = API_URL_PLACE_REVIEWS_ID.replace(':placeReviewId', this.placeReviewId as string)
                 if (this.form.data.content.trim() === '') {
                     alert('Ulasan harus diisi.')
                     this.form.loading = false
                     return
                 }
-                await axios.post(url, this.form.data)
+                await axios.put(url, this.form.data)
                 if (window.Android !== undefined) {
-                    window.Android.showToast('Ulasan berhasil ditambahkan.')
+                    window.Android.showToast('Ulasan berhasil disimpan.')
                 } else {
-                    alert('Ulasan berhasil ditambahkan.')
+                    alert('Ulasan berhasil disimpan.')
                 }
                 this.$router.back()
             } catch (error) {
-                alert('Ulasan gagal ditambahkan.')
+                alert('Ulasan gagal disimpan.')
                 console.error(error)
             }
             this.form.loading = false
         }
     },
 
+    async beforeMount () {
+        await this.getMyPlaceReview(this.placeId)
+        if (this.myReview === null) {
+            this.$router.push({ name: 'explore' })
+            return
+        }
+        this.placeReviewId = this.myReview.id
+        this.form.data = {
+            rating: this.myReview.rating as number,
+            content: this.myReview.content as string,
+            imageIds: this.myReview.imageIds as string[]
+        }
+        this.images = this.myReview.images as File[]
+    },
+
     data () {
         return {
+            placeReviewId: '',
             form: {
                 data: {
                     rating: 1,
