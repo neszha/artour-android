@@ -33,6 +33,9 @@ import CardPlaceReview from '@components/card/review/CardPlaceReview.vue'
     <!-- place title -->
     <section class="mb-3" style="margin-top: 70px;">
         <div class="container-fluid">
+            <div v-if="place.dislike >= 5" class="alert alert-warning mb-3" role="alert">
+                Tempat ini dibatasi di pencarian aplikasi karena mencapai batas 5 dislike.
+            </div>
             <h6 class="mb-1">{{ place.name }}</h6>
             <div class="rating d-flex gap-1">
                 <i v-for="i of 5" :key="i" :class="classNames({

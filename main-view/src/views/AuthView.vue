@@ -28,11 +28,11 @@ import PageSpinner from '@components/common/PageSpinner.vue'
                 </div>
             </div>
         </div>
-        <div class="auth-footer pb-4">
+        <!-- <div class="auth-footer pb-4">
             <p class="m-0 w-100 text-center">
                 <small>Lorem ipsum dolor sit, amet consectetur dolor adipisicing Lorem, ipsum dolor elit.</small>
             </p>
-        </div>
+        </div> -->
     </div>
 </template>
 
