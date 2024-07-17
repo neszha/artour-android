@@ -64,6 +64,9 @@ export default {
             window.Android.setupPermissions()
         }
         this.getCurrentGeolocation()
+
+        // Clear back history.
+        history.pushState(null, '', location.href)
     }
 }
 </script>

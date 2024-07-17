@@ -3,7 +3,7 @@ import HeaderNavbar from '@components/common/HeaderNavbar.vue'
 </script>
 
 <template>
-    <HeaderNavbar nav-title="Ubah Nama" :nav-back-to="{name: 'profile'}" />
+    <HeaderNavbar nav-title="Ubah Nama" />
 
     <!-- form input  -->
     <section class="container-fluid mt-4">

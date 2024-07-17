@@ -3,7 +3,7 @@ import HeaderNavbar from '@components/common/HeaderNavbar.vue'
 </script>
 
 <template>
-    <HeaderNavbar nav-title="Ubah Foto" :nav-back-to="{name: 'profile'}" />
+    <HeaderNavbar nav-title="Ubah Foto" />
 
     <!-- avatar view -->
     <section class="container-fluid pt-4 mb-3">

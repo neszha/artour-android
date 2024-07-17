@@ -8,7 +8,7 @@ import { UserRoleEnum } from '@/interfaces/enums'
 </script>
 
 <template>
-    <HeaderNavbar nav-title="Profile Saya" :nav-back-to="{name: 'explore'}" />
+    <HeaderNavbar nav-title="Profile Saya" />
 
     <!-- profile card -->
     <section class="container-fluid pt-4 mb-3">

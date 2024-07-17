@@ -3,7 +3,7 @@ import HeaderNavbar from '@components/common/HeaderNavbar.vue'
 </script>
 
 <template>
-    <HeaderNavbar nav-title="Informasi" :nav-back-to="{name: 'profile'}" />
+    <HeaderNavbar nav-title="Informasi" />
 
     <!-- content  -->
     <main class="mt-4">
