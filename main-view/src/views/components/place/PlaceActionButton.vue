@@ -106,7 +106,12 @@ export default {
         },
 
         openGoogleMapDirectionLink () {
-            window.open(`https://www.google.com/maps/dir/?api=1&destination=${this.place.latitude},${this.place.longitude}`)
+            const googleMapLink = `https://www.google.com/maps/dir/?api=1&destination=${this.place.latitude},${this.place.longitude}`
+            if (window.Android !== undefined) {
+                window.Android.openExternalLink(googleMapLink)
+                return
+            }
+            window.open(googleMapLink, '_blank')
         },
 
         async likePlace () {

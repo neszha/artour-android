@@ -45,45 +45,45 @@ import ModalDeletePlaceReview from '@components/modals/ModalDeletePlaceReview.vu
         <div class="image-review mt-3">
             <div v-if="review.images?.length === 1" class="d-flex gap-1">
                 <div class="image-review-item w-100" style="height: auto;">
-                    <img class="w-100" :src="review.images[0].link" alt="...">
+                    <img class="w-100" :src="getImageLinkIndex(0)" alt="...">
                 </div>
             </div>
             <div v-if="review.images?.length === 2" class="d-flex gap-1">
                 <div class="image-review-item">
-                    <img class="w-100" :src="review.images[0].link" alt="...">
+                    <img class="w-100" :src="getImageLinkIndex(0)" alt="...">
                 </div>
                 <div class="image-review-item">
-                    <img class="w-100" :src="review.images[1].link" alt="...">
+                    <img class="w-100" :src="getImageLinkIndex(1)" alt="...">
                 </div>
             </div>
             <div v-if="review.images?.length === 3" class="d-flex gap-1">
                 <div class="image-review-item">
-                    <img class="w-100" :src="review.images[0].link" alt="...">
+                    <img class="w-100" :src="getImageLinkIndex(0)" alt="...">
                 </div>
                 <div class="image-review-col">
                     <div class="image-review-item">
-                        <img class="w-100" :src="review.images[1].link" alt="...">
+                        <img class="w-100" :src="getImageLinkIndex(1)" alt="...">
                     </div>
                     <div class="image-review-item">
-                        <img class="w-100" :src="review.images[2].link" alt="...">
+                        <img class="w-100" :src="getImageLinkIndex(2)" alt="...">
                     </div>
                 </div>
             </div>
-            <div v-if="review.images?.length === 4" class="d-flex gap-1">
+            <div v-if="review.images?.length as number  >= 4" class="d-flex gap-1">
                 <div class="image-review-col">
                     <div class="image-review-item">
-                        <img class="w-100" :src="review.images[0].link" alt="...">
+                        <img class="w-100" :src="getImageLinkIndex(0)" alt="...">
                     </div>
                     <div class="image-review-item">
-                        <img class="w-100" :src="review.images[1].link" alt="...">
+                        <img class="w-100" :src="getImageLinkIndex(1)" alt="...">
                     </div>
                 </div>
                 <div class="image-review-col">
                     <div class="image-review-item">
-                        <img class="w-100" :src="review.images[2].link" alt="...">
+                        <img class="w-100" :src="getImageLinkIndex(2)" alt="...">
                     </div>
                     <div class="image-review-item">
-                        <img class="w-100" :src="review.images[3].link" alt="...">
+                        <img class="w-100" :src="getImageLinkIndex(3)" alt="...">
                     </div>
                 </div>
             </div>
@@ -99,7 +99,6 @@ import moment from 'moment'
 import { mapState } from 'pinia'
 import { useUserStore } from '@/stores/user.store'
 import { type PlaceReviewEntity } from '@/interfaces/PlaceReview'
-import { RouterLink } from 'vue-router'
 
 export default {
     computed: {
@@ -113,6 +112,12 @@ export default {
     methods: {
         getTimeString (updatedAt: Date): string {
             return moment(updatedAt).fromNow()
+        },
+
+        getImageLinkIndex (index: number = 0): string {
+            if (this.review.images === undefined) return ''
+            const file = this.review.images[index]
+            return file.link as string
         },
 
         openModalDeletePlaceReview () {

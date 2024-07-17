@@ -2,6 +2,8 @@ package com.neszha.artour
 
 import android.content.ContentValues.TAG
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.util.Log
 import android.webkit.JavascriptInterface
 import android.webkit.WebView
@@ -67,6 +69,13 @@ class JavaScriptInterface(
                 }
             }
         }
+    }
+
+    @JavascriptInterface
+    fun openExternalLink(link: String) {
+        val intent = Intent(Intent.ACTION_VIEW)
+        intent.data = Uri.parse(link)
+        context.startActivity(intent)
     }
 
     @JavascriptInterface

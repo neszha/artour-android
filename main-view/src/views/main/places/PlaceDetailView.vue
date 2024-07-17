@@ -106,7 +106,7 @@ import CardPlaceReview from '@components/card/review/CardPlaceReview.vue'
             </div>
             <div v-if="place.website" class="d-flex align-items-center mb-2">
                 <i class="bi bi-globe me-2 text-primary"></i>
-                <a :href="place.website" target="_blank" class="text-sm text-heading text-primary-hover">
+                <a @click="openLink(place.website)" href="javascript:void(0)" class="text-sm text-heading text-primary-hover">
                     {{ place.website }}
                 </a>
             </div>
@@ -220,6 +220,14 @@ export default {
             } catch (error) {
                 console.error(error)
             }
+        },
+
+        openLink (url: string) {
+            if (window.Android !== undefined) {
+                window.Android.openExternalLink(url)
+                return
+            }
+            window.open(url, '_blank')
         }
     },
 

@@ -7,7 +7,7 @@ import ModalDeletePlace from '@components/modals/ModalDeletePlace.vue'
 </script>
 
 <template>
-    <HeaderNavbar nav-title="Kelola Tempat" :nav-back-to="{name: 'contribution'}" />
+    <HeaderNavbar nav-title="Kelola Tempat" />
 
     <!-- main content -->
     <section>

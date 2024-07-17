@@ -29,6 +29,8 @@ import com.neszha.artour.ui.theme.ITentixTheme
 import android.Manifest
 import android.webkit.GeolocationPermissions
 import android.widget.Toast
+import androidx.activity.compose.BackHandler
+import androidx.compose.runtime.remember
 import com.neszha.artour.store.WebServer
 
 class MainActivity : ComponentActivity() {
@@ -282,6 +284,16 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun WebViewScreen(webUrl: String) {
     val contextActivity = LocalContext.current as MainActivity
+    val webView = remember { WebView(contextActivity) }
+
+    // Handle back press event.
+    BackHandler(enabled = true) {
+        if (webView.canGoBack()) {
+            webView.goBack()
+        } else {
+            contextActivity.finish()
+        }
+    }
 
     Box (
         contentAlignment = Alignment.Center,
@@ -290,8 +302,8 @@ fun WebViewScreen(webUrl: String) {
     ) {
         AndroidView(
             modifier = Modifier.fillMaxSize(),
-            factory = { context ->
-                WebView(context).apply {
+            factory = {
+                webView.apply {
                     webViewClient = contextActivity.createWebViewClient()
 
                     // Web view settings.
@@ -312,9 +324,9 @@ fun WebViewScreen(webUrl: String) {
                     loadUrl(webUrl)
                 }
             },
-            update = { webView ->
-                webView.loadUrl(webUrl)
-            },
+//            update = {
+//                canGoBack = it.canGoBack()
+//            },
         )
     }
 }

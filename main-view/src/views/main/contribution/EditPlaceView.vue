@@ -7,7 +7,7 @@ import ModalOpeningHoursDay from '@components/modals/ModalOpeningHoursDay.vue'
 </script>
 
 <template>
-    <HeaderNavbar nav-title="Edit Tempat" :nav-back-to="{name: 'contribution'}" />
+    <HeaderNavbar nav-title="Edit Tempat" />
 
     <!-- main content -->
     <section class="mt-4 mb-3">
