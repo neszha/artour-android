@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import numeral from 'numeral'
 import classNames from 'classnames'
-import CardPlaceReview from '@components/card/CardPlaceReview.vue'
 import PlaceActionButton from '@components/place/PlaceActionButton.vue'
+import CardCreateReview from '@components/card/review/CardCreateReview.vue'
+import CardMyPlaceReview from '@components/card/review/CardMyPlaceReview.vue'
+import CardPlaceReview from '@components/card/review/CardPlaceReview.vue'
 </script>
 
 <template>
@@ -14,9 +16,9 @@ import PlaceActionButton from '@components/place/PlaceActionButton.vue'
                     <i class="bi bi-chevron-left"></i>
                 </button>
                 <div class="d-flex gap-2">
-                    <button class="navbar-toggler text-dark waves-effect waves-dark" type="button">
+                    <RouterLink :to="{name: 'maps'}" class="navbar-toggler text-dark waves-effect waves-dark" type="button">
                         <i class="bi bi-geo-alt"></i>
-                    </button>
+                    </RouterLink>
                     <RouterLink :to="{name: 'place:bookmarks'}" class="navbar-toggler text-dark waves-effect waves-dark" type="button">
                         <i class="bi bi-bookmarks"></i>
                     </RouterLink>
@@ -108,6 +110,19 @@ import PlaceActionButton from '@components/place/PlaceActionButton.vue'
         </div>
     </section>
 
+    <!-- my review  -->
+    <section class="place-review mb-3">
+        <div class="place-review-header container-fluid mb-3">
+            <h5 class="mb-0">Ulasan Saya</h5>
+        </div>
+        <div v-if="myReview === null" class="create-review">
+            <CardCreateReview />
+        </div>
+        <div v-else class="my-place-review">
+            <CardMyPlaceReview :review-data="myReview" />
+        </div>
+    </section>
+
     <!-- review list -->
     <section class="place-review mb-3">
         <div class="place-review-header container-fluid mb-3">
@@ -129,19 +144,21 @@ import PlaceActionButton from '@components/place/PlaceActionButton.vue'
 import { getDistance } from 'geolib'
 import { mapActions, mapState } from 'pinia'
 import { usePlaceStore } from '@/stores/place.store'
+import axios from '@/helpers/axios.helper'
 import { type OpeningHoursDay, type OpeningHoursStatus, type PlaceEntity } from '@/interfaces/Place'
 import { toIdrCurrency } from '@/helpers/formater.helper'
 import { useGeolocationStore } from '@/stores/geolocation.store'
 import { getPlaceOpenHourStatus } from '@/helpers/time.helper'
 import { useUserStore } from '@/stores/user.store'
 import { API_URL_PLACE_INC_VIEWS } from '@/constants/api-url'
-import axios from '@/helpers/axios.helper'
+import { usePlaceReviewStore } from '@/stores/place-review.store'
 
 export default {
     computed: {
         ...mapState(useGeolocationStore, ['coordinates']),
         ...mapState(useUserStore, ['myInfo']),
         ...mapState(usePlaceStore, ['placeDetailObject']),
+        ...mapState(usePlaceReviewStore, ['myReview']),
 
         placeId (): string {
             return this.$route.params.placeId as string
@@ -185,6 +202,7 @@ export default {
     methods: {
         ...mapActions(useGeolocationStore, ['getCurrentGeolocation']),
         ...mapActions(usePlaceStore, ['getPlaceDetail']),
+        ...mapActions(usePlaceReviewStore, ['getMyPlaceReview']),
 
         async incPlaceViews () {
             try {
@@ -198,6 +216,7 @@ export default {
 
     async beforeMount () {
         this.getCurrentGeolocation()
+        this.getMyPlaceReview(this.placeId, true)
         const getted = await this.getPlaceDetail(this.placeId)
         if (getted === false) {
             this.$router.push({ name: 'explore' })

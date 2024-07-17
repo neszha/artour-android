@@ -76,7 +76,7 @@ export interface PlaceEntity {
     updatedAt: Date
 
     user?: UserEntity
-    category: PlaceCategory
+    category: PlaceCategoryEntity
     mapImages?: File[]
     mapImageCover?: File
     mapArImageCover?: File
