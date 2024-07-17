@@ -17,9 +17,10 @@ import CardMyPlace from '@components/card/CardMyPlace.vue'
                             Kontribusi
                         </h2>
                     </div>
-                    <button @click="toAddPlaceView" class="navbar-toggler waves-effect waves-dark border border-secondary" type="button">
+                    <button @click="toAddPlaceView" v-if="allowAddPlace" class="navbar-toggler waves-effect waves-dark border border-secondary" type="button">
                         <i class="bi bi-plus"></i>
                     </button>
+                    <div v-else></div>
                 </div>
             </nav>
         </section>
@@ -56,11 +57,21 @@ import CardMyPlace from '@components/card/CardMyPlace.vue'
                 </div>
             </div>
             <div v-if="!myPlaces.length" class="no-card-list container-fluid">
-                <div class="card">
+                <div v-if="allowAddPlace" class="card">
                     <div class="card-body text-center py-5">
                         <small>
                             Anda belum memiliki tempat untuk dikeloka. Klik ikon plus untuk menambahkan tampat baru!
                         </small>
+                    </div>
+                </div>
+                <div v-else class="card border-danger">
+                    <div class="card-body text-center py-5">
+                        <div class="mb-3">
+                            <small class="text-muted">
+                                Anda melakukan menulis minimal 10 ulasan pada setiap tempat yang berbeda untuk dapat mempublikasikan tempat wisata baru.
+                            </small>
+                        </div>
+                        <RouterLink :to="{name: 'explore'}" class="router-link-active btn btn-sm font-bold btn-neutral text-nowrap shadow-none">Explore Tempat Wisata</RouterLink>
                     </div>
                 </div>
             </div>
@@ -72,15 +83,28 @@ import CardMyPlace from '@components/card/CardMyPlace.vue'
 import { mapActions, mapState } from 'pinia'
 import { useUserStore } from '@/stores/user.store'
 import { usePlaceStore } from '@/stores/place.store'
+import { UserRoleEnum } from '@/interfaces/enums'
+import { type UserEntity } from '@/interfaces/User'
 
 export default {
 
     computed: {
         ...mapState(useUserStore, ['myInfo']),
-        ...mapState(usePlaceStore, ['myPlaces'])
+        ...mapState(usePlaceStore, ['myPlaces']),
+
+        allowAddPlace (): boolean {
+            const user = this.myInfo as UserEntity
+            const minReview = 10
+            if (user.role === UserRoleEnum.ADMIN) return true
+            if (user.userMeta !== undefined) {
+                if (user.userMeta?.reviews >= minReview) return true
+            }
+            return false
+        }
     },
 
     methods: {
+        ...mapActions(useUserStore, ['getMySessionInfo']),
         ...mapActions(usePlaceStore, ['getPlaceCategories', 'getMyPlaces']),
 
         toAddPlaceView () {
@@ -91,6 +115,7 @@ export default {
     async beforeMount () {
         await this.getPlaceCategories()
         await this.getMyPlaces()
+        this.getMySessionInfo()
     },
 
     mounted () {

@@ -1,5 +1,9 @@
 import { type UserRoleEnum } from './enums'
 
+export interface UserMeta {
+    reviews: number
+}
+
 export interface UserEntity {
     id: string
     avatar: string
@@ -10,4 +14,6 @@ export interface UserEntity {
     lastLoginAt?: Date
     createdAt: Date
     updatedAt: Date
+
+    userMeta?: UserMeta
 }
