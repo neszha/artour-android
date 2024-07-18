@@ -179,24 +179,23 @@ export default {
         ...mapActions(usePlaceStore, ['getPlaceCategories', 'getMyPlaces']),
         ...mapActions(useModalStore, ['setOpenHoursDayData']),
 
-        async uploadImagePlace (event: Event) {
+        uploadImagePlace (event: Event) {
             const files = (event.target as HTMLInputElement).files
             if (files === null) return
 
             for (const file of files) {
                 const formData = new FormData()
                 formData.append('file', file)
-                try {
-                    const response: AxiosResponse = await axios.post(API_URL_FILE_MAP_CONTENTS, formData)
+                axios.post(API_URL_FILE_MAP_CONTENTS, formData).then((response: AxiosResponse) => {
                     const fileData = response.data.data as File
                     this.mapImages.push(fileData)
                     this.form.data.mapImageIds.push(fileData.id)
                     if (this.form.data.mapImageIds.length === 1) {
                         this.form.data.mapImageCoverId = fileData.id
                     }
-                } catch (error) {
+                }).catch((error) => {
                     console.error(error)
-                }
+                })
             }
         },
 

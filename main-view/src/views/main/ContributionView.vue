@@ -68,7 +68,7 @@ import CardMyPlace from '@components/card/CardMyPlace.vue'
                     <div class="card-body text-center py-5">
                         <div class="mb-3">
                             <small class="text-muted">
-                                Anda melakukan menulis minimal 10 ulasan pada setiap tempat yang berbeda untuk dapat mempublikasikan tempat wisata baru.
+                                Anda harus memberi minimal 10 ulasan pada setiap tempat yang berbeda untuk dapat mempublikasikan tempat wisata baru.
                             </small>
                         </div>
                         <RouterLink :to="{name: 'explore'}" class="router-link-active btn btn-sm font-bold btn-neutral text-nowrap shadow-none">Explore Tempat Wisata</RouterLink>
