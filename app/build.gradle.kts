@@ -6,6 +6,14 @@ plugins {
 }
 
 android {
+    signingConfigs {
+        getByName("debug") {
+            storeFile = file("/Users/neszha/projects/artour/artour-android/keystore")
+            storePassword = "Artour123*"
+            keyAlias = "neszha"
+            keyPassword = "Artour123*"
+        }
+    }
     namespace = "com.neszha.artour"
     compileSdk = 34
 
@@ -14,13 +22,14 @@ android {
         minSdk = 26
         //noinspection OldTargetApi
         targetSdk = 34
-        versionCode = 1
-        versionName = "0.1.0"
+        versionCode = 2
+        versionName = "0.1.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary = true
         }
+        signingConfig = signingConfigs.getByName("debug")
     }
 
     buildTypes {
