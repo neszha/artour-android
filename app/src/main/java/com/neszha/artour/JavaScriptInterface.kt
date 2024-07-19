@@ -36,9 +36,9 @@ class JavaScriptInterface(
         // Create request options.
         val nonceId = UUID.randomUUID().toString()
         val googleIdOption: GetGoogleIdOption = GetGoogleIdOption.Builder()
-            .setFilterByAuthorizedAccounts(true)
+            .setFilterByAuthorizedAccounts(false)
             .setServerClientId(clientId)
-            .setAutoSelectEnabled(true)
+            .setAutoSelectEnabled(false)
             .setNonce(nonceId)
             .build()
 
