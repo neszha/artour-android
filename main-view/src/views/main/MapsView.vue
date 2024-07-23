@@ -1,11 +1,14 @@
 <script setup lang="ts">
 import MainLayout from '../layouts/MainLayout.vue'
 import MainMaps from '@components/maps/MainMaps.vue'
+import CardPlaceInline from '../components/card/CardPlaceInline.vue'
 </script>
 
 <template>
     <MainLayout>
         <div class="map-container">
+
+            <!-- search form  -->
             <div class="map-search">
                 <form @submit.prevent="searchPlaces">
                     <div class="input-group input-group-md input-group-inline shadow border-none" style="height: 50px;">
@@ -42,7 +45,35 @@ import MainMaps from '@components/maps/MainMaps.vue'
                 </div>
             </div>
 
+            <!-- maps view  -->
             <MainMaps />
+
+            <!-- search result list view -->
+            <div class="search-result-item">
+                <div class="action-button mb-3">
+                    <div class="d-flex">
+                        <div class="col-6">
+                            <button class="icon icon-sm icon-shape bg-white rounded-circle waves-effect waves-dark ms-3">
+                                <i class="bi bi-x-lg" style="font-size: 20px;"></i>
+                            </button>
+                        </div>
+                        <div class="col-6 text-end">
+                            <button class="btn btn-sm btn-neutral border-base waves-effect waves-dark me-3">
+                                <i class="bi bi-list-ul me-2"></i>
+                                <span>Daftar Pencarian</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="scroll-x-wrapper px-3 pb-3 mb-2">
+                    <div class="search-list d-flex gap-3">
+                        <div v-for="i in 10" :key="i" class="search-item">
+                            <CardPlaceInline />
+                        </div>
+                        <div class="invisible">.</div>
+                    </div>
+                </div>
+            </div>
 
         </div>
     </MainLayout>
@@ -129,11 +160,22 @@ export default {
         }
     }
 }
+.search-result-item {
+    width: 100%;
+    position: absolute;
+    bottom: 0px;
+    .scroll-x-wrapper {
+        overflow-x: scroll;
+    }
+}
 </style>
 
 <style lang="scss">
 .main-maps-layout {
     position: relative;
+    .map-container {
+        position: relative;
+    }
     .main-content {
         padding-bottom: 0 !important;
     }
