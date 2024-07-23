@@ -1,44 +1,128 @@
+<script setup lang="ts">
+import classNames from 'classnames'
+</script>
+
 <template>
-    <div class="card">
+    <div @click="toPlaceDetailView()" class="card">
         <div class="card-box-img">
-            <img src="http://192.168.100.92:8000/map-contents/map-content-e79833aa-4872-454d-804d-a263793cc847-1721237053543.jpg"
-                alt="..." class="card-img">
+            <img :src="imageCoverLink" alt="..." class="card-img">
         </div>
         <div class="card-body p-2">
             <div class="head d-flex justify-content-between align-items-center">
                 <h3 class="title h4">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Odit, animi.
-                    Lorem, ipsum dolor.
+                    {{ place.name }}
                 </h3>
-                <div class="save-action">
-                    <i class="bi bi-bookmark mx-2"></i>
+                <div @click="addToBookmark" class="save-action px-2">
+                    <i v-if="savedToBookmark" class="bi bi-bookmark-fill text-primary"></i>
+                    <i v-else class="bi bi-bookmark"></i>
                 </div>
             </div>
             <div class="list-info">
                 <div class="d-flex align-items-center">
                     <i class="bi bi-geo-alt-fill me-2 text-muted"></i>
                     <span class="address text-sm text-heading text-primary-hover">
-                        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Eligendi, aut.
+                        {{ place.address }}
                     </span>
                 </div>
                 <div class="d-flex align-items-center">
                     <i class="bi bi-alarm-fill me-2 text-muted"></i>
                     <div class="text-sm text-heading text-primary-hover">
-                        <span class="text-danger">Tutup</span>
+                        <span :class="classNames({
+                            'text-primary': (openingHoursStatus.open === true),
+                            'text-danger': (openingHoursStatus.open === false),
+                        })">{{ openingHoursStatus.content }}</span>
                     </div>
                 </div>
             </div>
             <div class="rating d-flex gap-1">
-                <i class="bi-star-fill bi text-warning"></i>
-                <i class="bi-star-fill bi text-warning"></i>
-                <i class="bi-star-fill bi text-warning"></i>
-                <i class="bi-star-fill bi text-warning"></i>
-                <i class="bi-star-half bi text-warning"></i>
-                <span>(4.90)</span>
+                <i v-for="i of 5" :key="i" :class="classNames({
+                    'bi-star': (place.rating <= i - 1),
+                    'bi-star-half': (place.rating > i - 1 && place.rating < i),
+                    'bi-star-fill': (place.rating >= i),
+                })" class="bi text-warning"></i>
+                <span>({{ place.rating.toFixed(2) }})</span>
             </div>
         </div>
     </div>
 </template>
+
+<script lang="ts">
+import { mapState } from 'pinia'
+import { type OpeningHoursDay, type OpeningHoursStatus, type PlaceEntity } from '@/interfaces/Place'
+import { usePlaceStore } from '@/stores/place.store'
+import { type File } from '@/interfaces/File'
+import { getPlaceOpenHourStatus } from '@/helpers/time.helper'
+import { API_URL_PLACE_ACTION_METADATA, API_URL_PLACE_ADD_BOOKMARKS } from '@/constants/api-url'
+import axios from '@/helpers/axios.helper'
+import { type AxiosResponse } from 'axios'
+
+export default {
+    computed: {
+        ...mapState(usePlaceStore, ['placeSearchList']),
+
+        place (): PlaceEntity {
+            return this.placeSearchList.find(place => place.id === this.placeId) as PlaceEntity
+        },
+
+        imageCoverLink (): string {
+            if (this.place.mapImageCover === undefined) return ''
+            const fileData = this.place.mapImageCover as unknown as File
+            return fileData.link ?? ''
+        },
+
+        openingHoursStatus (): OpeningHoursStatus {
+            const openingHours = this.place.openingHours.find(openingHours => openingHours.dayIndex === this.dayIndex) as OpeningHoursDay
+            return getPlaceOpenHourStatus(openingHours)
+        }
+    },
+
+    methods: {
+        toPlaceDetailView (): void {
+            this.$router.push({ name: 'place:detail', params: { placeId: this.placeId } })
+        },
+
+        async getPlaceActionMetaData (): Promise<void> {
+            try {
+                const url = API_URL_PLACE_ACTION_METADATA.replace(':placeId', this.place.id as string)
+                const response: AxiosResponse = await axios.get(url)
+                const metaData = response.data.data
+                this.savedToBookmark = metaData?.saved?.setted as boolean
+            } catch (error) {
+                console.error(error)
+            }
+        },
+
+        async addToBookmark (event: Event) {
+            event.stopPropagation()
+            try {
+                const url = API_URL_PLACE_ADD_BOOKMARKS.replace(':placeId', this.place.id as string)
+                await axios.post(url)
+            } catch (error) {
+                console.error(error)
+            }
+            await this.getPlaceActionMetaData()
+        }
+    },
+
+    beforeMount () {
+        this.getPlaceActionMetaData()
+    },
+
+    data () {
+        return {
+            dayIndex: new Date().getDay(),
+            savedToBookmark: false
+        }
+    },
+
+    props: {
+        placeId: {
+            type: String,
+            required: true
+        }
+    }
+}
+</script>
 
 <style scoped lang="scss">
     .card {
