@@ -24,11 +24,17 @@ class JavaScriptInterface(
     private val webView: WebView
 ) {
 
+    /**
+     * Initial trigger to activate all permission form main view.
+     */
     @JavascriptInterface
     fun setupPermissions() {
         contextActivity.requestPermission("notification")
     }
 
+    /**
+     * Login google with oAuth2.
+     */
     @JavascriptInterface
     fun loginWithGoogle(clientId: String) {
         val credentialManager = CredentialManager.create(context)
@@ -71,6 +77,9 @@ class JavaScriptInterface(
         }
     }
 
+    /**
+     * Open link with external browser.
+     */
     @JavascriptInterface
     fun openExternalLink(link: String) {
         val intent = Intent(Intent.ACTION_VIEW)
@@ -78,6 +87,9 @@ class JavaScriptInterface(
         context.startActivity(intent)
     }
 
+    /**
+     * Show toast in android activity.
+     */
     @JavascriptInterface
     fun showToast(message: String) {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show()

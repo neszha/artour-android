@@ -66,6 +66,9 @@ class SplashScreenActivity: ComponentActivity() {
         }
     }
 
+    /**
+     * Start app local http server.
+     */
     private fun startingHttpServer() {
         if (WebServer.localHttpServerIsRunning) return
         embeddedServer(Jetty, host = WebServer.Config.host, port = WebServer.Config.port) {

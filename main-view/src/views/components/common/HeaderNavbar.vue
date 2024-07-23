@@ -1,5 +1,5 @@
 <template>
-    <nav class="navbar navbar-light bg-light border-bottom px-0 py-1">
+    <nav class="navbar navbar-light bg-white border-bottom px-0 py-1">
         <div class="container-xl">
             <div @click="backAction()" class="navbar-brand p-0">
                 <i class="bi bi-arrow-left"></i>

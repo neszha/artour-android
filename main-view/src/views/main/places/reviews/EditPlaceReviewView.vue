@@ -32,13 +32,20 @@ import HeaderNavbar from '@components/common/HeaderNavbar.vue'
     <!-- image review  -->
     <div class="container-fluid">
         <div class="mb-4">
-            <input ref="fileImageInput" @change="uploadImagePlace"  type="file" class="d-none" multiple accept="image/*">
-            <div class="d-grid">
-                <button @click="($refs.fileImageInput as HTMLInputElement).click()" type="button" class="btn btn-sm btn-neutral border-base waves-effect waves-dark">
+            <input ref="fileImageInputGalerry" @change="uploadImagePlace" type="file" class="d-none" multiple accept="image/*">
+            <input ref="fileImageInputCamerra" @change="uploadImagePlace" type="file" class="d-none" capture="user" accept="image/*">
+            <div class="d-flex gap-2">
+                <button @click="($refs.fileImageInputGalerry as HTMLInputElement).click()" type="button" class="btn btn-sm btn-neutral border-base w-50 waves-effect waves-dark">
                     <span class="pe-2">
                         <i class="bi bi-images"></i>
                     </span>
-                    <span>Tambahkan foto</span>
+                    <span>Tambahkan Foto</span>
+                </button>
+                <button @click="($refs.fileImageInputCamerra as HTMLInputElement).click()" type="button" class="btn btn-sm btn-neutral border-base w-50 waves-effect waves-dark">
+                    <span class="pe-2">
+                        <i class="bi bi-camera-fill"></i>
+                    </span>
+                    <span>Ambil Gambar</span>
                 </button>
             </div>
         </div>

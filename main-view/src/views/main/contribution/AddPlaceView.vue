@@ -90,13 +90,22 @@ import ModalOpeningHoursDay from '@components/modals/ModalOpeningHoursDay.vue'
                         <p class="text-sm text-muted">Tambahkan beberapa foto tempat mimimal 4 foto.</p>
                     </div>
                     <div class="col-12 mb-3">
-                        <input ref="fileImageInput" @change="uploadImagePlace" type="file" class="d-none" multiple accept="image/*">
-                        <button @click="($refs.fileImageInput as HTMLInputElement).click()" type="button" class="btn btn-sm btn-neutral border-base waves-effect waves-dark">
-                            <span class="pe-2">
-                                <i class="bi bi-images"></i>
-                            </span>
-                            <span>Tambahkan foto</span>
-                        </button>
+                        <input ref="fileImageInputGalerry" @change="uploadImagePlace" type="file" class="d-none" multiple accept="image/*">
+                        <input ref="fileImageInputCamerra" @change="uploadImagePlace" type="file" class="d-none" capture="user" accept="image/*">
+                        <div class="d-flex gap-2">
+                            <button @click="($refs.fileImageInputGalerry as HTMLInputElement).click()" type="button" class="btn btn-sm btn-neutral border-base waves-effect waves-dark">
+                                <span class="pe-2">
+                                    <i class="bi bi-images"></i>
+                                </span>
+                                <span>Tambahkan Foto</span>
+                            </button>
+                            <button @click="($refs.fileImageInputCamerra as HTMLInputElement).click()" type="button" class="btn btn-sm btn-neutral border-base waves-effect waves-dark">
+                                <span class="pe-2">
+                                    <i class="bi bi-camera-fill"></i>
+                                </span>
+                                <span>Ambil Gambar</span>
+                            </button>
+                        </div>
                     </div>
                     <div class="col-12">
                         <div class="mt-2 image-scrollable-x">

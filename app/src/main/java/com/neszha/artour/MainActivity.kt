@@ -27,11 +27,18 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.neszha.artour.ui.theme.ITentixTheme
 import android.Manifest
+import android.os.Environment
+import android.provider.MediaStore
 import android.webkit.GeolocationPermissions
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.runtime.remember
+import androidx.core.content.FileProvider
 import com.neszha.artour.store.WebServer
+import java.io.File
+import java.io.IOException
+import java.text.SimpleDateFormat
+import java.util.Date
 
 class MainActivity : ComponentActivity() {
     private val REQUEST_CODE_POST_NOTIFICASSION = 102
@@ -41,7 +48,11 @@ class MainActivity : ComponentActivity() {
     private val REQUEST_CODE_CAMERA_ACCESS = 106
     private val REQUEST_CODE_FILE_CHOOSER  = 2002
     private var fileChooserCallback: ValueCallback<Array<Uri>>? = null
+    private var cameraPhotoUri: Uri? = null
 
+    /**
+     * Create activity.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -49,6 +60,7 @@ class MainActivity : ComponentActivity() {
         val host: String = WebServer.Config.host
         val port: String = WebServer.Config.port.toString()
         val webViewUrl = "http://$host:$port/index.html#/auth"
+//        val webViewUrl = "http://$host:$port/index.html#/contribution/places"
         setContent {
             ITentixTheme {
                 Surface(
@@ -62,21 +74,31 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    /**
+     * Handle event on activity results.
+     */
     @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, intent)
+        super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_CODE_FILE_CHOOSER) {
             if (resultCode == RESULT_OK) {
-                data?.let { intent ->
-                    val results = this.getSelectedFiles(intent)
+                if (cameraPhotoUri !== null) { // From camera capture.
+                    val results = this.getCameraCaptureFiles(data)
                     fileChooserCallback?.onReceiveValue(results)
-                    fileChooserCallback = null
+                    cameraPhotoUri = null
+                } else { // From gallery selected.
+                    val results = this.getGallerySelectedFiles(data)
+                    fileChooserCallback?.onReceiveValue(results)
                 }
+                fileChooserCallback = null
             }
             fileChooserCallback?.onReceiveValue(null)
         }
     }
 
+    /**
+     * Handle event request permissions.
+     */
     @Deprecated("This method has been deprecated in favor of using the Activity Result API\n      which brings increased type safety via an {@link ActivityResultContract} and the prebuilt\n      contracts for common intents available in\n      {@link androidx.activity.result.contract.ActivityResultContracts}, provides hooks for\n      testing, and allow receiving results in separate, testable classes independent from your\n      activity. Use\n      {@link #registerForActivityResult(ActivityResultContract, ActivityResultCallback)} passing\n      in a {@link RequestMultiplePermissions} object for the {@link ActivityResultContract} and\n      handling the result in the {@link ActivityResultCallback#onActivityResult(Object) callback}.")
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
@@ -121,6 +143,9 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    /**
+     * Setup and custom web view client.
+     */
     fun createWebViewClient(): WebViewClient {
         return object : WebViewClient() {
             private var finished: Boolean = false
@@ -133,6 +158,9 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    /**
+     * Setup and custom chrome web client.
+     */
     fun createWebChromeClient(): WebChromeClient {
         return object : WebChromeClient() {
 
@@ -169,6 +197,7 @@ class MainActivity : ComponentActivity() {
             }
 
             // Handle open file.
+            @SuppressLint("QueryPermissionsNeeded")
             override fun onShowFileChooser(
                 webView: WebView?,
                 filePathCallback: ValueCallback<Array<Uri>>?,
@@ -193,6 +222,39 @@ class MainActivity : ComponentActivity() {
                     intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
                 }
 
+                // Open live capture via camera.
+                if (fileChooserParams?.isCaptureEnabled == true) {
+                    val captureImageIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { intentCapture ->
+                        intentCapture.resolveActivity(packageManager).also {
+                            val photoFile: File? = try {
+                                createImageFile()
+                            } catch (ex: IOException) {
+                                null
+                            }
+                            photoFile?.also {
+                                cameraPhotoUri = FileProvider.getUriForFile(
+                                    this@MainActivity,
+                                    "$packageName.provider",
+                                    it
+                                )
+                                intentCapture.putExtra(MediaStore.EXTRA_OUTPUT, cameraPhotoUri)
+                            }
+                        }
+                    }
+                    val pickFileIntent = Intent(Intent.ACTION_GET_CONTENT).apply {
+                        type = "image/*"
+                        putExtra(Intent.EXTRA_ALLOW_MULTIPLE, false)
+                    }
+                    val chooserIntent = Intent(Intent.ACTION_CHOOSER).apply {
+                        putExtra(Intent.EXTRA_INTENT, pickFileIntent)
+                        putExtra(Intent.EXTRA_TITLE, "Select or Take a Picture")
+                        putExtra(Intent.EXTRA_INITIAL_INTENTS, arrayOf(captureImageIntent))
+                    }
+                    startActivityForResult(chooserIntent, REQUEST_CODE_FILE_CHOOSER)
+                    fileChooserCallback = filePathCallback
+                    return true
+                }
+
                 // Start open file.
                 startActivityForResult(Intent.createChooser(intent, "Select File"), REQUEST_CODE_FILE_CHOOSER)
                 fileChooserCallback = filePathCallback
@@ -201,6 +263,9 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    /**
+     * Handle request permissions.
+     */
     fun requestPermission(permissionName: String) {
         // Ask notification permission.
         if (permissionName == "notification") {
@@ -263,7 +328,27 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    private fun getSelectedFiles(intent: Intent?): Array<Uri>? {
+    /**
+     * Save capture image to applocation local data.
+     */
+    @SuppressLint("SimpleDateFormat")
+    @Throws(IOException::class)
+    private fun createImageFile(): File {
+        val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+        val storageDir: File = getExternalFilesDir(Environment.DIRECTORY_PICTURES)!!
+        return File.createTempFile(
+            "JPEG_${timeStamp}_",
+            ".jpg",
+            storageDir
+        ).apply {
+            cameraPhotoUri = Uri.fromFile(this)
+        }
+    }
+
+    /**
+     * Get image data from selected gallery.
+     */
+    private fun getGallerySelectedFiles(intent: Intent?): Array<Uri>? {
         val clipData = intent?.clipData
         val singleFile = intent?.data
         return when {
@@ -277,6 +362,28 @@ class MainActivity : ComponentActivity() {
             singleFile != null -> arrayOf(singleFile)
             else -> null
         }
+    }
+
+    /**
+     * Get image paths form camera capture.
+     */
+    private fun getCameraCaptureFiles(data: Intent?): Array<Uri>? {
+        val results: Array<Uri>? = when {
+            data == null || data.data == null -> {
+                // Case where no data URI but camera photo URI exists
+                cameraPhotoUri?.let { arrayOf(it) }
+            }
+            data.clipData != null -> {
+                // Multiple files selected
+                val clipData = data.clipData
+                Array(clipData!!.itemCount) { i -> clipData.getItemAt(i).uri }
+            }
+            else -> {
+                // Single file selected
+                data.data?.let { arrayOf(it) }
+            }
+        }
+        return results
     }
 }
 
@@ -324,9 +431,6 @@ fun WebViewScreen(webUrl: String) {
                     loadUrl(webUrl)
                 }
             },
-//            update = {
-//                canGoBack = it.canGoBack()
-//            },
         )
     }
 }
