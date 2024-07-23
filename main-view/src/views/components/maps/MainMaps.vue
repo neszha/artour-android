@@ -149,7 +149,9 @@ export default {
             }
             let zoomLevel = 12
             const maxDistance = Math.max(...markerDistances)
-            if (maxDistance >= 10 && maxDistance < 20) {
+            if (maxDistance < 10) {
+                zoomLevel = 12
+            } else if (maxDistance >= 10 && maxDistance < 20) {
                 zoomLevel = 11
             } else if (maxDistance >= 20 && maxDistance < 150) {
                 zoomLevel = 8

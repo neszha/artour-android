@@ -80,10 +80,13 @@ export const usePlaceStore = defineStore('place', {
             }
         },
 
-        async searchPlacesByKeyword (keyword: string) {
+        async searchPlacesByKeyword (keyword: string, coordinates: Coordinates) {
             try {
                 const url = `${API_URL_PLACE_MAP_SEARCH}?keyword=${keyword}`
-                const response: AxiosResponse = await axios.get(url)
+                const response: AxiosResponse = await axios.post(url, {
+                    latitude: coordinates.latitude,
+                    longitude: coordinates.longitude
+                })
                 const data = response.data.data as PlaceEntity[]
                 if (data.length === 0) {
                     if (window.Android !== undefined) {

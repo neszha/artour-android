@@ -7,7 +7,7 @@ import ModalOpeningHoursDay from '@components/modals/ModalOpeningHoursDay.vue'
 </script>
 
 <template>
-    <HeaderNavbar nav-title="Tambahkan Tempat" />
+    <HeaderNavbar nav-title="Tambahkan Tempat Wisata" />
 
     <!-- main content -->
     <section class="mt-4 mb-3">

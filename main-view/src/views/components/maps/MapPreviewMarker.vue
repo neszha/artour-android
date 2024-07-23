@@ -35,7 +35,7 @@ export default {
                     lat: this.location.latitude,
                     lng: this.location.longitude
                 },
-                zoom: 15,
+                zoom: 13,
                 fullscreenControl: true
             })
             const marker = new google.maps.Marker({

@@ -45,10 +45,13 @@ import MainMaps from '@components/maps/MainMaps.vue'
 <script lang="ts">
 import { mapActions, mapState } from 'pinia'
 import { usePlaceStore } from '@/stores/place.store'
+import { type Coordinates } from '@/interfaces/Geolocation'
+import { useGeolocationStore } from '@/stores/geolocation.store'
 
 export default {
     computed: {
-        ...mapState(usePlaceStore, ['placeCategories'])
+        ...mapState(usePlaceStore, ['placeCategories']),
+        ...mapState(useGeolocationStore, ['coordinates'])
     },
 
     methods: {
@@ -58,7 +61,7 @@ export default {
             if (this.form.keyword.trim() === '') return
             this.form.loading = true
             this.$router.push({ name: 'maps', query: { keyword: this.form.keyword } })
-            await this.searchPlacesByKeyword(this.form.keyword as string)
+            await this.searchPlacesByKeyword(this.form.keyword as string, this.coordinates as Coordinates)
             setTimeout(() => {
                 this.form.loading = false
             }, 500)
