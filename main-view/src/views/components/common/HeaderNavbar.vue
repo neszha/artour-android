@@ -1,5 +1,5 @@
 <template>
-    <nav class="navbar navbar-light border-bottom px-0 py-1">
+    <nav class="navbar navbar-light bg-light border-bottom px-0 py-1">
         <div class="container-xl">
             <div @click="backAction()" class="navbar-brand p-0">
                 <i class="bi bi-arrow-left"></i>
@@ -11,6 +11,7 @@
             </div>
         </div>
     </nav>
+    <div class="invisible" style="width: 100%; height: 60px;">...</div>
 </template>
 
 <script lang="ts">
@@ -38,6 +39,10 @@ export default {
 
 <style scoped lang="scss">
 .navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
     .navbar-toggler {
         font-size: 22px;
         &:focus {
