@@ -10,7 +10,7 @@ import CardPlaceInline from '../components/card/CardPlaceInline.vue'
 
             <!-- search form  -->
             <div class="map-search">
-                <form @submit.prevent="searchPlaces">
+                <form @submit.prevent="searchPlaces()">
                     <div class="input-group input-group-md input-group-inline shadow border-none" style="height: 50px;">
                         <span class="input-group-text pe-2 rounded-start-pill">
                             <div v-if="form.loading" class="spinner-border spinner-border-sm text-gray" role="status"></div>
@@ -102,6 +102,7 @@ export default {
             this.$router.push({ name: 'maps', query: { keyword: this.form.keyword } })
             await this.searchPlacesByKeyword(this.form.keyword as string, this.coordinates as Coordinates)
             setTimeout(() => {
+                (this.$refs.inputSearch as HTMLInputElement).blur()
                 this.form.loading = false
             }, 500)
         },
