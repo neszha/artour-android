@@ -58,7 +58,9 @@ import CardPlaceInline from '../components/card/CardPlaceInline.vue'
                             </button>
                         </div>
                         <div class="col-8 text-end">
-                            <button class="btn btn-sm btn-neutral border-base waves-effect waves-dark me-3">
+                            <button
+                                @click="$router.push({name: 'maps:search-list' })"
+                                class="btn btn-sm btn-neutral border-base waves-effect waves-dark me-3">
                                 <i class="bi bi-list-ul me-2"></i>
                                 <span>Daftar Pencarian</span>
                             </button>

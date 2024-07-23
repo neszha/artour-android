@@ -16,6 +16,9 @@ import MapsView from './views/main/MapsView.vue'
 import ArCameraView from './views/main/ArCameraView.vue'
 import ContributionView from './views/main/ContributionView.vue'
 
+// Maps.
+import PlaceMapSearchView from './views/main/maps/PlaceMapSearchView.vue'
+
 // Place
 import PlaceDetailView from './views/main/places/PlaceDetailView.vue'
 import PlaceUserBookmarkView from './views/main/places/PlaceUserBookmarkView.vue'
@@ -63,9 +66,21 @@ const routes: RouteRecordRaw [] = [
                 component: ExploreView
             },
             {
-                name: 'maps',
+                name: 'maps-layout',
                 path: '/maps',
-                component: MapsView
+                component: RouterLayout,
+                children: [
+                    {
+                        name: 'maps',
+                        path: '',
+                        component: MapsView
+                    },
+                    {
+                        name: 'maps:search-list',
+                        path: 'search-list',
+                        component: PlaceMapSearchView
+                    }
+                ]
             },
             {
                 name: 'place-layout',
