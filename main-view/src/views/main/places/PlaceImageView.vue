@@ -9,7 +9,7 @@ import HeaderNavbar from '@components/common/HeaderNavbar.vue'
     <section class="place-image-galery mt-3">
         <div class="image-list">
             <div v-for="image in images" :key="image.id" class="image-item">
-                <img v-lazy="image.link" class="w-100" alt="...">
+                <img v-lazy="image.link" :href="image.link" class="lightbox-image w-100" alt="...">
             </div>
         </div>
     </section>
@@ -41,8 +41,14 @@ export default {
         }
     },
 
-    beforeMount () {
-        this.getPlaceImages()
+    async beforeMount () {
+        await this.getPlaceImages()
+        window.$('.lightbox-image').magnificPopup({
+            type: 'image',
+            gallery: {
+                enabled: true
+            }
+        })
     },
 
     data () {

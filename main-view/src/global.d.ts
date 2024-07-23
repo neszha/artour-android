@@ -1,6 +1,7 @@
 export {}
 
 declare global {
+
     interface AndroidInterface {
         setupPermissions: () => void
         loginWithGoogle: (clientId: string) => void
@@ -12,5 +13,6 @@ declare global {
         Android: AndroidInterface
         authGoogleAndroidCallback: (token: string) => void
         AFRAME: any
+        $: any
     }
 }
