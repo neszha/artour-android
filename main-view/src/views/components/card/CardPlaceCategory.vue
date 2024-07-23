@@ -1,7 +1,7 @@
 <template>
     <div class="card">
         <div class="card-box-img">
-            <img :src="category.popularPlace?.mapImageCover?.link" alt="..." class="card-img">
+            <img v-lazy="category.popularPlace?.mapImageCover?.link" alt="..." class="card-img">
         </div>
         <div class="card-body p-3">
             <h3 class="title h4 mb-2">

@@ -45,45 +45,45 @@ import ModalDeletePlaceReview from '@components/modals/ModalDeletePlaceReview.vu
         <div class="image-review mt-3">
             <div v-if="review.images?.length === 1" class="d-flex gap-1">
                 <div class="image-review-item w-100" style="height: auto;">
-                    <img class="w-100" :src="getImageLinkIndex(0)" alt="...">
+                    <img class="w-100" v-lazy="getImageLinkIndex(0)" alt="...">
                 </div>
             </div>
             <div v-if="review.images?.length === 2" class="d-flex gap-1">
                 <div class="image-review-item">
-                    <img class="w-100" :src="getImageLinkIndex(0)" alt="...">
+                    <img class="w-100" v-lazy="getImageLinkIndex(0)" alt="...">
                 </div>
                 <div class="image-review-item">
-                    <img class="w-100" :src="getImageLinkIndex(1)" alt="...">
+                    <img class="w-100" v-lazy="getImageLinkIndex(1)" alt="...">
                 </div>
             </div>
             <div v-if="review.images?.length === 3" class="d-flex gap-1">
                 <div class="image-review-item">
-                    <img class="w-100" :src="getImageLinkIndex(0)" alt="...">
+                    <img class="w-100" v-lazy="getImageLinkIndex(0)" alt="...">
                 </div>
                 <div class="image-review-col">
                     <div class="image-review-item">
-                        <img class="w-100" :src="getImageLinkIndex(1)" alt="...">
+                        <img class="w-100" v-lazy="getImageLinkIndex(1)" alt="...">
                     </div>
                     <div class="image-review-item">
-                        <img class="w-100" :src="getImageLinkIndex(2)" alt="...">
+                        <img class="w-100" v-lazy="getImageLinkIndex(2)" alt="...">
                     </div>
                 </div>
             </div>
             <div v-if="review.images?.length as number  >= 4" class="d-flex gap-1">
                 <div class="image-review-col">
                     <div class="image-review-item">
-                        <img class="w-100" :src="getImageLinkIndex(0)" alt="...">
+                        <img class="w-100" v-lazy="getImageLinkIndex(0)" alt="...">
                     </div>
                     <div class="image-review-item">
-                        <img class="w-100" :src="getImageLinkIndex(1)" alt="...">
+                        <img class="w-100" v-lazy="getImageLinkIndex(1)" alt="...">
                     </div>
                 </div>
                 <div class="image-review-col">
                     <div class="image-review-item">
-                        <img class="w-100" :src="getImageLinkIndex(2)" alt="...">
+                        <img class="w-100" v-lazy="getImageLinkIndex(2)" alt="...">
                     </div>
                     <div class="image-review-item">
-                        <img class="w-100" :src="getImageLinkIndex(3)" alt="...">
+                        <img class="w-100" v-lazy="getImageLinkIndex(3)" alt="...">
                     </div>
                 </div>
             </div>

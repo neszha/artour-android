@@ -55,16 +55,16 @@ import CardPlaceReview from '@components/card/review/CardPlaceReview.vue'
         <div class="horizontal-scroll px-2 mx-1">
             <div v-for="i in Math.floor(place.mapImages.length / 3)" :key="i" class="hs-item d-flex gap-2">
                 <div class="single-img">
-                    <div class="box-img" data-v-bdb02ee3="">
-                        <img :src="place.mapImages[i - 1].link" alt="..." class="card-img" >
+                    <div class="box-img">
+                        <img v-lazy="place.mapImages[i - 1].link" alt="..." class="card-img" >
                     </div>
                 </div>
                 <div class="double-img d-flex flex-column gap-2">
-                    <div class="box-img" data-v-bdb02ee3="">
-                        <img :src="place.mapImages[i].link" alt="..." class="card-img" >
+                    <div class="box-img">
+                        <img v-lazy="place.mapImages[i].link" alt="..." class="card-img" >
                     </div>
-                    <div class="box-img" data-v-bdb02ee3="">
-                        <img :src="place.mapImages[i + 1].link" alt="..." class="card-img" >
+                    <div class="box-img">
+                        <img v-lazy="place.mapImages[i + 1].link" alt="..." class="card-img" >
                     </div>
                 </div>
             </div>

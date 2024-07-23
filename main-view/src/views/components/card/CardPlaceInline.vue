@@ -5,7 +5,7 @@ import classNames from 'classnames'
 <template>
     <div @click="toPlaceDetailView()" class="card">
         <div class="card-box-img">
-            <img :src="imageCoverLink" alt="..." class="card-img">
+            <img v-lazy="imageCoverLink" alt="..." class="card-img">
         </div>
         <div class="card-body p-2">
             <div class="head d-flex justify-content-between align-items-center">

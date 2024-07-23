@@ -5,7 +5,7 @@ import classNames from 'classnames'
 <template>
     <div @click="toManagePlaceView()" class="card">
         <div class="card-box-img">
-            <img :src="imageCoverLink" alt="..." class="card-img">
+            <img v-lazy="imageCoverLink" alt="..." class="card-img">
         </div>
         <div class="card-body">
             <span class="badge bg-white text-dark border mb-2">

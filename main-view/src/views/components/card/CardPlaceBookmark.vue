@@ -6,7 +6,7 @@ import { toIdrCurrency } from '@/helpers/formater.helper'
 <template>
     <div @click="toPlaceDetailView" class="card">
         <div class="card-box-img">
-            <img :src="imageCoverLink" alt="..." class="card-img">
+            <img v-lazy="imageCoverLink" alt="..." class="card-img">
             <div class="badge-absolute">
                 <span class="badge bg-light text-dark border mb-2">
                     {{ placeDistance.toFixed(1) }} KM
