@@ -65,6 +65,16 @@ import CardPlaceReview from '@components/card/review/CardPlaceReview.vue'
                     </div>
                     <div class="box-img">
                         <img v-lazy="place.mapImages[i + 1].link" alt="..." class="card-img" >
+                        <div
+                            v-if="i === Math.floor(place.mapImages.length / 3)"
+                            @click="$router.push({name: 'place:images'})"
+                            class="box-image-overlay d-flex justify-content-center align-items-center">
+                            <div class="text-center text-light">
+                                <i class="bi bi-images" style="font-size: 22px;"></i>
+                                <br>
+                                <small>Lihat semua</small>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -303,7 +313,6 @@ export default {
     .box-img {
         overflow: hidden;
         border-radius: 8px;
-
         img {
             width: 100%;
             height: 100%;
@@ -318,8 +327,19 @@ export default {
     }
     .double-img {
         .box-img {
+            position: relative;
             width: 180px;
             aspect-ratio: 1/1;
+            .box-image-overlay {
+                cursor: pointer;
+                position: absolute;
+                z-index: 33;
+                top: 0;
+                left: 0;
+                width: 180px;
+                aspect-ratio: 1/1;
+                background: rgba(0, 0, 0, 0.6);
+            }
         }
     }
 }

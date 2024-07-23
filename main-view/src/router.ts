@@ -21,6 +21,7 @@ import PlaceMapSearchView from './views/main/maps/PlaceMapSearchView.vue'
 
 // Place
 import PlaceDetailView from './views/main/places/PlaceDetailView.vue'
+import PlaceImageView from './views/main/places/PlaceImageView.vue'
 import PlaceUserBookmarkView from './views/main/places/PlaceUserBookmarkView.vue'
 
 // Place Review.
@@ -101,6 +102,11 @@ const routes: RouteRecordRaw [] = [
                                 name: 'place:detail',
                                 path: '',
                                 component: PlaceDetailView
+                            },
+                            {
+                                name: 'place:images',
+                                path: 'images',
+                                component: PlaceImageView
                             },
                             {
                                 name: 'place:add-review',
