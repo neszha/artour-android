@@ -49,15 +49,15 @@ import CardPlaceInline from '../components/card/CardPlaceInline.vue'
             <MainMaps />
 
             <!-- search result list view -->
-            <div class="search-result-item">
+            <div v-if="placeSearchList.length" class="search-result-item">
                 <div class="action-button mb-3">
                     <div class="d-flex">
-                        <div class="col-6">
-                            <button class="icon icon-sm icon-shape bg-white rounded-circle waves-effect waves-dark ms-3">
+                        <div class="col-4">
+                            <button @click="clearMapSearch()" class="icon icon-sm icon-shape bg-white rounded-circle waves-effect waves-dark ms-3">
                                 <i class="bi bi-x-lg" style="font-size: 20px;"></i>
                             </button>
                         </div>
-                        <div class="col-6 text-end">
+                        <div class="col-8 text-end">
                             <button class="btn btn-sm btn-neutral border-base waves-effect waves-dark me-3">
                                 <i class="bi bi-list-ul me-2"></i>
                                 <span>Daftar Pencarian</span>
@@ -67,8 +67,8 @@ import CardPlaceInline from '../components/card/CardPlaceInline.vue'
                 </div>
                 <div class="scroll-x-wrapper px-3 pb-3 mb-2">
                     <div class="search-list d-flex gap-3">
-                        <div v-for="i in 10" :key="i" class="search-item">
-                            <CardPlaceInline />
+                        <div v-for="place of placeSearchList" :key="place.id" class="search-item">
+                            <CardPlaceInline :placeId="place.id" />
                         </div>
                         <div class="invisible">.</div>
                     </div>
@@ -87,12 +87,12 @@ import { useGeolocationStore } from '@/stores/geolocation.store'
 
 export default {
     computed: {
-        ...mapState(usePlaceStore, ['placeCategories']),
-        ...mapState(useGeolocationStore, ['coordinates'])
+        ...mapState(useGeolocationStore, ['coordinates']),
+        ...mapState(usePlaceStore, ['placeCategories', 'placeSearchList'])
     },
 
     methods: {
-        ...mapActions(usePlaceStore, ['getPlaceCategories', 'searchPlacesByKeyword']),
+        ...mapActions(usePlaceStore, ['getPlaceCategories', 'searchPlacesByKeyword', 'clearPlaceSearchList']),
 
         async searchPlaces () {
             if (this.form.keyword.trim() === '') return
@@ -107,10 +107,16 @@ export default {
         async searchByCategory (categoryName: string) {
             this.form.keyword = categoryName
             await this.searchPlaces()
+        },
+
+        clearMapSearch () {
+            this.clearPlaceSearchList()
+            this.form.keyword = ''
         }
     },
 
     async beforeMount () {
+        this.clearPlaceSearchList()
         await this.getPlaceCategories()
         const queryKeyword = this.$route.query.keyword as string | undefined
         if (queryKeyword !== undefined) {

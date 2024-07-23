@@ -163,6 +163,10 @@ export const usePlaceStore = defineStore('place', {
                 console.error(error)
                 return false
             }
+        },
+
+        clearPlaceSearchList () {
+            this.placeSearchList = []
         }
     }
 })
