@@ -27,7 +27,13 @@ import MainMaps from '@components/maps/MainMaps.vue'
                         <div v-for="(category) of placeCategories" :key="category.id" class="category-item">
                             <span
                                 @click="searchByCategory(category.name)"
-                                class="badge bg-white text-dark border border-gray waves-effect waves-dark">
+                                :class="{
+                                    'bg-primary': category.name.toLowerCase() === form.keyword.toLowerCase(),
+                                    'text-white': category.name.toLowerCase() === form.keyword.toLowerCase(),
+                                    'bg-white': category.name.toLowerCase() !== form.keyword.toLowerCase(),
+                                    'text-dark': category.name.toLowerCase() !== form.keyword.toLowerCase(),
+                                }"
+                                class="badge border border-gray waves-effect waves-dark">
                                 {{ category.name }}
                             </span>
                         </div>
