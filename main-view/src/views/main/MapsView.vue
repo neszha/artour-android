@@ -130,3 +130,15 @@ export default {
     }
 }
 </style>
+
+<style lang="scss">
+.main-maps-layout {
+    position: relative;
+    .main-content {
+        padding-bottom: 0 !important;
+    }
+    .bottom-navigation-bar {
+        position: relative;
+    }
+}
+</style>

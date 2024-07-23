@@ -1,5 +1,5 @@
 <template>
-    <div class="main-layout position-relative">
+    <div :class="{'main-maps-layout': inMapView}" class="main-layout position-relative">
         <div class="main-content">
             <slot></slot>
         </div>
@@ -55,6 +55,12 @@ import { useGeolocationStore } from '@/stores/geolocation.store'
 import { mapActions } from 'pinia'
 
 export default {
+    computed: {
+        inMapView () {
+            return (this.$route.name === 'maps')
+        }
+    },
+
     methods: {
         ...mapActions(useGeolocationStore, ['getCurrentGeolocation'])
     },
