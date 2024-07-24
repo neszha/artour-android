@@ -50,7 +50,7 @@ import CardPlaceReview from '@components/card/review/CardPlaceReview.vue'
     </section>
 
     <!-- place image galery -->
-    <section class="place-imae-galery mb-3">
+    <section class="place-image-galery mb-3">
         <div class="horizontal-scroll px-2 mx-1">
             <div v-for="i in Math.floor(place.mapImages.length / 3)" :key="i" class="hs-item d-flex gap-2">
                 <div class="single-img">
@@ -132,7 +132,7 @@ import CardPlaceReview from '@components/card/review/CardPlaceReview.vue'
     </section>
 
     <!-- my review  -->
-    <section class="place-review mb-3">
+    <section id="my-place-review" class="place-review mb-3">
         <div class="place-review-header container-fluid mb-3">
             <h5 class="mb-0">Ulasan Saya</h5>
         </div>
@@ -255,6 +255,13 @@ export default {
                 return
             }
             window.open(url, '_blank')
+        },
+
+        autoScrollRouteHashHandler () {
+            const hashRoute = this.$route.hash
+            if (hashRoute === '') return
+            const element = document.querySelector(hashRoute)
+            element?.scrollIntoView({ behavior: 'smooth' })
         }
     },
 
@@ -264,8 +271,10 @@ export default {
         if (getted === false) {
             this.$router.push({ name: 'explore' })
         }
-        this.getMyPlaceReview(this.placeId, true)
-        this.getPlaceReviews(this.placeId, true)
+        const promise1 = this.getMyPlaceReview(this.placeId, true)
+        const promise2 = this.getPlaceReviews(this.placeId, true)
+        await Promise.all([promise1, promise2])
+        this.autoScrollRouteHashHandler()
     },
 
     mounted () {
@@ -317,14 +326,14 @@ export default {
         height: 33px;
     }
 }
-.place-imae-galery {
+.place-image-galery {
     overflow-x: scroll;
     scroll-behavior: smooth;
     .horizontal-scroll {
         display: flex;
         gap: 0.5rem;
         .hs-item:last-child {
-            padding-right: 1rem;
+            padding-right: 12px;
         }
     }
     .box-img {

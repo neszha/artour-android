@@ -67,6 +67,8 @@ import numeral from 'numeral'
                 <span>Bagikan</span>
             </button>
 
+            <span class="invisible">............</span>
+
         </div>
     </section>
 </template>

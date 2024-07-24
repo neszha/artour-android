@@ -1,4 +1,5 @@
 import { type File } from './File'
+import { type PlaceEntity } from './Place'
 import { type UserEntity } from './User'
 
 export interface PlaceReviewEntity {
@@ -12,5 +13,6 @@ export interface PlaceReviewEntity {
     updatedAt: Date
 
     user?: UserEntity
+    place?: PlaceEntity
     images?: File[]
 }

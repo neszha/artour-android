@@ -33,7 +33,7 @@ import { UserRoleEnum } from '@/interfaces/enums'
         <div class="list-group list-group-flush border-top border-bottom">
 
             <div class="list-group-item position-relative hstack bg-light py-2">
-                <span class="px-3">Akun</span>
+                <span class="px-3">Akun dan Data</span>
             </div>
 
             <div class="list-group-item position-relative hstack flex-wrap waves-effect waves-dark">
@@ -63,9 +63,21 @@ import { UserRoleEnum } from '@/interfaces/enums'
             <div class="list-group-item position-relative hstack flex-wrap waves-effect waves-dark">
                 <div class="flex-1 px-3">
                     <div class="d-flex align-items-center justify-content-between">
-                        <a href="javascript:void(0)" class="d-block h4 stretched-link">
+                        <RouterLink :to="{name: 'place:bookmarks'}" class="d-block h4 stretched-link">
+                            <span>Tempat Disimpan</span>
+                        </RouterLink>
+                        <div class="icon text-end">
+                            <i class="bi bi-chevron-right"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="list-group-item position-relative hstack flex-wrap waves-effect waves-dark">
+                <div class="flex-1 px-3">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <RouterLink :to="{name: 'my-place-reviews'}" class="d-block h4 stretched-link">
                             <span>Ulasan Saya</span>
-                        </a>
+                        </RouterLink>
                         <div class="icon text-end">
                             <i class="bi bi-chevron-right"></i>
                         </div>

@@ -1,4 +1,4 @@
-// import { userAuthenticated } from './middlewares/auth.middleware'
+import { userAuthenticated } from './middlewares/auth.middleware'
 import { type RouteRecordRaw, createRouter, type Router, createWebHashHistory } from 'vue-router'
 
 /**
@@ -38,9 +38,9 @@ import EditPlaceView from './views/main/contribution/EditPlaceView.vue'
 import ProfileView from './views/main/ProfileView.vue'
 import ChangeAvatarView from './views/main/profile/ChangeAvatarView.vue'
 import ChangeNameView from './views/main/profile/ChangeNameView.vue'
+import MyPlaceReviewView from './views/main/profile/MyPlaceReviewView.vue'
 import InfomationView from './views/main/profile/InfomationView.vue'
 import AboutAppView from './views/main/profile/AboutAppView.vue'
-import { userAuthenticated } from './middlewares/auth.middleware'
 
 /**
  * Register page views to routes.
@@ -179,6 +179,11 @@ const routes: RouteRecordRaw [] = [
                         name: 'change-name',
                         path: 'name',
                         component: ChangeNameView
+                    },
+                    {
+                        name: 'my-place-reviews',
+                        path: 'place-reviews',
+                        component: MyPlaceReviewView
                     },
                     {
                         name: 'information',
