@@ -63,10 +63,10 @@ import classNames from 'classnames'
                         :value="place.description"
                         position="0.1 0.9 0.01"
                         color="#000"
-                        width="4"
-                        line-height="50"
+                        width="3.5"
+                        line-height="65"
                         letter-spacing="2"
-                        wrap-count="37"
+                        wrap-count="32"
                         align="left"
                         anchor="left"
                         baseline="top"
@@ -89,7 +89,7 @@ import classNames from 'classnames'
                     <a-plane
                         width="8"
                         height="4"
-                        material="color: #fff; opacity: 0.9">
+                        material="color: #fff; opacity: 1">
                     </a-plane>
                 </a-entity>
             </a-entity>

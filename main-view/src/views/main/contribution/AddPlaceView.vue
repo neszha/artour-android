@@ -26,7 +26,7 @@ import ModalOpeningHoursDay from '@components/modals/ModalOpeningHoursDay.vue'
                 </div>
                 <div class="col-12 mb-3">
                     <label class="form-label">Deskripsi Tempat <span class="text-danger">*</span></label>
-                    <textarea v-model="form.data.description" class="form-control" required placeholder="Deskripsi tempat"></textarea>
+                    <textarea v-model="form.data.description" class="form-control" rows="8" required placeholder="Deskripsi tempat"></textarea>
                 </div>
                 <div class="col-12 mb-3">
                     <label class="form-label">Ketegori <span class="text-danger">*</span></label>

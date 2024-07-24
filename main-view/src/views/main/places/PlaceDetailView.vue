@@ -110,16 +110,17 @@ import CardPlaceReview from '@components/card/review/CardPlaceReview.vue'
             <div class="d-flex align-items-center mb-2">
                 <i class="bi bi-alarm me-2 text-primary"></i>
                 <div class="text-sm text-heading">
-                    <span :class="classNames({
+                    <span
+                        :class="classNames({
                             'text-primary': (openingHoursStatus.open === true),
                             'text-danger': (openingHoursStatus.open === false),
                         })">{{ openingHoursStatus.content }}</span>
                 </div>
             </div>
             <div class="d-flex align-items-center mb-2">
-                <i class="bi bi-currency-dollar me-2 text-primary"></i>
+                <i class="bi bi-telephone me-2 text-primary"></i>
                 <span class="text-sm text-heading">
-                    {{ toIdrCurrency(place.price || 0) }}
+                    {{ place.phone }}
                 </span>
             </div>
             <div v-if="place.website" class="d-flex align-items-center mb-2">
@@ -127,6 +128,12 @@ import CardPlaceReview from '@components/card/review/CardPlaceReview.vue'
                 <a @click="openLink(place.website)" href="javascript:void(0)" class="text-sm text-heading text-primary-hover">
                     {{ place.website }}
                 </a>
+            </div>
+            <div class="d-flex align-items-center mb-2">
+                <i class="bi bi-currency-dollar me-2 text-primary"></i>
+                <span class="text-sm text-heading">
+                    {{ toIdrCurrency(place.price || 0) }}
+                </span>
             </div>
         </div>
     </section>
