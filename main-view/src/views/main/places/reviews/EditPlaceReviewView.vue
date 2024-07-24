@@ -25,7 +25,7 @@ import HeaderNavbar from '@components/common/HeaderNavbar.vue'
     <div class="container-fluid">
         <div class="mb-3">
             <label class="form-label">Jelaskan penilaian anda<span class="text-danger">*</span></label>
-            <textarea v-model="form.data.content" class="form-control" rows="4" required placeholder="Bagikan pengalaman anda di tempat ini!"></textarea>
+            <textarea v-model="form.data.content" class="form-control" rows="8" required placeholder="Bagikan pengalaman anda di tempat ini!"></textarea>
         </div>
     </div>
 
@@ -135,6 +135,8 @@ export default {
                 } else {
                     alert('Ulasan berhasil disimpan.')
                 }
+                await this.getMyPlaceReview(this.placeId as string)
+                sessionStorage.setItem('place_review_detail', JSON.stringify(this.myReview))
                 this.$router.back()
             } catch (error) {
                 alert('Ulasan gagal disimpan.')

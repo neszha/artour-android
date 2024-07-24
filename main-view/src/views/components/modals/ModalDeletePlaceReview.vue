@@ -41,9 +41,13 @@ export default {
                     alert('Data tempat berhasil dihapus')
                 }
                 void this.getMyPlaceReview(this.placeId as string)
+                if (this.$route.name === 'review:detail') {
+                    this.$router.back()
+                }
             } catch (error) {
                 alert('Gagal menghapus ulasan.')
-                console.error(error)
+                console.error(error);
+                (this.$refs.close as HTMLElement).click()
             }
         }
     },

@@ -43,6 +43,7 @@ export default {
     top: 0;
     left: 0;
     width: 100%;
+    z-index: 10;
     .navbar-toggler {
         font-size: 22px;
         &:focus {

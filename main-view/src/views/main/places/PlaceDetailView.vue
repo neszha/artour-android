@@ -3,7 +3,6 @@ import numeral from 'numeral'
 import classNames from 'classnames'
 import PlaceActionButton from '@components/place/PlaceActionButton.vue'
 import CardCreateReview from '@components/card/review/CardCreateReview.vue'
-import CardMyPlaceReview from '@components/card/review/CardMyPlaceReview.vue'
 import CardPlaceReview from '@components/card/review/CardPlaceReview.vue'
 </script>
 
@@ -56,15 +55,24 @@ import CardPlaceReview from '@components/card/review/CardPlaceReview.vue'
             <div v-for="i in Math.floor(place.mapImages.length / 3)" :key="i" class="hs-item d-flex gap-2">
                 <div class="single-img">
                     <div class="box-img">
-                        <img v-lazy="place.mapImages[i - 1].link" alt="..." class="card-img" >
+                        <img
+                            @click="openImageLightbox(place.mapImages[i - 1].link)"
+                            v-lazy="place.mapImages[i - 1].link"
+                            alt="..." class="card-img" >
                     </div>
                 </div>
                 <div class="double-img d-flex flex-column gap-2">
                     <div class="box-img">
-                        <img v-lazy="place.mapImages[i].link" alt="..." class="card-img" >
+                        <img
+                            @click="openImageLightbox(place.mapImages[i].link)"
+                            v-lazy="place.mapImages[i].link"
+                            alt="..." class="card-img" >
                     </div>
                     <div class="box-img">
-                        <img v-lazy="place.mapImages[i + 1].link" alt="..." class="card-img" >
+                        <img
+                            @click="openImageLightbox(place.mapImages[i + 1].link)"
+                            v-lazy="place.mapImages[i + 1].link"
+                            alt="..." class="card-img" >
                         <div
                             v-if="i === Math.floor(place.mapImages.length / 3)"
                             @click="$router.push({name: 'place:images'})"
@@ -132,7 +140,7 @@ import CardPlaceReview from '@components/card/review/CardPlaceReview.vue'
             <CardCreateReview />
         </div>
         <div v-else class="my-place-review">
-            <CardMyPlaceReview :review-data="myReview" />
+            <CardPlaceReview :review-data="myReview" />
         </div>
     </section>
 
@@ -230,6 +238,15 @@ export default {
             } catch (error) {
                 console.error(error)
             }
+        },
+
+        openImageLightbox (imageSource: string) {
+            window.$.magnificPopup.open({
+                items: {
+                    src: imageSource
+                },
+                type: 'image'
+            })
         },
 
         openLink (url: string) {
@@ -333,7 +350,7 @@ export default {
             .box-image-overlay {
                 cursor: pointer;
                 position: absolute;
-                z-index: 33;
+                z-index: 2;
                 top: 0;
                 left: 0;
                 width: 180px;
