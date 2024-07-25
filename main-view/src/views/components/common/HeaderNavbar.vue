@@ -9,6 +9,9 @@
                     {{ navTitle }}
                 </h2>
             </div>
+            <div class="right-action">
+                <slot class="" name="right-action"></slot>
+            </div>
         </div>
     </nav>
     <div class="invisible" style="width: 100%; height: 60px;">...</div>
@@ -67,5 +70,9 @@ export default {
     i {
         font-size: 30px;
     }
+}
+.right-action {
+    position: relative;
+    z-index: 3;
 }
 </style>

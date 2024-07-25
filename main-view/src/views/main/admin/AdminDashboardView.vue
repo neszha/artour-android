@@ -81,7 +81,9 @@
             <div class="card mb-4">
                 <div class="card-body py-0">
                     <div class="list-group list-group-flush">
-                        <div class="list-group-item d-flex align-items-center">
+                        <div
+                            @click="$router.push({name: 'admin:place-category'})"
+                            class="list-group-item d-flex align-items-center">
                             <div class="flex-fill">
                                 <span class="d-block h6 font-semibold">
                                     Kategori Wisata

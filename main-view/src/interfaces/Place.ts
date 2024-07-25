@@ -16,6 +16,7 @@ export interface PlaceCategoryEntity {
     updatedAt: Date
 
     popularPlace?: PlaceEntity
+    mapMarkerLink?: string
 }
 
 export interface OpeningHoursDay {

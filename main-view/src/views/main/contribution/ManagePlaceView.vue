@@ -3,7 +3,6 @@ import { type PlaceEntity } from '@/interfaces/Place'
 import { usePlaceStore } from '@/stores/place.store'
 import HeaderNavbar from '@components/common/HeaderNavbar.vue'
 import ModalDeletePlace from '@components/modals/ModalDeletePlace.vue'
-
 </script>
 
 <template>
