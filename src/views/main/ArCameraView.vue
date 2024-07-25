@@ -349,7 +349,7 @@ export default {
     }
     .expaned {
         .list-content {
-            height: 300px;
+            height: 220px;
         }
         .expand-control {
             i::before {

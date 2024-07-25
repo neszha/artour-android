@@ -82,10 +82,6 @@ export default {
     color: var(--bs-primary) !important;
 }
 .main-layout {
-    height: 100vh;
-    min-height: 720px;
-    overflow-x: hidden;
-
     .main-content {
         padding-bottom: 70px;
     }
