@@ -6,14 +6,6 @@ plugins {
 }
 
 android {
-    signingConfigs {
-        getByName("debug") {
-            storeFile = file("/Users/neszha/projects/artour/artour-android/keystore")
-            storePassword = "Artour123*"
-            keyAlias = "neszha"
-            keyPassword = "Artour123*"
-        }
-    }
     namespace = "com.neszha.artour"
     compileSdk = 34
 
@@ -65,7 +57,7 @@ tasks.register("BuildMainWebView") {
     doLast {
         println("Building Main WebView...")
         exec {
-            setWorkingDir("../main-view")
+            setWorkingDir("../")
             commandLine("npm", "run", "build")
         }
     }
