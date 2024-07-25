@@ -1,4 +1,4 @@
-import { userAuthenticated } from './middlewares/auth.middleware'
+import { adminAuthenticated, userAuthenticated } from './middlewares/auth.middleware'
 import { type RouteRecordRaw, createRouter, type Router, createWebHashHistory } from 'vue-router'
 
 /**
@@ -41,6 +41,9 @@ import ChangeNameView from './views/main/profile/ChangeNameView.vue'
 import MyPlaceReviewView from './views/main/profile/MyPlaceReviewView.vue'
 import InfomationView from './views/main/profile/InfomationView.vue'
 import AboutAppView from './views/main/profile/AboutAppView.vue'
+
+// Admin Dashboard.
+import AdminDashboardView from './views/main/admin/AdminDashboardView.vue'
 
 /**
  * Register page views to routes.
@@ -196,6 +199,19 @@ const routes: RouteRecordRaw [] = [
                         component: AboutAppView
                     }
                 ]
+            }
+        ]
+    },
+    {
+        name: 'admin-layout',
+        path: '/admin',
+        beforeEnter: adminAuthenticated,
+        component: RouterLayout,
+        children: [
+            {
+                name: 'admin',
+                path: '',
+                component: AdminDashboardView
             }
         ]
     }

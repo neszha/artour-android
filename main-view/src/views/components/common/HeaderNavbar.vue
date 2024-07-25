@@ -20,6 +20,11 @@ export default {
 
     methods: {
         backAction () {
+            const routeBack = this.$route.query.routeBack as string | undefined
+            if (routeBack !== undefined) {
+                this.$router.push({ name: routeBack })
+                return
+            }
             if (this.navBackTo !== undefined) {
                 this.$router.push(this.navBackTo)
                 return
