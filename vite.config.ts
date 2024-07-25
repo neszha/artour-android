@@ -29,6 +29,6 @@ export default defineConfig({
     build: {
         target: 'es2015',
         emptyOutDir: true,
-        outDir: '../app/src/main/assets/web-view'
+        outDir: 'android/app/src/main/assets/web-view'
     }
 })
