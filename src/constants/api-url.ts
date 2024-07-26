@@ -29,6 +29,7 @@ export const API_URL_PLACE_CATEGORIES_ID: string = '/place-categories/:placeCate
  * Place
  */
 export const API_URL_PLACES: string = '/places'
+export const API_URL_PLACES_ME: string = '/places/my-places'
 export const API_URL_PLACES_BOOKMARKS: string = '/places/bookmarks'
 export const API_URL_PLACES_ID: string = '/places/:placeId'
 export const API_URL_PLACES_IMAGES: string = '/places/:placeId/images'
