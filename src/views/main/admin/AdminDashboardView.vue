@@ -29,7 +29,7 @@
                         <div class="card-body px-1">
                             <div class="text-center">
                                 <div class="h1 font-bold mb-2">
-                                    <span>100</span>
+                                    <span>{{ dataOverview.totalUser }}</span>
                                 </div>
                                 <div class="h6 font-semibold text-muted text-sm">
                                     <span>Pengguna</span>
@@ -43,7 +43,7 @@
                         <div class="card-body px-1">
                             <div class="text-center">
                                 <div class="h1 font-bold mb-2">
-                                    <span>22</span>
+                                    <span>{{ dataOverview.totalPlace }}</span>
                                 </div>
                                 <div class="h6 font-semibold text-muted text-sm">
                                     <span>Wisata</span>
@@ -57,7 +57,7 @@
                         <div class="card-body px-1">
                             <div class="text-center">
                                 <div class="h1 font-bold mb-2">
-                                    <span>10K</span>
+                                    <span>{{ dataOverview.totalReview }}</span>
                                 </div>
                                 <div class="h6 font-semibold text-muted text-sm">
                                     <span>Ulasan</span>
@@ -166,12 +166,22 @@
 </template>
 
 <script lang="ts">
-import { mapState } from 'pinia'
+import { mapActions, mapState } from 'pinia'
 import { useUserStore } from '@/stores/user.store'
+import { useAdminStore } from '@/stores/admin.store'
 
 export default {
     computed: {
-        ...mapState(useUserStore, ['myInfo'])
+        ...mapState(useUserStore, ['myInfo']),
+        ...mapState(useAdminStore, ['dataOverview'])
+    },
+
+    methods: {
+        ...mapActions(useAdminStore, ['getDataOverview'])
+    },
+
+    beforeMount () {
+        this.getDataOverview()
     }
 
 }

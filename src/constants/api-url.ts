@@ -58,3 +58,8 @@ export const API_URL_PLACE_REVIEWS: string = '/place-reviews'
 export const API_URL_PLACE_REVIEWS_MY_REVIEW: string = '/place-reviews/my-review'
 export const API_URL_PLACE_REVIEWS_MY_REVIEWS: string = '/place-reviews/my-reviews'
 export const API_URL_PLACE_REVIEWS_ID: string = '/place-reviews/:placeReviewId'
+
+/**
+ * Summary.
+ */
+export const APU_URL_SUMMARY_DATA_OVERVIEW: string = '/summary/data-overview'
