@@ -37,8 +37,8 @@
 </template>
 
 <script lang="ts">
-import { useModalStore } from '@/stores/modal.store'
 import { mapState } from 'pinia'
+import { useModalStore } from '@/stores/modal.store'
 
 export default {
     computed: {

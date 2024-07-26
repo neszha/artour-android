@@ -6,12 +6,15 @@
                     <button ref="close" type="button" class="btn-close d-none" data-bs-dismiss="modal" aria-label="Close"></button>
                     <div class="row">
                         <div class="col-12">
-                            <span>Yakin ingin mengapus ulasan di tempat ini?</span>
+                            <span>
+                                Akan menghapus semua data yang beralasi.
+                                Yakin ingin mengapus tempat akun ini?
+                            </span>
                         </div>
                     </div>
                     <div class="mt-4 d-flex justify-content-end">
                         <button @click="($refs.close as  HTMLElement).click()" type="button" class="btn btn-sm btn-link text-secondary">Batal</button>
-                        <button @click="deleteReview()" type="button" class="btn btn-sm btn-link text-danger">Hapus Ulasan</button>
+                        <button @click="deleteUser()" type="button" class="btn btn-sm btn-link text-danger">Hapus Akun</button>
                     </div>
                 </div>
             </div>
@@ -21,43 +24,39 @@
 
 <script lang="ts">
 import { mapActions } from 'pinia'
+import { isAxiosError } from 'axios'
 import axios from '@/helpers/axios.helper'
-import { API_URL_PLACE_REVIEWS_ID } from '@/constants/api-url'
-import { usePlaceReviewStore } from '@/stores/place-review.store'
+import { useAdminStore } from '@/stores/admin.store'
+import { API_URL_USERS_ID } from '@/constants/api-url'
 
 export default {
 
     methods: {
-        ...mapActions(usePlaceReviewStore, ['getMyPlaceReview']),
+        ...mapActions(useAdminStore, ['getUsers']),
 
-        async deleteReview () {
+        async deleteUser () {
             try {
-                const url = API_URL_PLACE_REVIEWS_ID.replace(':placeReviewId', this.placeReviewId as string)
-                await axios.delete(url);
-                (this.$refs.close as HTMLElement).click()
+                const url = API_URL_USERS_ID.replace(':userId', this.userId as string)
+                await axios.delete(url)
+                await this.getUsers()
                 if (window.Android !== undefined) {
-                    window.Android.showToast('Data tempat berhasil dihapus!')
+                    window.Android.showToast('Akun pengguna berhasil dihapus!')
                 } else {
-                    alert('Data tempat berhasil dihapus!')
-                }
-                void this.getMyPlaceReview(this.placeId as string)
-                if (this.$route.name === 'review:detail') {
-                    this.$router.back()
+                    alert('Akun pengguna berhasil dihapus!')
                 }
             } catch (error) {
-                alert('Gagal menghapus ulasan.')
-                console.error(error);
-                (this.$refs.close as HTMLElement).click()
+                if (isAxiosError(error)) {
+                    const message = error.response?.data.message as string
+                    alert(message)
+                }
+                console.error(error)
             }
+            (this.$refs.close as HTMLElement).click()
         }
     },
 
     props: {
-        placeReviewId: {
-            type: String,
-            required: true
-        },
-        placeId: {
+        userId: {
             type: String,
             required: true
         }

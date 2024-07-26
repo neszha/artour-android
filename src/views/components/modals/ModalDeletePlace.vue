@@ -20,11 +20,11 @@
 </template>
 
 <script lang="ts">
-import { API_URL_PLACES_ID } from '@/constants/api-url'
+import { mapActions } from 'pinia'
+import { isAxiosError } from 'axios'
 import axios from '@/helpers/axios.helper'
 import { usePlaceStore } from '@/stores/place.store'
-import { isAxiosError } from 'axios'
-import { mapActions } from 'pinia'
+import { API_URL_PLACES_ID } from '@/constants/api-url'
 
 export default {
 
@@ -38,9 +38,9 @@ export default {
                 await this.getMyPlaces();
                 (this.$refs.close as HTMLElement).click()
                 if (window.Android !== undefined) {
-                    window.Android.showToast('Data tempat berhasil dihapus')
+                    window.Android.showToast('Data tempat berhasil dihapus!')
                 } else {
-                    alert('Data tempat berhasil dihapus')
+                    alert('Data tempat berhasil dihapus!')
                 }
                 this.$router.push({ name: 'contribution' })
             } catch (error) {

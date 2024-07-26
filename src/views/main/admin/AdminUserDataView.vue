@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import HeaderNavbar from '@components/common/HeaderNavbar.vue'
+import ModalDeleteUser from '@/views/components/modals/ModalDeleteUser.vue'
 </script>
 
 <template>
@@ -52,7 +53,9 @@ import HeaderNavbar from '@components/common/HeaderNavbar.vue'
                         </tr>
                         <tr v-for="user of filteredUsers" :key="user.id">
                             <td :data-id="user.id">
-                                <button type="button" class="btn btn-sm btn-square btn-neutral waves-effect waves-dark">
+                                <button
+                                    @click="openDeleteModal(user.id)"
+                                    type="button" class="btn btn-sm btn-square btn-neutral waves-effect waves-dark">
                                     <i class="bi bi-trash"></i>
                                 </button>
                             </td>
@@ -100,6 +103,9 @@ import HeaderNavbar from '@components/common/HeaderNavbar.vue'
             </div>
         </div>
     </section>
+
+    <!-- modals  -->
+    <ModalDeleteUser id="modal_delete_user" :user-id="modalData.userId" />
 </template>
 
 <script lang="ts">
@@ -134,6 +140,14 @@ export default {
 
         getTimeString (time: Date): string {
             return moment(time).fromNow()
+        },
+
+        openDeleteModal (userId: string) {
+            this.modalData.userId = userId
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-expect-error
+            const modal = new bootstrap.Modal(document.getElementById('modal_delete_user'))
+            modal.show()
         }
     },
 
@@ -145,6 +159,9 @@ export default {
         return {
             filter: {
                 keyword: '' as string
+            },
+            modalData: {
+                userId: ''
             }
         }
     }
