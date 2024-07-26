@@ -36,13 +36,13 @@ import ModalDeleteUser from '@/views/components/modals/ModalDeleteUser.vue'
                 <table class="table table-hover table-nowrap">
                     <thead class="table-light">
                         <tr>
-                            <th style="width: 0;"></th>
                             <th scope="col">Nama</th>
                             <th scope="col">Email</th>
                             <th scope="col">Role</th>
                             <th scope="col">Kontribusi</th>
                             <th scope="col">Terakhir Login</th>
                             <th scope="col">Terdaftar</th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -52,13 +52,6 @@ import ModalDeleteUser from '@/views/components/modals/ModalDeleteUser.vue'
                             </td>
                         </tr>
                         <tr v-for="user of filteredUsers" :key="user.id">
-                            <td :data-id="user.id">
-                                <button
-                                    @click="openDeleteModal(user.id)"
-                                    type="button" class="btn btn-sm btn-square btn-neutral waves-effect waves-dark">
-                                    <i class="bi bi-trash"></i>
-                                </button>
-                            </td>
                             <td>
                                 <img
                                     v-lazy="user.avatar"
@@ -93,6 +86,13 @@ import ModalDeleteUser from '@/views/components/modals/ModalDeleteUser.vue'
                             </td>
                             <td>
                                 {{ getTimeString(user.createdAt) }}
+                            </td>
+                            <td class="text-end">
+                                <button
+                                    @click="openDeleteModal(user.id)"
+                                    type="button" class="btn btn-sm btn-square btn-outline-danger waves-effect waves-dark">
+                                    <i class="bi bi-trash"></i>
+                                </button>
                             </td>
                         </tr>
                     </tbody>
