@@ -54,9 +54,9 @@ import ModalDeleteUser from '@/views/components/modals/ModalDeleteUser.vue'
                         <tr v-for="user of filteredUsers" :key="user.id">
                             <td>
                                 <img
-                                    v-lazy="user.avatar"
-                                    alt="..." class="avatar avatar-sm rounded-circle me-2">
-                                <span class="text-heading font-semibold">
+                                v-lazy="user.avatar"
+                                alt="..." class="avatar avatar-sm rounded-circle me-2">
+                                <span class="me-3">
                                     {{ user.name }}
                                 </span>
                             </td>

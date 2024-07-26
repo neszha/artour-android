@@ -36,8 +36,8 @@ import ModalDeletePlaceFromAdmin from '@/views/components/modals/ModalDeletePlac
                 <table class="table table-hover table-nowrap">
                     <thead class="table-light">
                         <tr>
-                            <th scope="col">Nama</th>
-                            <th scope="col">Kategory</th>
+                            <th scope="col">Tempat Wisata</th>
+                            <th scope="col">Kategori</th>
                             <th scope="col">User</th>
                             <th scope="col">Lokasi</th>
                             <th scope="col">Alamat</th>
@@ -54,7 +54,7 @@ import ModalDeletePlaceFromAdmin from '@/views/components/modals/ModalDeletePlac
                     </thead>
                     <tbody>
                         <tr v-if="filteredPlaces.length === 0">
-                            <td class="text-center" colspan="7">
+                            <td class="text-center" colspan="14">
                                 <span>Tidak ada data!</span>
                             </td>
                         </tr>
@@ -68,7 +68,12 @@ import ModalDeletePlaceFromAdmin from '@/views/components/modals/ModalDeletePlac
                                 {{ place.category?.name }}
                             </td>
                             <td>
-                                {{ place.user?.name }}
+                                <img
+                                    v-lazy="place.user?.avatar"
+                                    alt="..." class="avatar avatar-sm rounded-circle me-2">
+                                <span class="me-3">
+                                    {{ place.user?.name }}
+                                </span>
                             </td>
                             <td>
                                 <a

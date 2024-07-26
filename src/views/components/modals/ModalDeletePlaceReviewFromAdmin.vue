@@ -6,7 +6,7 @@
                     <button ref="close" type="button" class="btn-close d-none" data-bs-dismiss="modal" aria-label="Close"></button>
                     <div class="row">
                         <div class="col-12">
-                            <span>Yakin ingin mengapus ulasan di tempat ini?</span>
+                            <span>Yakin ingin mengapus data ulasan ini?</span>
                         </div>
                     </div>
                     <div class="mt-4 d-flex justify-content-end">
@@ -22,13 +22,13 @@
 <script lang="ts">
 import { mapActions } from 'pinia'
 import axios from '@/helpers/axios.helper'
+import { useAdminStore } from '@/stores/admin.store'
 import { API_URL_PLACE_REVIEWS_ID } from '@/constants/api-url'
-import { usePlaceReviewStore } from '@/stores/place-review.store'
 
 export default {
 
     methods: {
-        ...mapActions(usePlaceReviewStore, ['getMyPlaceReview']),
+        ...mapActions(useAdminStore, ['getPlaceReviews']),
 
         async deleteReview () {
             try {
@@ -40,24 +40,17 @@ export default {
                 } else {
                     alert('Data ulasan berhasil dihapus!')
                 }
-                void this.getMyPlaceReview(this.placeId as string)
-                if (this.$route.name === 'review:detail') {
-                    this.$router.back()
-                }
+                await this.getPlaceReviews()
             } catch (error) {
                 alert('Gagal menghapus ulasan.')
-                console.error(error);
-                (this.$refs.close as HTMLElement).click()
+                console.error(error)
             }
+            (this.$refs.close as HTMLElement).click()
         }
     },
 
     props: {
         placeReviewId: {
-            type: String,
-            required: true
-        },
-        placeId: {
             type: String,
             required: true
         }

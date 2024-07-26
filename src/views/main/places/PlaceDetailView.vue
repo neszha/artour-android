@@ -157,9 +157,9 @@ import CardPlaceReview from '@components/card/review/CardPlaceReview.vue'
             <h5 class="mb-0">Ulasan Pengunjung</h5>
         </div>
         <div class="place-review-list">
-            <CardPlaceReview v-for="review of placeReviews" :key="review.id" :review-data="review" />
+            <CardPlaceReview v-for="review of filteredPlaceReviews" :key="review.id" :review-data="review" />
         </div>
-        <div v-if="!placeReviews.length" class="no-card-list container-fluid">
+        <div v-if="!filteredPlaceReviews.length" class="no-card-list container-fluid">
             <div class="card mb-5">
                 <div class="card-body text-center py-5">
                     <div class="mb-3">
@@ -186,6 +186,7 @@ import { getPlaceOpenHourStatus } from '@/helpers/time.helper'
 import { useUserStore } from '@/stores/user.store'
 import { API_URL_PLACE_INC_VIEWS } from '@/constants/api-url'
 import { usePlaceReviewStore } from '@/stores/place-review.store'
+import { type PlaceReviewEntity } from '@/interfaces/PlaceReview'
 
 export default {
     computed: {
@@ -196,6 +197,11 @@ export default {
 
         placeId (): string {
             return this.$route.params.placeId as string
+        },
+
+        filteredPlaceReviews (): PlaceReviewEntity[] {
+            const placeReviews = this.placeReviews as PlaceReviewEntity[]
+            return placeReviews.filter((placeReview: PlaceReviewEntity) => placeReview.userId !== this.myInfo?.id)
         },
 
         place (): PlaceEntity | any {

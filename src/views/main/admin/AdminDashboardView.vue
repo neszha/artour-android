@@ -126,7 +126,9 @@
                                 <i class="bi bi-chevron-right text-dark" style="font-size: 22px;"></i>
                             </div>
                         </div>
-                        <div class="list-group-item d-flex align-items-center">
+                        <div
+                            @click="$router.push({name: 'admin:place-reviews'})"
+                            class="list-group-item d-flex align-items-center">
                             <div class="flex-fill">
                                 <span class="d-block h6 font-semibold">
                                     Data Ulasan
