@@ -4,6 +4,11 @@ export interface UserMeta {
     reviews: number
 }
 
+export interface ContributionSummary {
+    placeTotal: number
+    reviewTotal: number
+}
+
 export interface UserEntity {
     id: string
     avatar: string
@@ -16,4 +21,5 @@ export interface UserEntity {
     updatedAt: Date
 
     userMeta?: UserMeta
+    contributionSummary?: ContributionSummary
 }

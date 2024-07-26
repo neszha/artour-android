@@ -44,6 +44,7 @@ import AboutAppView from './views/main/profile/AboutAppView.vue'
 
 // Admin Dashboard.
 import AdminDashboardView from './views/main/admin/AdminDashboardView.vue'
+import AdminUserDataView from './views/main/admin/AdminUserDataView.vue'
 import AdminPlaceCategoryView from './views/main/admin/place-categories/AdminPlaceCategoryView.vue'
 import AdminAddPlaceCategoryView from './views/main/admin/place-categories/AdminAddPlaceCategoryView.vue'
 import AdminEditPlaceCategoryView from './views/main/admin/place-categories/AdminEditPlaceCategoryView.vue'
@@ -230,6 +231,11 @@ const routes: RouteRecordRaw [] = [
                 name: 'admin:edit-place-category',
                 path: 'place-categories/:placeCategoryId',
                 component: AdminEditPlaceCategoryView
+            },
+            {
+                name: 'admin:users',
+                path: 'users',
+                component: AdminUserDataView
             }
         ]
     }
