@@ -1,7 +1,7 @@
 import { createPinia } from 'pinia'
 import { type Plugin, createApp } from 'vue'
 import VueLazyload from 'vue-lazyload'
-// import 'moment/dist/locale/id'
+import 'moment/dist/locale/id'
 import './scss/main.scss'
 import 'bootstrap-icons/font/bootstrap-icons.css'
 import App from './App.vue'
