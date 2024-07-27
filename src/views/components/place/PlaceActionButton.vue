@@ -56,13 +56,15 @@ import numeral from 'numeral'
             </button>
             <button
                 v-else
-                  @click="addToBookmark()"
+                @click="addToBookmark()"
                 class="btn btn-neutral border-dark waves-effect waves-dark">
                 <i class="bi bi-bookmark-plus me-2"></i>
                 <span>Simpan ({{ numeral(metaData.saved.count || 0).format('0.[0]a').toUpperCase() }})</span>
             </button>
 
-            <button class="btn btn-neutral border-dark waves-effect waves-dark">
+            <button
+                @click="sharePlace(place.id)"
+                class="btn btn-neutral border-dark waves-effect waves-dark">
                 <i class="bi bi-share-fill me-2"></i>
                 <span>Bagikan</span>
             </button>
@@ -74,12 +76,13 @@ import numeral from 'numeral'
 </template>
 
 <script lang="ts">
-import { mapState } from 'pinia'
+import { mapActions, mapState } from 'pinia'
+import { type AxiosResponse } from 'axios'
+import axios from '@/helpers/axios.helper'
 import { useUserStore } from '@/stores/user.store'
 import { type PlaceEntity } from '@/interfaces/Place'
+import { usePlaceStore } from '@/stores/place.store'
 import { API_URL_PLACE_ACTION_METADATA, API_URL_PLACE_ADD_BOOKMARKS, API_URL_PLACE_DISLIKE, API_URL_PLACE_LIKE } from '@/constants/api-url'
-import axios from '@/helpers/axios.helper'
-import { type AxiosResponse } from 'axios'
 
 export default {
 
@@ -97,6 +100,8 @@ export default {
     },
 
     methods: {
+        ...mapActions(usePlaceStore, ['sharePlace']),
+
         async getActionMetaData () {
             try {
                 const url = API_URL_PLACE_ACTION_METADATA.replace(':placeId', this.place.id as string)

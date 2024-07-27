@@ -21,7 +21,9 @@ import CardPlaceReview from '@components/card/review/CardPlaceReview.vue'
                     <RouterLink :to="{name: 'place:bookmarks'}" class="navbar-toggler text-dark waves-effect waves-dark" type="button">
                         <i class="bi bi-bookmarks"></i>
                     </RouterLink>
-                    <button class="navbar-toggler text-dark waves-effect waves-dark" type="button">
+                    <button
+                        @click="sharePlace(place.id)"
+                        class="navbar-toggler text-dark waves-effect waves-dark" type="button">
                         <i class="bi bi-share-fill"></i>
                     </button>
                 </div>
@@ -241,7 +243,7 @@ export default {
 
     methods: {
         ...mapActions(useGeolocationStore, ['getCurrentGeolocation']),
-        ...mapActions(usePlaceStore, ['getPlaceDetail']),
+        ...mapActions(usePlaceStore, ['getPlaceDetail', 'sharePlace']),
         ...mapActions(usePlaceReviewStore, ['getMyPlaceReview', 'getPlaceReviews']),
 
         async incPlaceViews () {

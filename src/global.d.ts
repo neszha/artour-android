@@ -6,6 +6,7 @@ declare global {
         setupPermissions: () => void
         loginWithGoogle: (clientId: string) => void
         openExternalLink: (link: string) => void
+        openShareContent: (content: string) => void
         showToast: (message: string) => void
     }
 

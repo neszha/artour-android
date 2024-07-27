@@ -88,6 +88,19 @@ class JavaScriptInterface(
     }
 
     /**
+     * Open share content
+     */
+    @JavascriptInterface
+    fun openShareContent(content: String) {
+        val shareIntent = Intent().apply {
+            action = Intent.ACTION_SEND
+            putExtra(Intent.EXTRA_TEXT, content)
+            type = "text/plain"
+        }
+        contextActivity.startActivity(Intent.createChooser(shareIntent, null))
+    }
+
+    /**
      * Show toast in android activity.
      */
     @JavascriptInterface

@@ -165,6 +165,29 @@ export const usePlaceStore = defineStore('place', {
             }
         },
 
+        sharePlace (placeId: string) {
+            if (this.placeDetailObject === undefined) return
+            const place = this.placeDetailObject[placeId]
+            const hashtags = place.hashtags.map((hashtag) => `#${hashtag}`).join(' ')
+            let shareContent = place.name
+            shareContent += '\n\n'
+            shareContent += place.description
+            shareContent += '\n'
+            shareContent += 'https://maps.com/places/' + placeId
+            shareContent += '\n\n'
+            shareContent += 'Diposting ' + place.user?.name
+            if (hashtags !== '') {
+                shareContent += '\n\n'
+                shareContent += hashtags
+            }
+            if (window.Android !== undefined) {
+                window.Android.openShareContent(shareContent)
+            } else {
+                console.log(shareContent)
+                alert('open share content')
+            }
+        },
+
         clearPlaceSearchList () {
             this.placeSearchList = []
         }
