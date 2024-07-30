@@ -31,9 +31,14 @@ import HeaderNavbar from '@components/common/HeaderNavbar.vue'
                             </div>
                             <div class="col text-content pe-2">
                                 <h4 class="h4 font-bold mb-1">{{ category.name }}</h4>
-                                <small class="text-xs text-muted">
-                                    {{ category.description }}
-                                </small>
+                                <div class="mb-2">
+                                    <small class="text-xs text-muted">
+                                        {{ category.description }}
+                                    </small>
+                                </div>
+                                <div>
+                                    <small>Update: {{ getTimeString(category.updatedAt) }}</small>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -67,6 +72,7 @@ import HeaderNavbar from '@components/common/HeaderNavbar.vue'
 </template>
 
 <script lang="ts">
+import moment from 'moment'
 import { mapActions, mapState } from 'pinia'
 import { usePlaceCategory } from '@/stores/place-category.store'
 
@@ -82,6 +88,10 @@ export default {
             const placeCategory = this.placeCategories.find((category) => category.id === id)
             sessionStorage.setItem('place_category_detail', JSON.stringify(placeCategory)) // Load in edit view.
             this.$router.push({ name: 'admin:edit-place-category', params: { placeCategoryId: id } })
+        },
+
+        getTimeString (time: Date): string {
+            return moment(time).fromNow()
         }
     },
 

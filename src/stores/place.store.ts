@@ -2,11 +2,10 @@ import { defineStore } from 'pinia'
 import { type AxiosResponse } from 'axios'
 import axios from '@/helpers/axios.helper'
 import { type Coordinates } from '@/interfaces/Geolocation'
-import { type PlaceCategoryEntity, type MapMarker, type PlaceEntity } from '@/interfaces/Place'
-import { API_URL_PLACES_BOOKMARKS, API_URL_PLACES_ID, API_URL_PLACES_ME, API_URL_PLACE_AR_MAP_SEARCH, API_URL_PLACE_CATEGORIES, API_URL_PLACE_CATEGORY_MAP_MARKERS, API_URL_PLACE_HIGHLIGHT, API_URL_PLACE_MAP_SEARCH, API_URL_PLACE_NEAREST } from '@/constants/api-url'
+import { type PlaceCategoryEntity, type PlaceEntity } from '@/interfaces/Place'
+import { API_URL_PLACES_BOOKMARKS, API_URL_PLACES_ID, API_URL_PLACES_ME, API_URL_PLACE_AR_MAP_SEARCH, API_URL_PLACE_CATEGORIES, API_URL_PLACE_HIGHLIGHT, API_URL_PLACE_MAP_SEARCH, API_URL_PLACE_NEAREST } from '@/constants/api-url'
 
 interface PlaceState {
-    mapMarkers: MapMarker[]
     placeCategories: PlaceCategoryEntity[]
     placePreviewCategories: PlaceCategoryEntity[] // For category preview in explore page
     myPlaces: PlaceEntity[]
@@ -23,7 +22,6 @@ export const usePlaceStore = defineStore('place', {
      * States.
      */
     state: (): PlaceState => ({
-        mapMarkers: [],
         placeCategories: [],
         placePreviewCategories: [],
         myPlaces: [],
@@ -39,16 +37,6 @@ export const usePlaceStore = defineStore('place', {
      * Actions.
      */
     actions: {
-        async getMapMarkers () {
-            try {
-                const response: AxiosResponse = await axios.get(API_URL_PLACE_CATEGORY_MAP_MARKERS)
-                const data = response.data.data as MapMarker[]
-                this.mapMarkers = data
-            } catch (error) {
-                console.error(error)
-            }
-        },
-
         async getPlaceCategories () {
             try {
                 const response: AxiosResponse = await axios.get(API_URL_PLACE_CATEGORIES)

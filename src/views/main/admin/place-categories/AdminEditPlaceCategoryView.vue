@@ -41,19 +41,17 @@ import ModalDeletePlaceCategory from '@/views/components/modals/ModalDeletePlace
                 <p class="text-sm text-muted mb-3">
                     Pilih gambar marker untuk ditampilkan pada maps.
                 </p>
-                <select v-model="form.data.mapMarker" class="form-select d-none">
-                    <option v-for="(marker) in mapMarkes" :key="marker.mapMarker" :value="marker.mapMarker">{{ marker.mapMarker }}</option>
-                </select>
-                <div class="mt-2 scroll-x">
-                    <div class="d-flex gap-2">
-                        <div
-                            v-for="(marker) in mapMarkes" :key="marker.mapMarker"
-                            @click="form.data.mapMarker = marker.mapMarker"
-                            :class="{ 'selected': form.data.mapMarker === marker.mapMarker }"
-                            class="col-auto image-item rounded p-2">
-                            <img :src="marker.url" alt="..." >
-                        </div>
+                <div
+                    v-if="form.mapMarkerPreview"
+                    class="d-flex justify-content-center">
+                    <div
+                        class="image-item rounded p-2">
+                        <img :src="form.mapMarkerPreview" alt="..." >
                     </div>
+                </div>
+                <div>
+                    <label class="form-label" for="input_file">Pilih Gambar</label>
+                    <input @change="setAndPreviewImage" id="input_file" type="file" class="form-control" accept="image/png">
                 </div>
             </div>
             <div class="col-12 pt-4">
@@ -81,22 +79,24 @@ import ModalDeletePlaceCategory from '@/views/components/modals/ModalDeletePlace
 </template>
 
 <script lang="ts">
-import { mapActions, mapState } from 'pinia'
 import axios from '@/helpers/axios.helper'
-import { usePlaceCategory } from '@/stores/place-category.store'
 import { API_URL_PLACE_CATEGORIES_ID } from '@/constants/api-url'
 
 export default {
     computed: {
-        ...mapState(usePlaceCategory, ['mapMarkes']),
-
         placeCategoryId (): string {
             return this.$route.params.placeCategoryId as string
         }
     },
 
     methods: {
-        ...mapActions(usePlaceCategory, ['getMapMarkers']),
+        setAndPreviewImage (event: Event) {
+            const files = (event.target as HTMLInputElement).files
+            if (files === null) return
+            const singleFile = files[0]
+            this.form.mapMarkerPreview = URL.createObjectURL(singleFile)
+            this.form.data.mapMarker = singleFile
+        },
 
         loadPlaceCategoryFromStorage () {
             const dataJsonString = sessionStorage.getItem('place_category_detail')
@@ -104,8 +104,9 @@ export default {
                 this.$router.back()
                 return
             }
-            const { name, description, mapMarker } = JSON.parse(dataJsonString)
-            this.form.data = { name, description, mapMarker }
+            const { name, description, mapMarkerLink } = JSON.parse(dataJsonString)
+            this.form.mapMarkerPreview = mapMarkerLink
+            this.form.data = { name, description, mapMarker: null as unknown as File }
         },
 
         openModalDeletePlaceCategory () {
@@ -117,13 +118,15 @@ export default {
 
         async updatePlaceCategory () {
             this.form.loading = true
-            if (this.form.data.mapMarker === '') {
-                alert('Pilih Map Marker!')
-                return
-            }
             try {
                 const url = API_URL_PLACE_CATEGORIES_ID.replace(':placeCategoryId', this.placeCategoryId as string)
-                await axios.put(url, this.form.data)
+                const formData = new FormData()
+                formData.append('name', this.form.data.name as string)
+                formData.append('description', this.form.data.description as string)
+                if (this.form.data.mapMarker !== null) {
+                    formData.append('mapMarker', this.form.data.mapMarker as File, 'map-marker.png')
+                }
+                await axios.put(url, formData)
                 this.$router.push({ name: 'admin:place-category' })
                 if (window.Android !== undefined) {
                     window.Android.showToast('Kategory berhasil disimpan.')
@@ -140,7 +143,6 @@ export default {
     },
 
     async beforeMount () {
-        await this.getMapMarkers()
         this.loadPlaceCategoryFromStorage()
     },
 
@@ -150,8 +152,9 @@ export default {
                 data: {
                     name: '',
                     description: '',
-                    mapMarker: ''
+                    mapMarker: null as unknown as File
                 },
+                mapMarkerPreview: '',
                 loading: false
             }
         }
@@ -160,19 +163,10 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.scroll-x {
-    overflow-x: auto;
-    white-space: nowrap;
-    scroll-behavior: smooth;
-    .image-item {
-        display: inline-block;
-        overflow: hidden;
-        &.selected {
-            background-color: var(--x-gray-300)
-        }
-        img {
-            width: 80px;
-        }
+.image-item {
+    background-color: var(--x-gray-200);
+    img {
+        width: 80px;
     }
 }
 </style>

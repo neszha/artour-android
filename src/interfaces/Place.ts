@@ -1,11 +1,6 @@
 import { type File } from './File'
 import { type UserEntity } from './User'
-import { type PlaceStatusEnum, type MapMarkerEnum } from './enums'
-
-export interface MapMarker {
-    mapMarker: MapMarkerEnum
-    url: string
-}
+import { type PlaceStatusEnum } from './enums'
 
 export interface PlaceCategoryEntity {
     id: string
