@@ -8,7 +8,8 @@
                 {{ category.name }}
             </h3>
             <p class="description mb-2">
-                {{ category.description }}
+                <span v-if="category.description.length > 110">{{ category.description.substring(0, 110) }}...</span>
+                <span v-else>{{ category.description }}</span>
             </p>
             <RouterLink
                 :to="{ name: 'maps', query: { keyword: category.name.toLocaleLowerCase() } }"
