@@ -163,6 +163,15 @@ export default {
                 zoomLevel = 4
             }
             this.googleMap.setZoom(zoomLevel)
+        },
+
+        zoomToUserLocation () {
+            if (this.googleMap === null) return
+            this.googleMap.setCenter({
+                lat: this.coordinates.latitude,
+                lng: this.coordinates.longitude
+            })
+            this.googleMap.setZoom(14)
         }
     },
 

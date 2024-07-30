@@ -47,7 +47,7 @@ import CardPlaceInline from '../components/card/CardPlaceInline.vue'
             </div>
 
             <!-- maps view  -->
-            <MainMaps />
+            <MainMaps ref="mainMaps"/>
 
             <!-- search result list view -->
             <div v-if="placeSearchList.length" class="search-result-item">
@@ -61,9 +61,12 @@ import CardPlaceInline from '../components/card/CardPlaceInline.vue'
                         <div class="col-8 text-end">
                             <button
                                 @click="$router.push({name: 'maps:search-list' })"
-                                class="btn btn-sm btn-neutral border-base waves-effect waves-dark me-3">
+                                class="btn btn-sm btn-neutral border-base waves-effect waves-dark me-2">
                                 <i class="bi bi-list-ul me-2"></i>
                                 <span>Daftar Pencarian</span>
+                            </button>
+                            <button @click="zoomToUserLocation()" class="icon icon-sm icon-shape bg-white rounded-circle waves-effect waves-dark me-3">
+                                <i class="bi bi-geo-alt-fill text-primary" style="font-size: 20px;"></i>
                             </button>
                         </div>
                     </div>
@@ -116,6 +119,10 @@ export default {
         clearMapSearch () {
             this.clearPlaceSearchList()
             this.form.keyword = ''
+        },
+
+        zoomToUserLocation () {
+            (this.$refs.mainMaps as InstanceType<typeof MainMaps>).zoomToUserLocation()
         }
     },
 
