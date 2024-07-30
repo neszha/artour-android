@@ -28,7 +28,7 @@ import CardPlaceInline from '../components/card/CardPlaceInline.vue'
                 <div class="category-list">
                     <div class="d-flex gap-2 px-2 ms-1">
                         <div v-for="(category) of placeCategories" :key="category.id" class="category-item">
-                            <span
+                            <div
                                 @click="searchByCategory(category.name)"
                                 :class="{
                                     'bg-primary': category.name.toLowerCase() === form.keyword.toLowerCase(),
@@ -37,10 +37,11 @@ import CardPlaceInline from '../components/card/CardPlaceInline.vue'
                                     'text-dark': category.name.toLowerCase() !== form.keyword.toLowerCase(),
                                 }"
                                 class="badge border border-gray waves-effect waves-dark">
-                                {{ category.name }}
-                            </span>
+                                <img :src="category.mapMarkerLink" class="map-marker-image" alt="...">
+                                <span>{{ category.name }}</span>
+                            </div>
                         </div>
-                        <div class="invisible">..</div>
+                        <div class="invisible ms-5">......</div>
                     </div>
                 </div>
             </div>
@@ -164,8 +165,16 @@ export default {
     overflow-x: scroll;
     .category-item {
         .badge {
+            display: flex;
+            align-items: center;
             font-size: 12px;
             padding: 6px 10px;
+            width: max-content;
+        }
+        .map-marker-image {
+            height: 24px;
+            display: block;
+            margin-right: 2px;
         }
     }
 }
