@@ -142,25 +142,16 @@
                     </div>
                 </div>
             </div>
-            <div class="card mb-3">
-                <div class="card-body py-0">
-                    <div class="list-group list-group-flush">
-                        <div
-                            @click="$router.push({name: 'profile', query: {'routeBack': 'explore'}})"
-                            class="list-group-item d-flex align-items-center">
-                            <div class="flex-fill">
-                                <span class="d-block h6 font-semibold">
-                                    Kembali ke Profile
-                                </span>
-                                <div class="d-flex mx-n1"></div>
-                            </div>
-                            <div class="ms-auto text-end">
-                                <i class="bi bi-chevron-left text-dark" style="font-size: 22px;"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+
+            <div class="d-grid">
+                <button
+                    @click="$router.push({name: 'profile', query: {'routeBack': 'explore'}})"
+                    type="button" class="btn btn-neutral border-muted waves-effect waves-dark">
+                    <i class="bi bi-arrow-left me-2"></i>
+                    <span>Kembali ke Profile</span>
+                </button>
             </div>
+
         </div>
     </section>
 </template>
