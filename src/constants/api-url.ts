@@ -11,6 +11,7 @@ export const API_URL_LOGOUT: string = '/auth/logout'
 export const API_URL_USERS: string = '/users'
 export const API_URL_USER_AVATAR: string = '/users/avatars'
 export const API_URL_USER_INFO: string = '/users/info'
+export const API_URL_USER_ROLE: string = '/users/role' // ?userId=${userId}
 export const API_URL_USERS_ID: string = '/users/:userId'
 
 /**

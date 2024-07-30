@@ -2,6 +2,7 @@
 import HeaderNavbar from '@components/common/HeaderNavbar.vue'
 import { TIME_MOMENT_FORMAT } from '@/constants/global-string'
 import ModalDeleteUser from '@/views/components/modals/ModalDeleteUser.vue'
+import ModalUpdateUserRole from '@/views/components/modals/ModalUpdateUserRole.vue'
 </script>
 
 <template>
@@ -98,7 +99,7 @@ import ModalDeleteUser from '@/views/components/modals/ModalDeleteUser.vue'
                             <td class="text-center">
                                 <div v-if="!user.userMeta?.isSuperAdmin && myInfo.userMeta?.isSuperAdmin">
                                     <button
-                                        @click="openDeleteModal(user.id)"
+                                        @click="openUpdateRoleModal(user.id, user.role)"
                                         type="button" class="btn btn-sm btn-square btn-neutral waves-effect waves-dark me-2">
                                         <i class="bi bi-pencil"></i>
                                     </button>
@@ -122,6 +123,7 @@ import ModalDeleteUser from '@/views/components/modals/ModalDeleteUser.vue'
 
     <!-- modals  -->
     <ModalDeleteUser id="modal_delete_user" :user-id="modalData.userId" />
+    <ModalUpdateUserRole id="modal_update_user_role" :user-id="modalData.userId" :user-role="modalData.role" />
 </template>
 
 <script lang="ts">
@@ -166,6 +168,15 @@ export default {
             // @ts-expect-error
             const modal = new bootstrap.Modal(document.getElementById('modal_delete_user'))
             modal.show()
+        },
+
+        openUpdateRoleModal (userId: string, role: UserRoleEnum) {
+            this.modalData.userId = userId
+            this.modalData.role = role
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-expect-error
+            const modal = new bootstrap.Modal(document.getElementById('modal_update_user_role'))
+            modal.show()
         }
     },
 
@@ -179,7 +190,8 @@ export default {
                 keyword: '' as string
             },
             modalData: {
-                userId: ''
+                userId: '',
+                role: ''
             }
         }
     }
