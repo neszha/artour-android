@@ -9,7 +9,7 @@ import HeaderNavbar from '@components/common/HeaderNavbar.vue'
     <div class="container-fluid mt-4">
         <form @submit.prevent="createNewPlaceCategory()">
             <div class="mb-3">
-                <h4 class="mb-1">Kategory Tempat Wisata</h4>
+                <h4 class="mb-1">Kategori Tempat Wisata</h4>
                 <p class="text-sm text-muted">
                     Masukan informasi kategori yang akan digunakan untuk mengelompokkan tempat wisata.
                 </p>
@@ -25,7 +25,7 @@ import HeaderNavbar from '@components/common/HeaderNavbar.vue'
                     <span>Deskripsi Kategori</span>
                     <span class="text-danger">*</span>
                 </label>
-                <textarea v-model="form.data.description" class="form-control" rows="4" required placeholder="Masukan deskripsi kategory"></textarea>
+                <textarea v-model="form.data.description" class="form-control" rows="4" required placeholder="Masukan deskripsi kategori"></textarea>
             </div>
             <div class="mb-3 pt-1">
                 <h4 class="mb-1">Map Marker</h4>
@@ -98,14 +98,14 @@ export default {
                 await axios.post(API_URL_PLACE_CATEGORIES, formData)
                 this.$router.push({ name: 'admin:place-category' })
                 if (window.Android !== undefined) {
-                    window.Android.showToast('Kategory berhasil ditambahkan.')
+                    window.Android.showToast('Kategori berhasil ditambahkan.')
                 } else {
-                    alert('Kategory berhasil ditambahkan.')
+                    alert('Kategori berhasil ditambahkan.')
                 }
                 this.$router.back()
             } catch (error) {
                 console.error(error)
-                alert('Kategory gagal ditambahkan.')
+                alert('Kategori gagal ditambahkan.')
             }
             this.form.loading = false
         }

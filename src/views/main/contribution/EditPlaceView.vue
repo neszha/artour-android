@@ -31,7 +31,7 @@ import ModalOpeningHoursDay from '@components/modals/ModalOpeningHoursDay.vue'
                 <div class="col-12 mb-3">
                     <label class="form-label">Ketegori <span class="text-danger">*</span></label>
                     <select v-model="form.data.categoryId" class="form-select" required>
-                        <option value="">-- Pilih Kategory --</option>
+                        <option value="">-- Pilih Kategori --</option>
                         <option v-for="(category) in placeCategories" :key="category.id" :value="category.id">{{ category.name }}</option>
                     </select>
                 </div>
