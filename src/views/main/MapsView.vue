@@ -100,10 +100,14 @@ export default {
     methods: {
         ...mapActions(usePlaceStore, ['getPlaceCategories', 'searchPlacesByKeyword', 'clearPlaceSearchList']),
 
-        async searchPlaces () {
+        async searchPlaces (fromLoadView: boolean = false) {
             if (this.form.keyword.trim() === '') return
             this.form.loading = true
-            this.$router.push({ name: 'maps', query: { keyword: this.form.keyword } })
+            if (fromLoadView) {
+                this.$router.push({ name: 'maps', query: this.$route.query })
+            } else {
+                this.$router.push({ name: 'maps', query: { keyword: this.form.keyword } })
+            }
             await this.searchPlacesByKeyword(this.form.keyword as string, this.coordinates as Coordinates)
             setTimeout(() => {
                 (this.$refs.inputSearch as HTMLInputElement).blur()
@@ -132,7 +136,7 @@ export default {
         const queryKeyword = this.$route.query.keyword as string | undefined
         if (queryKeyword !== undefined) {
             this.form.keyword = queryKeyword
-            this.searchPlaces()
+            this.searchPlaces(true)
         }
     },
 

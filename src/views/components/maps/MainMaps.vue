@@ -3,13 +3,22 @@
 
     <!-- popup marker template -->
     <div id="marker-popup" class="d-none" style="position: absolute; top: 0; left: 0; z-index: 100; background-color: white; max-width: 240px;">
-        <div class="marker-popup">
+        <div class="marker-popup ms-1">
             <div class="col-auto image-item rounded mb-3">
                 <img alt="..." src="//:image">
             </div>
-            <h4 class="mb-2">:title</h4>
-            <p class="mb-2">:description</p>
-            <a class="mb-1" href=":link">Selengkapnya</a>
+            <h5 class="mb-1">:title</h5>
+            <p class="mb-2 text-sm" style="font-size: 12px;">:description</p>
+            <div class="d-grid">
+                <a href=":link" class="btn btn-sm btn-neutral border-dark waves-effect waves-light mb-2">
+                    <i class="bi bi-cursor me-2"></i>
+                    <span>Detail Wisata</span>
+                </a>
+                <button onclick="openGoogleMapDirectionLink(':latitude', ':longitude')" class="btn btn-sm btn-primary border-base waves-effect waves-light">
+                    <i class="bi bi-sign-turn-right-fill me-2"></i>
+                    <span>Buka Rute</span>
+                </button>
+            </div>
         </div>
     </div>
 </template>
@@ -17,18 +26,35 @@
 <script lang="ts">
 import { mapActions, mapState } from 'pinia'
 import { getCenter, getDistance } from 'geolib'
+import { usePlaceStore } from '@/stores/place.store'
+import { type Coordinates } from '@/interfaces/Geolocation'
 import { GOOGLE_MAPS_API_KEY } from '@/constants/environment'
 import { useGeolocationStore } from '@/stores/geolocation.store'
 import { Loader as GoogleMapsLoader } from '@googlemaps/js-api-loader'
-import { usePlaceStore } from '@/stores/place.store'
-import { type Coordinates } from '@/interfaces/Geolocation'
 
 let placeMarkers: google.maps.Marker[] = []
+
+/**
+ * Open map direction link.
+ */
+window.openGoogleMapDirectionLink = (latitude: number, longitude: number) => {
+    const googleMapLink = `https://www.google.com/maps/dir/?api=1&destination=${latitude},${longitude}`
+    if (window.Android !== undefined) {
+        window.Android.openExternalLink(googleMapLink)
+        return
+    }
+    window.open(googleMapLink, '_blank')
+}
 
 export default {
     computed: {
         ...mapState(useGeolocationStore, ['coordinates']),
-        ...mapState(usePlaceStore, ['placeSearchList'])
+        ...mapState(usePlaceStore, ['placeSearchList']),
+
+        showInfoWindow (): boolean {
+            const showInfoWindow = this.$route.query.showInfoWindow
+            return showInfoWindow === 'true'
+        }
     },
 
     methods: {
@@ -102,16 +128,25 @@ export default {
                 placeMarkers.push(marker)
 
                 // Info window.
+                let placeDescription = place.description
+                if (place.description.length > 70) {
+                    placeDescription = place.description.substring(0, 70) + '...'
+                }
                 const markerContent = document.getElementById('marker-popup')
                 const htmlContent = markerContent?.innerHTML
                     .replace('//:image', place.mapImageCover?.link as string)
                     .replace(':title', place.name as string)
-                    .replace(':description', place.description as string)
+                    .replace(':description', placeDescription as string)
                     .replace(':link', `/#/places/${place.id}`)
+                    .replace(':latitude', place.latitude.toString() as string)
+                    .replace(':longitude', place.longitude.toString() as string)
                 const infowindow = new google.maps.InfoWindow({
                     content: htmlContent,
-                    maxWidth: 200
+                    maxWidth: 250
                 })
+                if (this.showInfoWindow === true) {
+                    infowindow.open(this.googleMap as google.maps.Map, marker)
+                }
 
                 // Handle click event.
                 marker.addListener('click', () => {
@@ -167,7 +202,7 @@ export default {
 
         zoomToUserLocation () {
             if (this.googleMap === null) return
-            this.googleMap.setCenter({
+            this.googleMap.panTo({
                 lat: this.coordinates.latitude,
                 lng: this.coordinates.longitude
             })

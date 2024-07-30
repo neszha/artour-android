@@ -18,6 +18,13 @@ import numeral from 'numeral'
             </button>
 
             <button
+                @click="$router.push({ name: 'maps', query: { keyword: place.name, showInfoWindow: 'true' } })"
+                class="btn btn-neutral border-dark waves-effect waves-light">
+                <i class="bi bi-geo-alt me-2"></i>
+                <span>Lokasi</span>
+            </button>
+
+            <button
                 v-if="metaData.like.setted"
                 @click="likePlace()"
                 class="btn btn-neutral border-primary text-primary waves-effect waves-dark">

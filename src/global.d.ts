@@ -13,6 +13,7 @@ declare global {
     interface Window {
         Android: AndroidInterface
         authGoogleAndroidCallback: (token: string) => void
+        openGoogleMapDirectionLink: (latitude: number, longitude: number) => void
         AFRAME: any
         $: any
     }
