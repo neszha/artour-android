@@ -21,22 +21,19 @@
 </template>
 
 <script lang="ts">
-import { mapActions } from 'pinia'
 import { isAxiosError } from 'axios'
 import axios from '@/helpers/axios.helper'
-import { useAdminStore } from '@/stores/admin.store'
 import { API_URL_PLACES_ID } from '@/constants/api-url'
 
 export default {
 
     methods: {
-        ...mapActions(useAdminStore, ['getPlaces']),
 
         async deletePlace () {
             try {
                 const url = API_URL_PLACES_ID.replace(':placeId', this.placeId as string)
                 await axios.delete(url)
-                await this.getPlaces()
+                this.$emit('deleted')
                 if (window.Android !== undefined) {
                     window.Android.showToast('Data tempat berhasil dihapus!')
                 } else {

@@ -146,7 +146,7 @@ import { TIME_MOMENT_FORMAT } from '@/constants/global-string'
     </section>
 
     <!-- modals  -->
-    <ModalDeletePlaceFromAdmin id="modal_delete_place" :place-id="modalData.placeId" />
+    <ModalDeletePlaceFromAdmin id="modal_delete_place" @deleted="filterPlacesByKeyword()" :place-id="modalData.placeId" />
 </template>
 
 <script lang="ts">
@@ -162,18 +162,6 @@ export default {
 
         filteredPlaces (): PlaceEntity[] {
             const places = this.places as PlaceEntity[]
-
-            // Filter by keyword.
-            // const lowerKeyword = this.filter.keyword.toLowerCase() as string
-            // places = places.filter((place: PlaceEntity) => {
-            //     const userName = (place.user !== undefined) ? place.user.name.toLowerCase() : ''
-            //     const matchName = place.name.toLowerCase().includes(lowerKeyword)
-            //     const matchCategory = place.category.name.toLowerCase().includes(lowerKeyword)
-            //     const matchUserName = userName.includes(lowerKeyword)
-            //     const matchAddress = place.address.toLowerCase().includes(lowerKeyword)
-            //     return matchName || matchCategory || matchUserName || matchAddress
-            // })
-
             // done.
             return places
         }

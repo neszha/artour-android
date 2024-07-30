@@ -137,8 +137,8 @@ import ModalUpdateUserRole from '@/views/components/modals/ModalUpdateUserRole.v
     </section>
 
     <!-- modals  -->
-    <ModalDeleteUser id="modal_delete_user" :user-id="modalData.userId" />
-    <ModalUpdateUserRole id="modal_update_user_role" :user-id="modalData.userId" :user-role="modalData.role" />
+    <ModalDeleteUser id="modal_delete_user" @deleted="filterUsersByKeyword()" :user-id="modalData.userId" />
+    <ModalUpdateUserRole id="modal_update_user_role" @updated="filterUsersByKeyword()" :user-id="modalData.userId" :user-role="modalData.role" />
 </template>
 
 <script lang="ts">

@@ -20,15 +20,12 @@
 </template>
 
 <script lang="ts">
-import { mapActions } from 'pinia'
 import axios from '@/helpers/axios.helper'
-import { useAdminStore } from '@/stores/admin.store'
 import { API_URL_PLACE_REVIEWS_ID } from '@/constants/api-url'
 
 export default {
 
     methods: {
-        ...mapActions(useAdminStore, ['getPlaceReviews']),
 
         async deleteReview () {
             try {
@@ -40,7 +37,7 @@ export default {
                 } else {
                     alert('Data ulasan berhasil dihapus!')
                 }
-                await this.getPlaceReviews()
+                this.$emit('deleted')
             } catch (error) {
                 alert('Gagal menghapus ulasan.')
                 console.error(error)

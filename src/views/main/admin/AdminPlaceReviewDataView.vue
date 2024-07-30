@@ -99,7 +99,7 @@ import { TIME_MOMENT_FORMAT } from '@/constants/global-string'
     </section>
 
     <!-- modals  -->
-    <ModalDeletePlaceReviewFromAdmin id="modal_delete_place_review" :place-review-id="modalData.placeReviewId" />
+    <ModalDeletePlaceReviewFromAdmin id="modal_delete_place_review" @deleted="filterPlaceReviews(filter.filterKey)" :place-review-id="modalData.placeReviewId" />
 </template>
 
 <script lang="ts">

@@ -23,22 +23,18 @@
 </template>
 
 <script lang="ts">
-import { mapActions } from 'pinia'
 import { isAxiosError } from 'axios'
 import axios from '@/helpers/axios.helper'
-import { useAdminStore } from '@/stores/admin.store'
 import { API_URL_USERS_ID } from '@/constants/api-url'
 
 export default {
 
     methods: {
-        ...mapActions(useAdminStore, ['getUsers']),
-
         async deleteUser () {
             try {
                 const url = API_URL_USERS_ID.replace(':userId', this.userId as string)
                 await axios.delete(url)
-                await this.getUsers()
+                this.$emit('deleted')
                 if (window.Android !== undefined) {
                     window.Android.showToast('Akun pengguna berhasil dihapus!')
                 } else {
