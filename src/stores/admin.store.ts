@@ -7,11 +7,17 @@ import { type DataOverview } from '@/interfaces/Summary'
 import { type PlaceReviewEntity } from '@/interfaces/PlaceReview'
 import { API_URL_PLACE_REVIEWS, API_URL_PLACES, API_URL_USERS, APU_URL_SUMMARY_DATA_OVERVIEW } from '@/constants/api-url'
 
+interface SearchMeta {
+    total: number
+    limit?: number
+}
+
 interface AdminState {
     dataOverview: DataOverview
     users: UserEntity[]
     places: PlaceEntity[]
     placeReviews: PlaceReviewEntity[]
+    placeReviewsSearchMeta: SearchMeta
 }
 
 export const useAdminStore = defineStore('admin', {
@@ -26,7 +32,10 @@ export const useAdminStore = defineStore('admin', {
         },
         users: [],
         places: [],
-        placeReviews: []
+        placeReviews: [],
+        placeReviewsSearchMeta: {
+            total: 0
+        }
     }),
 
     /**
@@ -63,10 +72,15 @@ export const useAdminStore = defineStore('admin', {
             }
         },
 
-        async getPlaceReviews (): Promise<void> {
+        async getPlaceReviews (filterKey: string, limit?: number): Promise<void> {
             try {
-                const response: AxiosResponse = await axios.get(API_URL_PLACE_REVIEWS)
+                let url = `${API_URL_PLACE_REVIEWS}?filter=${filterKey}`
+                if (limit !== undefined) {
+                    url += `&limit=${limit}`
+                }
+                const response: AxiosResponse = await axios.get(url)
                 this.placeReviews = response.data.data as PlaceReviewEntity[]
+                this.placeReviewsSearchMeta = response.data.meta as SearchMeta
             } catch (error) {
                 alert('Gagal mengambil data ulasan')
                 console.error(error)

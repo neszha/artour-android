@@ -12,7 +12,20 @@ import { TIME_MOMENT_FORMAT } from '@/constants/global-string'
     <section class="container-fluid mt-4 mb-5">
         <div class="card">
             <div class="card-header d-flex align-items-center justify-content-between">
-                <h5 class="me-auto">Daftar Ulasan Pengguna</h5>
+                <h5 class="me-auto">Ulasan Pengguna</h5>
+                <div class="float-end">
+                    <div class="dropdown">
+                        <a class="dropdown-toggle text-reset" href="javascript:void(0)" id="dropdown_menu" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="fw-semibold">Filter:</span> <span class="text-muted">{{ filter.filterValue }}<i class="mdi mdi-chevron-down ms-1"></i></span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown_menu" style="">
+                            <a
+                                v-for="filter of filterList" :key="filter.key"
+                                @click="filterPlaceReviews(filter.key)"
+                                class="dropdown-item" href="javascript:void(0)">{{ filter.value }}</a>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="table-responsive">
                 <table class="table table-hover table-nowrap">
@@ -80,7 +93,7 @@ import { TIME_MOMENT_FORMAT } from '@/constants/global-string'
                 </table>
             </div>
             <div class="card-footer border-0 py-3">
-                <span class="text-muted text-sm">Menampilkan {{ filteredPlaceReviews.length }} dari {{ placeReviews.length }} total data</span>
+                <span class="text-muted text-sm">Menampilkan {{ filteredPlaceReviews.length }} dari {{ placeReviewsSearchMeta.total }} total data</span>
             </div>
         </div>
     </section>
@@ -96,7 +109,7 @@ import { type PlaceReviewEntity } from '@/interfaces/PlaceReview'
 
 export default {
     computed: {
-        ...mapState(useAdminStore, ['placeReviews']),
+        ...mapState(useAdminStore, ['placeReviews', 'placeReviewsSearchMeta']),
 
         filteredPlaceReviews (): PlaceReviewEntity[] {
             const placeReviews = this.placeReviews as PlaceReviewEntity[]
@@ -110,6 +123,12 @@ export default {
 
         getTimeString (time: Date): string {
             return moment(time).fromNow()
+        },
+
+        filterPlaceReviews (filterKey: string) {
+            this.filter.filterKey = filterKey
+            this.filter.filterValue = this.filterList.find(x => x.key === filterKey)?.value as string
+            void this.getPlaceReviews(this.filter.filterKey as string, 500)
         },
 
         openPlaceReviewDetailView (placeReview: PlaceReviewEntity) {
@@ -133,14 +152,26 @@ export default {
     },
 
     beforeMount () {
-        this.getPlaceReviews()
+        this.getPlaceReviews(this.filter.filterKey, 500)
     },
 
     data () {
         return {
             filter: {
-                keyword: '' as string
+                keyword: '' as string,
+                filterKey: 'newest',
+                filterValue: 'Terbaru'
             },
+            filterList: [
+                { key: 'newest', value: 'Terbaru' },
+                { key: 'rating_desc', value: 'Rating Tertinggi' },
+                { key: 'rating_asc', value: 'Rating Terendah' },
+                { key: 'rating_5', value: 'Rating (5)' },
+                { key: 'rating_4', value: 'Rating (4)' },
+                { key: 'rating_3', value: 'Rating (3)' },
+                { key: 'rating_2', value: 'Rating (2)' },
+                { key: 'rating_1', value: 'Rating (1)' }
+            ],
             modalData: {
                 placeReviewId: ''
             }
@@ -149,3 +180,9 @@ export default {
 
 }
 </script>
+
+<style scoped lang="scss">
+.dropdown-toggle {
+    font-size: 14px;
+}
+</style>
