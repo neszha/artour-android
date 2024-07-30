@@ -15,6 +15,7 @@ interface SearchMeta {
 interface AdminState {
     dataOverview: DataOverview
     users: UserEntity[]
+    usersSearchMeta: SearchMeta
     places: PlaceEntity[]
     placeReviews: PlaceReviewEntity[]
     placeReviewsSearchMeta: SearchMeta
@@ -31,6 +32,9 @@ export const useAdminStore = defineStore('admin', {
             totalReview: 0
         },
         users: [],
+        usersSearchMeta: {
+            total: 0
+        },
         places: [],
         placeReviews: [],
         placeReviewsSearchMeta: {
@@ -52,10 +56,17 @@ export const useAdminStore = defineStore('admin', {
             }
         },
 
-        async getUsers (): Promise<void> {
+        async getUsers (filter: string, keyword: string | null, limit: number = 500): Promise<void> {
             try {
-                const response: AxiosResponse = await axios.get(API_URL_USERS)
+                let url = API_URL_USERS
+                url += `?filter=${filter}`
+                if (keyword !== null) {
+                    url += `&keyword=${keyword}`
+                }
+                url += `&limit=${limit}`
+                const response: AxiosResponse = await axios.get(url)
                 this.users = response.data.data as UserEntity[]
+                this.usersSearchMeta = response.data.meta as SearchMeta
             } catch (error) {
                 alert('Gagal mengambil data user')
                 console.error(error)

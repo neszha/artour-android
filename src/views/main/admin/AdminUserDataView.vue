@@ -11,7 +11,9 @@ import ModalUpdateUserRole from '@/views/components/modals/ModalUpdateUserRole.v
     <!-- filter  -->
     <section class="container-fluid mt-4 mb-4">
         <div class="d-flex flex-column flex-md-row gap-3 justify-content-between">
-            <div class="d-flex gap-3">
+            <form
+                @submit.prevent="filterUsersByKeyword()"
+                class="d-flex gap-3">
                 <div class="input-group input-group-sm input-group-inline">
                     <span class="input-group-text pe-2">
                         <i class="bi bi-search"></i>
@@ -24,7 +26,7 @@ import ModalUpdateUserRole from '@/views/components/modals/ModalUpdateUserRole.v
                         aria-label="Search"
                     />
                 </div>
-            </div>
+            </form>
         </div>
     </section>
 
@@ -32,7 +34,20 @@ import ModalUpdateUserRole from '@/views/components/modals/ModalUpdateUserRole.v
     <section class="container-fluid mb-5">
         <div class="card">
             <div class="card-header d-flex align-items-center justify-content-between">
-                <h5 class="me-auto">Daftar Akun Pengguna</h5>
+                <h5 class="me-auto">Akun Pengguna</h5>
+                <div class="float-end">
+                    <div class="dropdown">
+                        <a class="dropdown-toggle text-reset" href="javascript:void(0)" id="dropdown_menu" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="font-size: 14px;">
+                            <span class="fw-semibold">Filter:</span> <span class="text-muted">{{ filter.filterValue }}<i class="mdi mdi-chevron-down ms-1"></i></span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown_menu" style="">
+                            <a
+                                v-for="filter of filterList" :key="filter.key"
+                                @click="filterUsers(filter.key)"
+                                class="dropdown-item" href="javascript:void(0)">{{ filter.value }}</a>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="table-responsive">
                 <table class="table table-hover table-nowrap">
@@ -116,7 +131,7 @@ import ModalUpdateUserRole from '@/views/components/modals/ModalUpdateUserRole.v
                 </table>
             </div>
             <div class="card-footer border-0 py-3">
-                <span class="text-muted text-sm">Menampilkan {{ filteredUsers.length }} dari {{ users.length }} total data</span>
+                <span class="text-muted text-sm">Menampilkan {{ filteredUsers.length }} dari {{ usersSearchMeta.total }} total data</span>
             </div>
         </div>
     </section>
@@ -136,20 +151,11 @@ import { useUserStore } from '@/stores/user.store'
 
 export default {
     computed: {
-        ...mapState(useAdminStore, ['users']),
+        ...mapState(useAdminStore, ['users', 'usersSearchMeta']),
         ...mapState(useUserStore, ['myInfo']),
 
         filteredUsers (): UserEntity[] {
-            let users = this.users as UserEntity[]
-
-            // Filter by keyword.
-            const lowerKeyword = this.filter.keyword.toLowerCase() as string
-            users = users.filter((user: UserEntity) => {
-                const matchName = user.name.toLowerCase().includes(lowerKeyword)
-                const matchEmail = user.email.toLowerCase().includes(lowerKeyword)
-                return matchName || matchEmail
-            })
-
+            const users = this.users as UserEntity[]
             // done.
             return users
         }
@@ -160,6 +166,16 @@ export default {
 
         getTimeString (time: Date): string {
             return moment(time).fromNow()
+        },
+
+        filterUsers (filterKey: string) {
+            this.filter.filterKey = filterKey
+            this.filter.filterValue = this.filterList.find(x => x.key === filterKey)?.value as string
+            void this.getUsers(this.filter.filterKey as string, this.filter.keyword as string)
+        },
+
+        filterUsersByKeyword () {
+            void this.getUsers(this.filter.filterKey as string, this.filter.keyword as string)
         },
 
         openDeleteModal (userId: string) {
@@ -181,14 +197,22 @@ export default {
     },
 
     beforeMount () {
-        this.getUsers()
+        this.getUsers(this.filter.filterKey, null)
     },
 
     data () {
         return {
             filter: {
-                keyword: '' as string
+                keyword: '' as string,
+                filterKey: 'newest',
+                filterValue: 'Terbaru'
             },
+            filterList: [
+                { key: 'newest', value: 'Terbaru' },
+                { key: 'role:user', value: 'Role: User' },
+                { key: 'role:admin', value: 'Role: Admin' },
+                { key: 'role:super_admin', value: 'Role: Super Admin' }
+            ],
             modalData: {
                 userId: '',
                 role: ''

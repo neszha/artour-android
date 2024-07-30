@@ -15,7 +15,7 @@ import { TIME_MOMENT_FORMAT } from '@/constants/global-string'
                 <h5 class="me-auto">Ulasan Pengguna</h5>
                 <div class="float-end">
                     <div class="dropdown">
-                        <a class="dropdown-toggle text-reset" href="javascript:void(0)" id="dropdown_menu" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <a class="dropdown-toggle text-reset" href="javascript:void(0)" id="dropdown_menu" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="font-size: 14px;">
                             <span class="fw-semibold">Filter:</span> <span class="text-muted">{{ filter.filterValue }}<i class="mdi mdi-chevron-down ms-1"></i></span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown_menu" style="">
@@ -180,9 +180,3 @@ export default {
 
 }
 </script>
-
-<style scoped lang="scss">
-.dropdown-toggle {
-    font-size: 14px;
-}
-</style>
