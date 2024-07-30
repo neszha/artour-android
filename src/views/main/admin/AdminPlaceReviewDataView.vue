@@ -1,6 +1,8 @@
 <script setup lang="ts">
+import moment from 'moment'
 import HeaderNavbar from '@components/common/HeaderNavbar.vue'
 import ModalDeletePlaceReviewFromAdmin from '@/views/components/modals/ModalDeletePlaceReviewFromAdmin.vue'
+import { TIME_MOMENT_FORMAT } from '@/constants/global-string'
 </script>
 
 <template>
@@ -19,7 +21,8 @@ import ModalDeletePlaceReviewFromAdmin from '@/views/components/modals/ModalDele
                             <th scope="col">Nama</th>
                             <th scope="col">Konten Ulasan</th>
                             <th scope="col">Rating</th>
-                            <th scope="col">Diperbaharui</th>
+                            <th scope="col">Tanggal Posting</th>
+                            <th scope="col">Terakhir Update</th>
                             <th></th>
                         </tr>
                     </thead>
@@ -50,18 +53,21 @@ import ModalDeletePlaceReviewFromAdmin from '@/views/components/modals/ModalDele
                                 {{ placeReview.rating }}
                             </td>
                             <td>
-                                {{ getTimeString(placeReview.updatedAt) }}
+                                {{ moment(placeReview.createdAt).format(TIME_MOMENT_FORMAT) }}
+                            </td>
+                            <td>
+                                {{ moment(placeReview.updatedAt).format(TIME_MOMENT_FORMAT) }}
                             </td>
                             <td class="d-flex gap-2">
                                 <button
-                                    @click="$router.push({name: 'place:detail', params: {placeId: placeReview.placeId}})"
-                                    type="button" class="btn btn-sm btn-neutral waves-effect waves-dark">
-                                    <span>Lihat Wisata</span>
-                                </button>
-                                <button
                                     @click="openPlaceReviewDetailView(placeReview)"
                                     type="button" class="btn btn-sm btn-neutral waves-effect waves-dark">
-                                    <span>Lihat Ulasan</span>
+                                    <span>Detail</span>
+                                </button>
+                                <button
+                                    @click="$router.push({name: 'place:detail', params: {placeId: placeReview.placeId}})"
+                                    type="button" class="btn btn-sm btn-neutral waves-effect waves-dark">
+                                    <span>Wisata</span>
                                 </button>
                                 <button
                                     @click="openDeleteModal(placeReview.id)"
@@ -84,7 +90,6 @@ import ModalDeletePlaceReviewFromAdmin from '@/views/components/modals/ModalDele
 </template>
 
 <script lang="ts">
-import moment from 'moment'
 import { mapActions, mapState } from 'pinia'
 import { useAdminStore } from '@/stores/admin.store'
 import { type PlaceReviewEntity } from '@/interfaces/PlaceReview'

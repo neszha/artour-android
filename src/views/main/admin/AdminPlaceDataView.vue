@@ -1,6 +1,8 @@
 <script setup lang="ts">
+import moment from 'moment'
 import HeaderNavbar from '@components/common/HeaderNavbar.vue'
 import ModalDeletePlaceFromAdmin from '@/views/components/modals/ModalDeletePlaceFromAdmin.vue'
+import { TIME_MOMENT_FORMAT } from '@/constants/global-string'
 </script>
 
 <template>
@@ -47,8 +49,8 @@ import ModalDeletePlaceFromAdmin from '@/views/components/modals/ModalDeletePlac
                             <th scope="col">Dislike</th>
                             <th scope="col">Disimpan</th>
                             <th scope="col">Pengunjung</th>
-                            <th scope="col">Terdaftar</th>
-                            <th scope="col">Diperbaharui</th>
+                            <th scope="col">Tanggal Posting</th>
+                            <th scope="col">Terakhir Diperbaharui</th>
                             <th></th>
                         </tr>
                     </thead>
@@ -106,10 +108,10 @@ import ModalDeletePlaceFromAdmin from '@/views/components/modals/ModalDeletePlac
                                 {{ place.views }}
                             </td>
                             <td>
-                                {{ getTimeString(place.createdAt) }}
+                                {{ moment(place.createdAt).format(TIME_MOMENT_FORMAT) }}
                             </td>
                             <td>
-                                {{ getTimeString(place.updatedAt) }}
+                                {{ moment(place.updatedAt).format(TIME_MOMENT_FORMAT) }}
                             </td>
                             <td class="text-end">
                                 <button
@@ -133,7 +135,6 @@ import ModalDeletePlaceFromAdmin from '@/views/components/modals/ModalDeletePlac
 </template>
 
 <script lang="ts">
-import moment from 'moment'
 import { mapActions, mapState } from 'pinia'
 import { useAdminStore } from '@/stores/admin.store'
 import { type PlaceEntity } from '@/interfaces/Place'

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import HeaderNavbar from '@components/common/HeaderNavbar.vue'
+import { TIME_MOMENT_FORMAT } from '@/constants/global-string'
 import ModalDeleteUser from '@/views/components/modals/ModalDeleteUser.vue'
 </script>
 
@@ -42,6 +43,7 @@ import ModalDeleteUser from '@/views/components/modals/ModalDeleteUser.vue'
                             <th scope="col">Kontribusi</th>
                             <th scope="col">Terakhir Login</th>
                             <th scope="col">Terdaftar</th>
+                            <th scope="col">Terakhir Update</th>
                             <th></th>
                         </tr>
                     </thead>
@@ -85,7 +87,10 @@ import ModalDeleteUser from '@/views/components/modals/ModalDeleteUser.vue'
                                 <span v-else>-</span>
                             </td>
                             <td>
-                                {{ getTimeString(user.createdAt) }}
+                                {{ moment(user.createdAt).format(TIME_MOMENT_FORMAT) }}
+                            </td>
+                            <td>
+                                {{ moment(user.updatedAt).format(TIME_MOMENT_FORMAT) }}
                             </td>
                             <td class="text-end">
                                 <button
