@@ -7,34 +7,41 @@ import numeral from 'numeral'
         <div class="action-item d-flex gap-2 mb-2">
 
             <RouterLink v-if="isPlaceOwner" :to="{ name: 'place:manage', params: { placeId: place.id }}"
-                class="btn btn-outline-primary border-base waves-effect waves-light" style="border-style: dashed;">
+                class="btn btn-sm btn-outline-primary border-base waves-effect waves-light" style="border-style: dashed;">
                 <i class="bi bi-pencil-square Tempat me-2"></i>
                 <span>Kelola</span>
             </RouterLink>
 
-            <button @click="openGoogleMapDirectionLink()" class="btn btn-primary border-base waves-effect waves-light">
+            <button @click="openGoogleMapDirectionLink()" class="btn btn-sm btn-primary border-base waves-effect waves-light">
                 <i class="bi bi-sign-turn-right-fill me-2"></i>
                 <span>Buka Rute</span>
             </button>
 
             <button
                 @click="$router.push({ name: 'maps', query: { keyword: place.name, showInfoWindow: 'true' } })"
-                class="btn btn-neutral border-dark waves-effect waves-light">
+                class="btn btn-sm btn-neutral border-dark waves-effect waves-light">
                 <i class="bi bi-geo-alt me-2"></i>
                 <span>Lokasi</span>
             </button>
 
             <button
+                @click="$router.push({ name: 'maps', query: { keyword: place.name, showInfoWindow: 'true' } })"
+                class="btn btn-sm btn-neutral border-dark waves-effect waves-light">
+                <i class="bi bi-pin-map-fill me-2"></i>
+                <span>Wisata Terdekat</span>
+            </button>
+
+            <button
                 v-if="metaData.like.setted"
                 @click="likePlace()"
-                class="btn btn-neutral border-primary text-primary waves-effect waves-dark">
+                class="btn btn-sm btn-neutral border-primary text-primary waves-effect waves-dark">
                 <i class="bi bi-hand-thumbs-up-fill me-2"></i>
                 <span>Like ({{ numeral(metaData.like.count || 0).format('0.[0]a').toUpperCase() }})</span>
             </button>
             <button
                 v-else
                   @click="likePlace()"
-                class="btn btn-neutral border-dark waves-effect waves-dark">
+                class="btn btn-sm btn-neutral border-dark waves-effect waves-dark">
                 <i class="bi bi-hand-thumbs-up me-2"></i>
                 <span>Like ({{ numeral(metaData.like.count || 0).format('0.[0]a').toUpperCase() }})</span>
             </button>
@@ -42,14 +49,14 @@ import numeral from 'numeral'
             <button
                 v-if="metaData.dislike.setted"
                 @click="dislikePlace()"
-                class="btn btn-neutral border-primary text-primary waves-effect waves-dark">
+                class="btn btn-sm btn-neutral border-primary text-primary waves-effect waves-dark">
                 <i class="bi bi-hand-thumbs-down-fill me-2"></i>
                 <span>Dislike ({{ numeral(metaData.dislike.count || 0).format('0.[0]a').toUpperCase() }})</span>
             </button>
             <button
                 v-else
                   @click="dislikePlace()"
-                class="btn btn-neutral border-dark waves-effect waves-dark">
+                class="btn btn-sm btn-neutral border-dark waves-effect waves-dark">
                 <i class="bi bi-hand-thumbs-down me-2"></i>
                 <span>Dislike ({{ numeral(metaData.dislike.count || 0).format('0.[0]a').toUpperCase() }})</span>
             </button>
@@ -57,21 +64,21 @@ import numeral from 'numeral'
             <button
                 v-if="metaData.saved.setted"
                 @click="addToBookmark()"
-                class="btn btn-neutral border-primary text-primary waves-effect waves-dark">
+                class="btn btn-sm btn-neutral border-primary text-primary waves-effect waves-dark">
                 <i class="bi bi-bookmark-plus-fill me-2"></i>
                 <span>Simpan ({{ numeral(metaData.saved.count || 0).format('0.[0]a').toUpperCase() }})</span>
             </button>
             <button
                 v-else
                 @click="addToBookmark()"
-                class="btn btn-neutral border-dark waves-effect waves-dark">
+                class="btn btn-sm btn-neutral border-dark waves-effect waves-dark">
                 <i class="bi bi-bookmark-plus me-2"></i>
                 <span>Simpan ({{ numeral(metaData.saved.count || 0).format('0.[0]a').toUpperCase() }})</span>
             </button>
 
             <button
                 @click="sharePlace(place.id)"
-                class="btn btn-neutral border-dark waves-effect waves-dark">
+                class="btn btn-sm btn-neutral border-dark waves-effect waves-dark">
                 <i class="bi bi-share-fill me-2"></i>
                 <span>Bagikan</span>
             </button>
