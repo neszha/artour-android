@@ -68,7 +68,10 @@ import ModalDeleteUser from '@/views/components/modals/ModalDeleteUser.vue'
                                 </span>
                             </td>
                             <td>
-                                <span v-if="user.role === UserRoleEnum.ADMIN" class="badge text-white bg-danger text-primary rounded-pill">
+                                <span v-if="user.userMeta?.isSuperAdmin" class="badge text-white bg-primary text-primary rounded-pill">
+                                    Super Admin
+                                </span>
+                                <span v-else-if="user.role === UserRoleEnum.ADMIN" class="badge text-white bg-danger text-primary rounded-pill">
                                     Admin
                                 </span>
                                 <span v-if="user.role === UserRoleEnum.USER" class="badge text-white bg-info text-primary rounded-pill">
@@ -92,12 +95,20 @@ import ModalDeleteUser from '@/views/components/modals/ModalDeleteUser.vue'
                             <td>
                                 {{ moment(user.updatedAt).format(TIME_MOMENT_FORMAT) }}
                             </td>
-                            <td class="text-end">
-                                <button
-                                    @click="openDeleteModal(user.id)"
-                                    type="button" class="btn btn-sm btn-square btn-outline-danger waves-effect waves-dark">
-                                    <i class="bi bi-trash"></i>
-                                </button>
+                            <td class="text-center">
+                                <div v-if="!user.userMeta?.isSuperAdmin && myInfo.userMeta?.isSuperAdmin">
+                                    <button
+                                        @click="openDeleteModal(user.id)"
+                                        type="button" class="btn btn-sm btn-square btn-neutral waves-effect waves-dark me-2">
+                                        <i class="bi bi-pencil"></i>
+                                    </button>
+                                    <button
+                                        @click="openDeleteModal(user.id)"
+                                        type="button" class="btn btn-sm btn-square btn-outline-danger waves-effect waves-dark">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </div>
+                                <div v-else>-</div>
                             </td>
                         </tr>
                     </tbody>
@@ -119,10 +130,12 @@ import { mapActions, mapState } from 'pinia'
 import { UserRoleEnum } from '@/interfaces/enums'
 import { type UserEntity } from '@/interfaces/User'
 import { useAdminStore } from '@/stores/admin.store'
+import { useUserStore } from '@/stores/user.store'
 
 export default {
     computed: {
         ...mapState(useAdminStore, ['users']),
+        ...mapState(useUserStore, ['myInfo']),
 
         filteredUsers (): UserEntity[] {
             let users = this.users as UserEntity[]

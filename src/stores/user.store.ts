@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import axiosDefault, { type AxiosResponse } from 'axios'
 import axios from '@/helpers/axios.helper'
 import { UserRoleEnum } from '@/interfaces/enums'
+import { type UserMeta } from '@/interfaces/User'
 import { API_URL_AUTH_SESSION_INFO } from '@/constants/api-url'
 
 export interface UserInfo {
@@ -11,6 +12,7 @@ export interface UserInfo {
     name: string
     email: string
     active: boolean
+    userMeta?: UserMeta
 }
 
 export interface UserState {

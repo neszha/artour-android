@@ -2,6 +2,7 @@ import { type UserRoleEnum } from './enums'
 
 export interface UserMeta {
     reviews: number
+    isSuperAdmin?: boolean
 }
 
 export interface ContributionSummary {
