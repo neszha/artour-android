@@ -18,6 +18,7 @@ import ContributionView from './views/main/ContributionView.vue'
 
 // Maps.
 import PlaceMapSearchView from './views/main/maps/PlaceMapSearchView.vue'
+import PlaceMapNearbyView from './views/main/maps/PlaceMapNearbyView.vue'
 
 // Place
 import PlaceDetailView from './views/main/places/PlaceDetailView.vue'
@@ -90,6 +91,11 @@ const routes: RouteRecordRaw [] = [
                         name: 'maps:search-list',
                         path: 'search-list',
                         component: PlaceMapSearchView
+                    },
+                    {
+                        name: 'maps:nearby-list',
+                        path: 'nearby-list',
+                        component: PlaceMapNearbyView
                     }
                 ]
             },

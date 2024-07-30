@@ -3,7 +3,7 @@ import { type AxiosResponse } from 'axios'
 import axios from '@/helpers/axios.helper'
 import { type Coordinates } from '@/interfaces/Geolocation'
 import { type PlaceCategoryEntity, type PlaceEntity } from '@/interfaces/Place'
-import { API_URL_PLACES_BOOKMARKS, API_URL_PLACES_ID, API_URL_PLACES_ME, API_URL_PLACE_AR_MAP_SEARCH, API_URL_PLACE_CATEGORIES, API_URL_PLACE_HIGHLIGHT, API_URL_PLACE_MAP_SEARCH, API_URL_PLACE_NEAREST } from '@/constants/api-url'
+import { API_URL_PLACES_BOOKMARKS, API_URL_PLACES_ID, API_URL_PLACES_ME, API_URL_PLACE_AR_MAP_SEARCH, API_URL_PLACE_CATEGORIES, API_URL_PLACE_HIGHLIGHT, API_URL_PLACE_MAP_SEARCH, API_URL_PLACE_NEARBY_PLACE, API_URL_PLACE_NEAREST } from '@/constants/api-url'
 
 interface PlaceState {
     placeCategories: PlaceCategoryEntity[]
@@ -75,6 +75,23 @@ export const usePlaceStore = defineStore('place', {
                     latitude: coordinates.latitude,
                     longitude: coordinates.longitude
                 })
+                const data = response.data.data as PlaceEntity[]
+                if (data.length === 0) {
+                    if (window.Android !== undefined) {
+                        window.Android.showToast('Tidak ada tempat wisata yang ditemukan.')
+                    }
+                }
+                this.placeSearchList = data
+            } catch (error) {
+                this.placeSearchList = []
+                console.error(error)
+            }
+        },
+
+        async getNearestPlacesByPlaceLocation (placeId: string) {
+            try {
+                const url = `${API_URL_PLACE_NEARBY_PLACE}?placeId=${placeId}`
+                const response: AxiosResponse = await axios.get(url)
                 const data = response.data.data as PlaceEntity[]
                 if (data.length === 0) {
                     if (window.Android !== undefined) {

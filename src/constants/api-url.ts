@@ -11,7 +11,7 @@ export const API_URL_LOGOUT: string = '/auth/logout'
 export const API_URL_USERS: string = '/users'
 export const API_URL_USER_AVATAR: string = '/users/avatars'
 export const API_URL_USER_INFO: string = '/users/info'
-export const API_URL_USER_ROLE: string = '/users/role' // ?userId=${userId}
+export const API_URL_USER_ROLE: string = '/users/role' // ?userId=${#1}
 export const API_URL_USERS_ID: string = '/users/:userId'
 
 /**
@@ -23,7 +23,7 @@ export const API_URL_FILE_MAP_CONTENTS: string = '/files/map-contents'
  * Place Category.
  */
 export const API_URL_PLACE_CATEGORY_MAP_MARKERS: string = '/place-categories/map-markers'
-export const API_URL_PLACE_CATEGORIES: string = '/place-categories' // ?with-popular-place=${boolean}
+export const API_URL_PLACE_CATEGORIES: string = '/place-categories' // ?with-popular-place=${#1}
 export const API_URL_PLACE_CATEGORIES_ID: string = '/place-categories/:placeCategoryId'
 
 /**
@@ -39,7 +39,8 @@ export const API_URL_PLACES_IMAGES: string = '/places/:placeId/images'
  * Place Search
  */
 export const API_URL_PLACE_HIGHLIGHT: string = '/places/highlight'
-export const API_URL_PLACE_NEAREST: string = '/places/nearest'
+export const API_URL_PLACE_NEAREST: string = '/places/nearest' // ?placeId={#1}
+export const API_URL_PLACE_NEARBY_PLACE: string = '/places/nearby-place'
 export const API_URL_PLACE_MAP_SEARCH: string = '/places/map-search' // ?keyword={#1}
 export const API_URL_PLACE_AR_MAP_SEARCH: string = '/places/ar-map-search'
 

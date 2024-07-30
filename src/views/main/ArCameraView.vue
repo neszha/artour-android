@@ -100,29 +100,6 @@ import classNames from 'classnames'
                         >
                     </a-text>
 
-                    <!-- rating  -->
-                    <!-- <a-image
-                        src="/images/star.png"
-                        position="0.25 -0.3 0.01"
-                        scale="1 1 1"
-                        width="0.3"
-                        height="0.3">
-                    </a-image>
-                    <a-text
-                        :value="`(${place.rating.toFixed(2)})`"
-                        position="0.5 -0.2 0.01"
-                        color="#000"
-                        width="5"
-                        line-height="50"
-                        letter-spacing="2"
-                        wrap-count="30"
-                        align="left"
-                        anchor="left"
-                        baseline="top"
-                        side="double"
-                        >
-                    </a-text> -->
-
                     <!-- like -->
                     <a-image
                         src="/images/like.png"

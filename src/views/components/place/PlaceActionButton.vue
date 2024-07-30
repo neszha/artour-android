@@ -25,7 +25,7 @@ import numeral from 'numeral'
             </button>
 
             <button
-                @click="$router.push({ name: 'maps', query: { keyword: place.name, showInfoWindow: 'true' } })"
+                @click="$router.push({ name: 'maps:nearby-list', query: { placeId: place.id,  placeName: place.name, latitude: place.latitude, longitude: place.longitude } })"
                 class="btn btn-sm btn-neutral border-dark waves-effect waves-light">
                 <i class="bi bi-pin-map-fill me-2"></i>
                 <span>Wisata Terdekat</span>
