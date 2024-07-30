@@ -17,6 +17,7 @@ interface AdminState {
     users: UserEntity[]
     usersSearchMeta: SearchMeta
     places: PlaceEntity[]
+    placesSearchMeta: SearchMeta
     placeReviews: PlaceReviewEntity[]
     placeReviewsSearchMeta: SearchMeta
 }
@@ -31,11 +32,20 @@ export const useAdminStore = defineStore('admin', {
             totalPlace: 0,
             totalReview: 0
         },
+
+        // For users.
         users: [],
         usersSearchMeta: {
             total: 0
         },
+
+        // For places
         places: [],
+        placesSearchMeta: {
+            total: 0
+        },
+
+        // For place reviews
         placeReviews: [],
         placeReviewsSearchMeta: {
             total: 0
@@ -73,10 +83,17 @@ export const useAdminStore = defineStore('admin', {
             }
         },
 
-        async getPlaces (): Promise<void> {
+        async getPlaces (filter: string, keyword: string | null, limit: number = 500): Promise<void> {
             try {
-                const response: AxiosResponse = await axios.get(API_URL_PLACES)
+                let url = API_URL_PLACES
+                url += `?filter=${filter}`
+                if (keyword !== null) {
+                    url += `&keyword=${keyword}`
+                }
+                url += `&limit=${limit}`
+                const response: AxiosResponse = await axios.get(url)
                 this.places = response.data.data as PlaceEntity[]
+                this.placesSearchMeta = response.data.meta as SearchMeta
             } catch (error) {
                 alert('Gagal mengambil data tempat wisata')
                 console.error(error)

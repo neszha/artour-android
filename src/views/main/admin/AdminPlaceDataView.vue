@@ -11,7 +11,9 @@ import { TIME_MOMENT_FORMAT } from '@/constants/global-string'
     <!-- filter  -->
     <section class="container-fluid mt-4 mb-4">
         <div class="d-flex flex-column flex-md-row gap-3 justify-content-between">
-            <div class="d-flex gap-3">
+            <form
+                @submit.prevent="filterPlacesByKeyword()"
+                class="d-flex gap-3">
                 <div class="input-group input-group-sm input-group-inline">
                     <span class="input-group-text pe-2">
                         <i class="bi bi-search"></i>
@@ -24,7 +26,7 @@ import { TIME_MOMENT_FORMAT } from '@/constants/global-string'
                         aria-label="Search"
                     />
                 </div>
-            </div>
+            </form>
         </div>
     </section>
 
@@ -32,7 +34,20 @@ import { TIME_MOMENT_FORMAT } from '@/constants/global-string'
     <section class="container-fluid mb-5">
         <div class="card">
             <div class="card-header d-flex align-items-center justify-content-between">
-                <h5 class="me-auto">Daftar Tempat Wisata</h5>
+                <h5 class="me-auto">Tempat Wisata</h5>
+                <div class="float-end">
+                    <div class="dropdown">
+                        <a class="dropdown-toggle text-reset" href="javascript:void(0)" id="dropdown_menu" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="font-size: 14px;">
+                            <span class="fw-semibold">Filter:</span> <span class="text-muted">{{ filter.filterValue }}<i class="mdi mdi-chevron-down ms-1"></i></span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown_menu" style="">
+                            <a
+                                v-for="filter of filterList" :key="filter.key"
+                                @click="filterPlaces(filter.key)"
+                                class="dropdown-item" href="javascript:void(0)">{{ filter.value }}</a>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="table-responsive">
                 <table class="table table-hover table-nowrap">
@@ -125,7 +140,7 @@ import { TIME_MOMENT_FORMAT } from '@/constants/global-string'
                 </table>
             </div>
             <div class="card-footer border-0 py-3">
-                <span class="text-muted text-sm">Menampilkan {{ filteredPlaces.length }} dari {{ places.length }} total data</span>
+                <span class="text-muted text-sm">Menampilkan {{ filteredPlaces.length }} dari {{ placesSearchMeta.total }} total data</span>
             </div>
         </div>
     </section>
@@ -143,21 +158,21 @@ import { RouterLink } from 'vue-router'
 
 export default {
     computed: {
-        ...mapState(useAdminStore, ['places']),
+        ...mapState(useAdminStore, ['places', 'placesSearchMeta']),
 
         filteredPlaces (): PlaceEntity[] {
-            let places = this.places as PlaceEntity[]
+            const places = this.places as PlaceEntity[]
 
             // Filter by keyword.
-            const lowerKeyword = this.filter.keyword.toLowerCase() as string
-            places = places.filter((place: PlaceEntity) => {
-                const userName = (place.user !== undefined) ? place.user.name.toLowerCase() : ''
-                const matchName = place.name.toLowerCase().includes(lowerKeyword)
-                const matchCategory = place.category.name.toLowerCase().includes(lowerKeyword)
-                const matchUserName = userName.includes(lowerKeyword)
-                const matchAddress = place.address.toLowerCase().includes(lowerKeyword)
-                return matchName || matchCategory || matchUserName || matchAddress
-            })
+            // const lowerKeyword = this.filter.keyword.toLowerCase() as string
+            // places = places.filter((place: PlaceEntity) => {
+            //     const userName = (place.user !== undefined) ? place.user.name.toLowerCase() : ''
+            //     const matchName = place.name.toLowerCase().includes(lowerKeyword)
+            //     const matchCategory = place.category.name.toLowerCase().includes(lowerKeyword)
+            //     const matchUserName = userName.includes(lowerKeyword)
+            //     const matchAddress = place.address.toLowerCase().includes(lowerKeyword)
+            //     return matchName || matchCategory || matchUserName || matchAddress
+            // })
 
             // done.
             return places
@@ -169,6 +184,16 @@ export default {
 
         getTimeString (time: Date): string {
             return moment(time).fromNow()
+        },
+
+        filterPlacesByKeyword () {
+            void this.getPlaces(this.filter.filterKey as string, this.filter.keyword as string)
+        },
+
+        filterPlaces (filterKey: string) {
+            this.filter.filterKey = filterKey
+            this.filter.filterValue = this.filterList.find(x => x.key === filterKey)?.value as string
+            void this.getPlaces(this.filter.filterKey as string, this.filter.keyword as string)
         },
 
         openLocationInGoogleMaps (latitude: number, longitude: number) {
@@ -190,14 +215,29 @@ export default {
     },
 
     beforeMount () {
-        this.getPlaces()
+        this.getPlaces(this.filter.filterKey, null)
     },
 
     data () {
         return {
             filter: {
-                keyword: '' as string
+                keyword: '' as string,
+                filterKey: 'newest',
+                filterValue: 'Terbaru'
             },
+            filterList: [
+                { key: 'newest', value: 'Terbaru' },
+                { key: 'rating_desc', value: 'Rating Tertinggi' },
+                { key: 'rating_asc', value: 'Rating Terendah' },
+                { key: 'like_desc', value: 'Like Tertinggi' },
+                { key: 'like_asc', value: 'Like Terendah' },
+                { key: 'dislike_desc', value: 'Dislike Tertinggi' },
+                { key: 'dislike_asc', value: 'Dislike Terendah' },
+                { key: 'save_desc', value: 'Disimpan Tertinggi' },
+                { key: 'save_asc', value: 'Disimpan Terendah' },
+                { key: 'view_desc', value: 'Pengunjung Tertinggi' },
+                { key: 'view_asc', value: 'Pengunjung Terendah' }
+            ],
             modalData: {
                 placeId: ''
             }
