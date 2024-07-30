@@ -38,6 +38,7 @@ import classNames from 'classnames'
                     :position="place.position"
                     scale="1 1 1"
                 >
+                    <!-- image cover  -->
                     <a-image
                         :src="place.mapArImageCover?.link"
                         position="-2 0 0.01"
@@ -45,11 +46,36 @@ import classNames from 'classnames'
                         width="3.5"
                         height="3.5">
                     </a-image>
+
+                    <!-- rating  -->
+                    <a-image
+                        src="/images/star.png"
+                        position="0.25 1.6 0.01"
+                        scale="1 1 1"
+                        width="0.3"
+                        height="0.3">
+                    </a-image>
+                    <a-text
+                        :value="`(${place.rating.toFixed(2)})`"
+                        position="0.5 1.7 0.01"
+                        color="#000"
+                        width="5"
+                        line-height="50"
+                        letter-spacing="2"
+                        wrap-count="30"
+                        align="left"
+                        anchor="left"
+                        baseline="top"
+                        side="double"
+                        >
+                    </a-text>
+
+                    <!-- title and description -->
                     <a-text
                         :value="place.name"
-                        position="0.1 1.55 0.01"
+                        position="0.1 1.15 0.01"
                         color="#000"
-                        width="4"
+                        width="4.5"
                         line-height="50"
                         letter-spacing="2"
                         wrap-count="30"
@@ -61,7 +87,7 @@ import classNames from 'classnames'
                     </a-text>
                     <a-text
                         :value="place.description"
-                        position="0.1 0.9 0.01"
+                        position="0.1 0.7 0.01"
                         color="#000"
                         width="3.5"
                         line-height="65"
@@ -73,11 +99,82 @@ import classNames from 'classnames'
                         side="double"
                         >
                     </a-text>
+
+                    <!-- rating  -->
+                    <!-- <a-image
+                        src="/images/star.png"
+                        position="0.25 -0.3 0.01"
+                        scale="1 1 1"
+                        width="0.3"
+                        height="0.3">
+                    </a-image>
+                    <a-text
+                        :value="`(${place.rating.toFixed(2)})`"
+                        position="0.5 -0.2 0.01"
+                        color="#000"
+                        width="5"
+                        line-height="50"
+                        letter-spacing="2"
+                        wrap-count="30"
+                        align="left"
+                        anchor="left"
+                        baseline="top"
+                        side="double"
+                        >
+                    </a-text> -->
+
+                    <!-- like -->
+                    <a-image
+                        src="/images/like.png"
+                        position="0.3 -0.75 0.01"
+                        scale="1 1 1"
+                        width="0.3"
+                        height="0.3">
+                    </a-image>
+                    <a-text
+                        :value="place.like"
+                        position="0.55 -0.7 0.01"
+                        color="#000"
+                        width="5"
+                        line-height="50"
+                        letter-spacing="2"
+                        wrap-count="30"
+                        align="left"
+                        anchor="left"
+                        baseline="top"
+                        side="double"
+                        >
+                    </a-text>
+
+                    <!-- dislike -->
+                    <a-image
+                        src="/images/dislike.png"
+                        position="2 -0.8 0.01"
+                        scale="1 1 1"
+                        width="0.3"
+                        height="0.3">
+                    </a-image>
+                    <a-text
+                        :value="place.dislike"
+                        position="2.3 -0.7 0.01"
+                        color="#000"
+                        width="5"
+                        line-height="50"
+                        letter-spacing="2"
+                        wrap-count="30"
+                        align="left"
+                        anchor="left"
+                        baseline="top"
+                        side="double"
+                        >
+                    </a-text>
+
+                    <!-- distance  -->
                     <a-text
                         :value="`${place.distance.toFixed(1)} KM`"
-                        position="0 -1.6 0.01"
+                        position="0 -1.7 0.01"
                         color="#000"
-                        width="15"
+                        width="12"
                         line-height="50"
                         letter-spacing="2"
                         align="left"
@@ -86,6 +183,8 @@ import classNames from 'classnames'
                         side="double"
                         >
                     </a-text>
+
+                    <!-- main box  -->
                     <a-plane
                         width="8"
                         height="4"
@@ -239,7 +338,7 @@ export default {
                 { latitude: place.latitude, longitude: place.longitude }
             )
             const placeCoord: Coordinates = { latitude: place.latitude, longitude: place.longitude }
-            const nearDistanceInMeter = 12 + (index)
+            const nearDistanceInMeter = 10 + (index * 5)
             const nearCoordinates: GeolibInputCoordinates = this.moveCloser(this.myCoordinates, placeCoord, nearDistanceInMeter)
             // const newNearDistanceInMeter = getDistance(
             //     { latitude: this.myCoordinates.latitude, longitude: this.myCoordinates.longitude },
@@ -263,8 +362,11 @@ export default {
                 vrPlace.position = '0 4.5 0'
                 vrPlace.rotation = `0 ${circleBearing} 0`
             }
-            if (place.description.length > 160) {
-                vrPlace.description = place.description.slice(0, 160) + '...'
+            if (place.name.length > 20) {
+                vrPlace.name = place.name.slice(0, 20) + '...'
+            }
+            if (place.description.length > 90) {
+                vrPlace.description = place.description.slice(0, 90) + '...'
             }
             // console.log(vrPlace.distance, nearDistanceInMeter, newNearDistanceInMeter, vrPlace.position, vrPlace.rotation)
             // console.log({ ...vrPlace })
