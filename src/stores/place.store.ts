@@ -174,21 +174,20 @@ export const usePlaceStore = defineStore('place', {
             if (this.placeDetailObject === undefined) return
             const place = this.placeDetailObject[placeId]
             const hashtags = place.hashtags.map((hashtag) => `#${hashtag}`).join(' ')
-            let shareContent = place.name
-            shareContent += '\n\n'
-            shareContent += place.description
-            shareContent += '\n'
-            shareContent += 'https://maps.com/places/' + placeId
-            shareContent += '\n\n'
-            shareContent += 'Diposting ' + place.user?.name
+            let textContent = place.name
+            textContent += '\n\n'
+            textContent += place.description
+            textContent += '\n\n'
+            textContent += 'Diposting oleh ' + place.user?.name
             if (hashtags !== '') {
-                shareContent += '\n\n'
-                shareContent += hashtags
+                textContent += '\n\n'
+                textContent += hashtags
             }
+            const imageCoverUrl = place.mapImageCover?.link ?? ''
             if (window.Android !== undefined) {
-                window.Android.openShareContent(shareContent)
+                window.Android.openShareContent(textContent, imageCoverUrl)
             } else {
-                console.log(shareContent)
+                console.log(textContent, imageCoverUrl)
                 alert('open share content')
             }
         },

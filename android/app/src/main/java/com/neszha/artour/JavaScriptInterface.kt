@@ -3,11 +3,15 @@ package com.neszha.artour
 import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
+import android.os.Environment
 import android.util.Log
 import android.webkit.JavascriptInterface
 import android.webkit.WebView
 import android.widget.Toast
+import androidx.core.content.FileProvider
 import androidx.credentials.CredentialManager
 import androidx.credentials.GetCredentialRequest
 import androidx.credentials.exceptions.GetCredentialException
@@ -16,6 +20,9 @@ import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.io.File
+import java.io.FileOutputStream
+import java.net.URL
 import java.util.UUID
 
 class JavaScriptInterface(
@@ -91,13 +98,39 @@ class JavaScriptInterface(
      * Open share content
      */
     @JavascriptInterface
-    fun openShareContent(content: String) {
-        val shareIntent = Intent().apply {
-            action = Intent.ACTION_SEND
-            putExtra(Intent.EXTRA_TEXT, content)
-            type = "text/plain"
+    fun openShareContent(textContent: String, imageCoverUrl: String) {
+        // Download image.
+        val input = URL(imageCoverUrl).openStream()
+        val bitmap = BitmapFactory.decodeStream(input)
+
+        // Save to local storage app.
+        val imagesDir = File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), "SharedImages")
+        if (!imagesDir.exists()) {
+            imagesDir.mkdirs()
         }
-        contextActivity.startActivity(Intent.createChooser(shareIntent, null))
+        val imageFile = File(imagesDir, "shared_image.jpg")
+        val fos = FileOutputStream(imageFile)
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos)
+        fos.flush()
+        fos.close()
+        val fileUri = FileProvider.getUriForFile(context, "${context.packageName}.provider", imageFile)
+        Log.i(TAG, fileUri.toString())
+
+        // Create an intent to share content
+        val intent = Intent(Intent.ACTION_SEND)
+        intent.type = "text/plain"
+
+        // Set the text content to share
+        intent.putExtra(Intent.EXTRA_TEXT, textContent)
+
+        // If there is an image URL, set it as an extra
+        if (imageCoverUrl.isNotEmpty()) {
+            intent.putExtra(Intent.EXTRA_STREAM, fileUri)
+            intent.type = "image/*"
+        }
+
+        // Star activity.
+        contextActivity.startActivity(Intent.createChooser(intent, "Share Place"))
     }
 
     /**
