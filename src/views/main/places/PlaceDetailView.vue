@@ -11,7 +11,7 @@ import CardPlaceReview from '@components/card/review/CardPlaceReview.vue'
     <section class="place-detail-header mb-3">
         <nav class="navbar navbar-light px-0 py-1">
             <div class="container-xl py-2 ps-1">
-                <button @click="$router.back()" class="navbar-toggler text-dark" type="button">
+                <button @click="goBack()" class="navbar-toggler text-dark" type="button">
                     <i class="bi bi-chevron-left"></i>
                 </button>
                 <div class="d-flex gap-2">
@@ -277,6 +277,14 @@ export default {
             if (hashRoute === '') return
             const element = document.querySelector(hashRoute)
             element?.scrollIntoView({ behavior: 'smooth' })
+        },
+
+        goBack () {
+            if (window.history.length > 1) {
+                this.$router.back()
+            } else {
+                this.$router.push({ name: 'explore' })
+            }
         }
     },
 

@@ -75,7 +75,6 @@ class MainActivity : ComponentActivity() {
             val placeId = data.lastPathSegment
             webViewUrl = webViewUrl.replaceFirst("/auth", "/places/$placeId")
         }
-        Toast.makeText(this, "Deep link received: $webViewUrl", Toast.LENGTH_LONG).show()
 
         // Render content.
 //        val webViewUrl = "http://$host:$port/index.html#/contribution/places"
