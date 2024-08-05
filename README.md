@@ -1,9 +1,49 @@
-# Vue 3 + TypeScript + Vite
+## About Project
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+Aplikasi android sebagai tampilan utama aplikasi yang dibuat dengan Kotlin + VueJS.
 
-## Recommended Setup
+## Development Requirements
+- Git
+- NodeJS v20.x.x
+- Android Studio
 
-- [VS Code](https://code.visualstudio.com/) + [Vue - Official](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (previously Volar) and disable Vetur
+## Software Architecture
+Dibuat menggunakan https://excalidraw.com/
 
-- Use [vue-tsc](https://github.com/vuejs/language-tools/tree/master/packages/tsc) for performing the same type checking from the command line, or for generating d.ts files for SFCs.
+<center>
+    <img src="docs/mobile-architecture.png" width="100%" alt="Software Architecture">
+</center>
+
+## Development Installations
+
+Instalasi development tools:
+- Install program Git. Download https://git-scm.com/downloads
+- Instal interpreter NodeJS versi v20.x.x. Download https://nodejs.org/en
+- Instal IDE Android Studio. Download https://developer.android.com
+
+Instalasi dependency:
+```sh
+npm i -g ts-node
+npm install
+```
+
+Setup environment variable:
+- Salin file `.env.example` menjadi file `.env`
+- Isi setiap variable sesuai dengan kebutuhan:
+- `VITE_APP_API_BASE_URL`: Host dimana backend api dijalankan.
+- `VITE_APP_GOOGLE_AUTH_CLIENT_ID`: Key untuk menggunakan OAuth google. Panduan https://developers.google.com/identity/protocols/oauth2
+- `VITE_APP_GOOGLE_MAPS_API_KEY=""`: Key google maps javascript api. Panduan https://developers.google.com/maps/documentation/javascript/overview
+
+
+Menjalankan aplikasi di web browser:
+```sh
+npm run dev
+```
+
+Aplikasi secara default dapat dibuka pada http://localhost:5173
+
+Untuk menjalankannya pada device android:
+- Buka Android Studio.
+- Install SDK dan emulator yang akan digunakan.
+- Buka directory `/android` di Android Studio.
+- Jalankan aplikasi.
