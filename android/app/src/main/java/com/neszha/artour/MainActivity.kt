@@ -42,6 +42,10 @@ import io.ktor.server.engine.embeddedServer
 import io.ktor.server.http.content.staticResources
 import io.ktor.server.jetty.Jetty
 import io.ktor.server.routing.routing
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
@@ -72,7 +76,11 @@ class MainActivity : ComponentActivity() {
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         Log.d(TAG, "onNewIntent")
-        this.setupWebViewLayout(intent)
+        setContent {}
+        CoroutineScope(Dispatchers.Default).launch {
+            delay(10)
+            this@MainActivity.setupWebViewLayout(intent)
+        }
     }
 
     /**
@@ -156,12 +164,10 @@ class MainActivity : ComponentActivity() {
         // Parsing deep link intent.
         val action: String? = intent.action
         val data: Uri? = intent.data
-        println(data)
         if (Intent.ACTION_VIEW == action && data != null) {
             val placeId = data.lastPathSegment
             webViewUrl = webViewUrl.replaceFirst("/auth", "/places/$placeId")
         }
-        println(webViewUrl)
 
         // Render content.
         setContent {
@@ -437,13 +443,9 @@ class MainActivity : ComponentActivity() {
 
 @SuppressLint("SetJavaScriptEnabled")
 @Composable
-fun WebViewScreen(webUrl: String, reload: Boolean = true) {
+fun WebViewScreen(webUrl: String) {
     val contextActivity = LocalContext.current as MainActivity
     val webView = remember { WebView(contextActivity) }
-
-    if (reload == true) {
-        webView.reload()
-    }
 
     // Handle back press event.
     BackHandler(enabled = true) {
