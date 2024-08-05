@@ -28,6 +28,7 @@ import androidx.core.content.ContextCompat
 import com.neszha.artour.ui.theme.ITentixTheme
 import android.Manifest
 import android.content.ContentValues
+import android.content.ContentValues.TAG
 import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
@@ -62,33 +63,16 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         this.startingHttpServer()
+        this.setupWebViewLayout(intent)
+    }
 
-        // Render content.
-        val host: String = WebServer.Config.host
-        val port: String = WebServer.Config.port.toString()
-        var webViewUrl = "http://$host:$port/index.html#/auth"
-
-        // Parsing deep link intent.
-        val action: String? = intent.action
-        val data: Uri? = intent.data
-        if (Intent.ACTION_VIEW == action && data != null) {
-            val placeId = data.lastPathSegment
-            webViewUrl = webViewUrl.replaceFirst("/auth", "/places/$placeId")
-        }
-
-        // Render content.
-//        val webViewUrl = "http://$host:$port/index.html#/contribution/places"
-        setContent {
-            ITentixTheme {
-                Surface(
-                    color = MaterialTheme.colorScheme.background,
-                    modifier = Modifier
-                        .fillMaxSize()
-                ) {
-                    WebViewScreen(webUrl = webViewUrl)
-                }
-            }
-        }
+    /**
+     * Detect deep link in intent.
+     */
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        Log.d(TAG, "onNewIntent")
+        this.setupWebViewLayout(intent)
     }
 
     /**
@@ -156,6 +140,39 @@ class MainActivity : ComponentActivity() {
                 Toast.makeText(this, "Camera permission granted!", Toast.LENGTH_SHORT).show()
             } else {
                 Toast.makeText(this, "Camera permission denied!", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    /**
+     * Setup web view layout.
+     */
+    private fun setupWebViewLayout(intent: Intent) {
+        // Render content.
+        val host: String = WebServer.Config.host
+        val port: String = WebServer.Config.port.toString()
+        var webViewUrl = "http://$host:$port/index.html#/auth"
+
+        // Parsing deep link intent.
+        val action: String? = intent.action
+        val data: Uri? = intent.data
+        println(data)
+        if (Intent.ACTION_VIEW == action && data != null) {
+            val placeId = data.lastPathSegment
+            webViewUrl = webViewUrl.replaceFirst("/auth", "/places/$placeId")
+        }
+        println(webViewUrl)
+
+        // Render content.
+        setContent {
+            ITentixTheme {
+                Surface(
+                    color = MaterialTheme.colorScheme.background,
+                    modifier = Modifier
+                        .fillMaxSize()
+                ) {
+                    WebViewScreen(webUrl = webViewUrl)
+                }
             }
         }
     }
@@ -420,9 +437,13 @@ class MainActivity : ComponentActivity() {
 
 @SuppressLint("SetJavaScriptEnabled")
 @Composable
-fun WebViewScreen(webUrl: String) {
+fun WebViewScreen(webUrl: String, reload: Boolean = true) {
     val contextActivity = LocalContext.current as MainActivity
     val webView = remember { WebView(contextActivity) }
+
+    if (reload == true) {
+        webView.reload()
+    }
 
     // Handle back press event.
     BackHandler(enabled = true) {
