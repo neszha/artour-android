@@ -62,7 +62,7 @@ tasks.register("BuildMainWebView") {
         }
     }
 }
-//tasks.preBuild.dependsOn("BuildMainWebView")
+tasks.preBuild.dependsOn("BuildMainWebView")
 
 dependencies {
 
