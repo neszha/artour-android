@@ -1,10 +1,8 @@
 package com.neszha.artour
 
 import android.annotation.SuppressLint
-import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
@@ -21,14 +19,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.neszha.artour.store.WebServer
 import com.neszha.artour.ui.theme.ColorDark
 import com.neszha.artour.ui.theme.ITentixTheme
 import com.neszha.artour.ui.theme.poppinsFontFamily
-import io.ktor.server.engine.embeddedServer
-import io.ktor.server.http.content.staticResources
-import io.ktor.server.jetty.Jetty
-import io.ktor.server.routing.routing
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -38,7 +31,6 @@ import kotlinx.coroutines.launch
 class SplashScreenActivity: ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        this.startingHttpServer()
 
         // Get app version.
         val packageInfo = this.packageManager.getPackageInfo(this.packageName, 0)
@@ -64,20 +56,6 @@ class SplashScreenActivity: ComponentActivity() {
                 }
             }
         }
-    }
-
-    /**
-     * Start app local http server.
-     */
-    private fun startingHttpServer() {
-        if (WebServer.localHttpServerIsRunning) return
-        embeddedServer(Jetty, host = WebServer.Config.host, port = WebServer.Config.port) {
-            Log.i(TAG, "Web server running on http://${WebServer.Config.host}:${WebServer.Config.port}")
-            routing {
-                staticResources("/", WebServer.Config.resourcePath)
-            }
-        }.start(wait = false)
-        WebServer.localHttpServerIsRunning = true
     }
 }
 

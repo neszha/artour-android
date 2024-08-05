@@ -4,6 +4,7 @@ import axios from '@/helpers/axios.helper'
 import { type Coordinates } from '@/interfaces/Geolocation'
 import { type PlaceCategoryEntity, type PlaceEntity } from '@/interfaces/Place'
 import { API_URL_PLACES_BOOKMARKS, API_URL_PLACES_ID, API_URL_PLACES_ME, API_URL_PLACE_AR_MAP_SEARCH, API_URL_PLACE_CATEGORIES, API_URL_PLACE_HIGHLIGHT, API_URL_PLACE_MAP_SEARCH, API_URL_PLACE_NEARBY_PLACE, API_URL_PLACE_NEAREST } from '@/constants/api-url'
+import { API_BASE_URL } from '@/constants/environment'
 
 interface PlaceState {
     placeCategories: PlaceCategoryEntity[]
@@ -177,6 +178,8 @@ export const usePlaceStore = defineStore('place', {
             let textContent = place.name
             textContent += '\n\n'
             textContent += place.description
+            textContent += '\n'
+            textContent += `${API_BASE_URL}/places/${placeId}`
             textContent += '\n\n'
             textContent += 'Diposting oleh ' + place.user?.name
             if (hashtags !== '') {

@@ -27,14 +27,20 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.neszha.artour.ui.theme.ITentixTheme
 import android.Manifest
+import android.content.ContentValues
 import android.os.Environment
 import android.provider.MediaStore
+import android.util.Log
 import android.webkit.GeolocationPermissions
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.runtime.remember
 import androidx.core.content.FileProvider
 import com.neszha.artour.store.WebServer
+import io.ktor.server.engine.embeddedServer
+import io.ktor.server.http.content.staticResources
+import io.ktor.server.jetty.Jetty
+import io.ktor.server.routing.routing
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
@@ -55,11 +61,23 @@ class MainActivity : ComponentActivity() {
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        this.startingHttpServer()
 
         // Render content.
         val host: String = WebServer.Config.host
         val port: String = WebServer.Config.port.toString()
-        val webViewUrl = "http://$host:$port/index.html#/auth"
+        var webViewUrl = "http://$host:$port/index.html#/auth"
+
+        // Parsing deep link intent.
+        val action: String? = intent.action
+        val data: Uri? = intent.data
+        if (Intent.ACTION_VIEW == action && data != null) {
+            val placeId = data.lastPathSegment
+            webViewUrl = webViewUrl.replaceFirst("/auth", "/places/$placeId")
+        }
+        Toast.makeText(this, "Deep link received: $webViewUrl", Toast.LENGTH_LONG).show()
+
+        // Render content.
 //        val webViewUrl = "http://$host:$port/index.html#/contribution/places"
         setContent {
             ITentixTheme {
@@ -326,6 +344,20 @@ class MainActivity : ComponentActivity() {
                 return
             }
         }
+    }
+
+    /**
+     * Start app local http server.
+     */
+    private fun startingHttpServer() {
+        if (WebServer.localHttpServerIsRunning) return
+        embeddedServer(Jetty, host = WebServer.Config.host, port = WebServer.Config.port) {
+            Log.i(ContentValues.TAG, "Web server running on http://${WebServer.Config.host}:${WebServer.Config.port}")
+            routing {
+                staticResources("/", WebServer.Config.resourcePath)
+            }
+        }.start(wait = false)
+        WebServer.localHttpServerIsRunning = true
     }
 
     /**
