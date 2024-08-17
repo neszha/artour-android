@@ -178,7 +178,11 @@ export const usePlaceStore = defineStore('place', {
             let textContent = place.name
             textContent += '\n\n'
             textContent += place.description
-            textContent += '\n'
+            textContent += '\n\n'
+            textContent += 'Buka di Google Maps:\n'
+            textContent += `https://www.google.com/maps/@${place.latitude},${place.longitude},17z`
+            textContent += '\n\n'
+            textContent += 'Buka di aplikasi:\n'
             textContent += `${API_BASE_URL}/places/${placeId}`
             textContent += '\n\n'
             textContent += 'Diposting oleh ' + place.user?.name
@@ -191,7 +195,6 @@ export const usePlaceStore = defineStore('place', {
                 window.Android.openShareContent(textContent, imageCoverUrl)
             } else {
                 console.log(textContent, imageCoverUrl)
-                alert('open share content')
             }
         },
 
