@@ -1,0 +1,138 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36" version="24.7.7">
+  <diagram id="C5RBs43oDa-KdzZeNtuy" name="Page-1">
+    <mxGraphModel dx="1007" dy="566" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="WIyWlLk6GJQsqaUBKTNV-0" />
+        <mxCell id="WIyWlLk6GJQsqaUBKTNV-1" parent="WIyWlLk6GJQsqaUBKTNV-0" />
+        <mxCell id="e-_WCHEav21t-MaE0KTX-1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="e-_WCHEav21t-MaE0KTX-0" target="e-_WCHEav21t-MaE0KTX-4">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="180" y="140" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e-_WCHEav21t-MaE0KTX-0" value="Mulai" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="80" y="60" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="e-_WCHEav21t-MaE0KTX-11" value="" style="swimlane;startSize=0;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="40" y="120" width="480" height="350" as="geometry" />
+        </mxCell>
+        <mxCell id="e-_WCHEav21t-MaE0KTX-4" value="Mengirim Request&amp;nbsp;" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;glass=0;strokeWidth=1;shadow=0;" vertex="1" parent="e-_WCHEav21t-MaE0KTX-11">
+          <mxGeometry x="40" y="30" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="e-_WCHEav21t-MaE0KTX-51" value="Front End" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="e-_WCHEav21t-MaE0KTX-11">
+          <mxGeometry x="208" y="-4" width="80" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="e-_WCHEav21t-MaE0KTX-81" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="e-_WCHEav21t-MaE0KTX-11" source="e-_WCHEav21t-MaE0KTX-73" target="e-_WCHEav21t-MaE0KTX-76">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-_WCHEav21t-MaE0KTX-73" value="Inisialiasi AR.js" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;glass=0;strokeWidth=1;shadow=0;" vertex="1" parent="e-_WCHEav21t-MaE0KTX-11">
+          <mxGeometry x="188" y="80" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="e-_WCHEav21t-MaE0KTX-92" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="e-_WCHEav21t-MaE0KTX-11" source="e-_WCHEav21t-MaE0KTX-63" target="e-_WCHEav21t-MaE0KTX-85">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-_WCHEav21t-MaE0KTX-63" value="&lt;div&gt;(Lokasi 1)&lt;/div&gt;Dekatkan Jarak Coords 10 Meter" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;glass=0;strokeWidth=1;shadow=0;" vertex="1" parent="e-_WCHEav21t-MaE0KTX-11">
+          <mxGeometry x="40" y="155" width="120" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="e-_WCHEav21t-MaE0KTX-94" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="e-_WCHEav21t-MaE0KTX-11" source="e-_WCHEav21t-MaE0KTX-76" target="e-_WCHEav21t-MaE0KTX-86">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-_WCHEav21t-MaE0KTX-76" value="&lt;div&gt;(Lokasi 2)&lt;/div&gt;Dekatkan Jarak Coords 15 Meter" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;glass=0;strokeWidth=1;shadow=0;" vertex="1" parent="e-_WCHEav21t-MaE0KTX-11">
+          <mxGeometry x="188" y="155" width="120" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="e-_WCHEav21t-MaE0KTX-95" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="e-_WCHEav21t-MaE0KTX-11" source="e-_WCHEav21t-MaE0KTX-77" target="e-_WCHEav21t-MaE0KTX-87">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-_WCHEav21t-MaE0KTX-77" value="&lt;div&gt;(Lokasi 3)&lt;/div&gt;Dekatkan Jarak Coords 20 Meter" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;glass=0;strokeWidth=1;shadow=0;" vertex="1" parent="e-_WCHEav21t-MaE0KTX-11">
+          <mxGeometry x="340" y="155" width="120" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="e-_WCHEav21t-MaE0KTX-82" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="e-_WCHEav21t-MaE0KTX-11" source="e-_WCHEav21t-MaE0KTX-73" target="e-_WCHEav21t-MaE0KTX-63">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="258" y="130" as="sourcePoint" />
+            <mxPoint x="258" y="165" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="248" y="140" />
+              <mxPoint x="100" y="140" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e-_WCHEav21t-MaE0KTX-83" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="e-_WCHEav21t-MaE0KTX-11" source="e-_WCHEav21t-MaE0KTX-73" target="e-_WCHEav21t-MaE0KTX-77">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="250" y="120" as="sourcePoint" />
+            <mxPoint x="110" y="165" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="248" y="140" />
+              <mxPoint x="400" y="140" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e-_WCHEav21t-MaE0KTX-91" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="e-_WCHEav21t-MaE0KTX-11" source="e-_WCHEav21t-MaE0KTX-85" target="e-_WCHEav21t-MaE0KTX-23">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="100" y="320" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e-_WCHEav21t-MaE0KTX-85" value="Render Card&amp;nbsp;&lt;div&gt;Lokasi 1&lt;div&gt;&lt;/div&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;glass=0;strokeWidth=1;shadow=0;" vertex="1" parent="e-_WCHEav21t-MaE0KTX-11">
+          <mxGeometry x="40" y="230" width="120" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="e-_WCHEav21t-MaE0KTX-89" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="e-_WCHEav21t-MaE0KTX-11" source="e-_WCHEav21t-MaE0KTX-86" target="e-_WCHEav21t-MaE0KTX-23">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-_WCHEav21t-MaE0KTX-86" value="Render Card&amp;nbsp;&lt;div&gt;Lokasi 2&lt;div&gt;&lt;/div&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;glass=0;strokeWidth=1;shadow=0;" vertex="1" parent="e-_WCHEav21t-MaE0KTX-11">
+          <mxGeometry x="188" y="230" width="120" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="e-_WCHEav21t-MaE0KTX-90" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="e-_WCHEav21t-MaE0KTX-11" source="e-_WCHEav21t-MaE0KTX-87" target="e-_WCHEav21t-MaE0KTX-23">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="400" y="320" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e-_WCHEav21t-MaE0KTX-87" value="Render Card&amp;nbsp;&lt;div&gt;Lokasi 3&lt;div&gt;&lt;/div&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;glass=0;strokeWidth=1;shadow=0;" vertex="1" parent="e-_WCHEav21t-MaE0KTX-11">
+          <mxGeometry x="340" y="230" width="120" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="e-_WCHEav21t-MaE0KTX-23" value="Tampilkan di&amp;nbsp;&lt;div&gt;AR Camera&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;glass=0;strokeWidth=1;shadow=0;" vertex="1" parent="e-_WCHEav21t-MaE0KTX-11">
+          <mxGeometry x="188" y="300" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="e-_WCHEav21t-MaE0KTX-12" value="" style="swimlane;startSize=0;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="560" y="120" width="260" height="350" as="geometry" />
+        </mxCell>
+        <mxCell id="e-_WCHEav21t-MaE0KTX-71" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="e-_WCHEav21t-MaE0KTX-12" source="e-_WCHEav21t-MaE0KTX-15" target="e-_WCHEav21t-MaE0KTX-69">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-_WCHEav21t-MaE0KTX-15" value="Ambil 3 Tempat Wisata Terdekat" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;glass=0;strokeWidth=1;shadow=0;" vertex="1" parent="e-_WCHEav21t-MaE0KTX-12">
+          <mxGeometry x="60" y="30" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="e-_WCHEav21t-MaE0KTX-52" value="Back End" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="e-_WCHEav21t-MaE0KTX-12">
+          <mxGeometry x="190" width="70" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="e-_WCHEav21t-MaE0KTX-72" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="e-_WCHEav21t-MaE0KTX-12" source="e-_WCHEav21t-MaE0KTX-69" target="e-_WCHEav21t-MaE0KTX-70">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-_WCHEav21t-MaE0KTX-69" value="Urutkan Berdasarkan Jarak Terdekat dengan User" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;glass=0;strokeWidth=1;shadow=0;" vertex="1" parent="e-_WCHEav21t-MaE0KTX-12">
+          <mxGeometry x="60" y="130" width="120" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="e-_WCHEav21t-MaE0KTX-70" value="Kirim Response" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;glass=0;strokeWidth=1;shadow=0;" vertex="1" parent="e-_WCHEav21t-MaE0KTX-12">
+          <mxGeometry x="60" y="240" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="e-_WCHEav21t-MaE0KTX-47" value="Selesai" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="228" y="500" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="e-_WCHEav21t-MaE0KTX-67" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="e-_WCHEav21t-MaE0KTX-4" target="e-_WCHEav21t-MaE0KTX-15">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-_WCHEav21t-MaE0KTX-74" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="e-_WCHEav21t-MaE0KTX-70" target="e-_WCHEav21t-MaE0KTX-73">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="580" y="380" />
+              <mxPoint x="580" y="220" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e-_WCHEav21t-MaE0KTX-88" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="e-_WCHEav21t-MaE0KTX-23" target="e-_WCHEav21t-MaE0KTX-47">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
