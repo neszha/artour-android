@@ -1,5 +1,7 @@
 import { defineStore } from 'pinia'
 import { type Coordinates } from '@/interfaces/Geolocation'
+import { IN_TEST_MODE } from '@/constants/environment'
+import { TestCoordinate } from '@/constants/test-data'
 
 interface GeolocationState {
     coordinates: Coordinates
@@ -26,7 +28,16 @@ export const useGeolocationStore = defineStore('geolocation', {
                 if (navigator.geolocation !== undefined) {
                     navigator.geolocation.getCurrentPosition((position) => {
                         const { latitude, longitude, accuracy } = position.coords
-                        this.coordinates = { latitude, longitude, accuracy }
+                        if (IN_TEST_MODE) {
+                            this.coordinates = {
+                                latitude: TestCoordinate.latitude,
+                                longitude: TestCoordinate.longitude,
+                                accuracy
+                            }
+                        } else {
+                            this.coordinates = { latitude, longitude, accuracy }
+                        }
+                        console.log({ IN_TEST_MODE })
                         console.log(this.coordinates)
                         resolve(true)
                     }, () => {
