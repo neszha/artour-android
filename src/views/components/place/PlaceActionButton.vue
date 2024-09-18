@@ -6,10 +6,11 @@ import numeral from 'numeral'
     <section class="action-button mb-2 pt-1">
         <div class="action-item d-flex gap-2 mb-2">
 
-            <RouterLink v-if="isPlaceOwner" :to="{ name: 'place:manage', params: { placeId: place.id }}"
+            <RouterLink v-if="isPlaceOwnerOrAdmin" :to="{ name: 'place:manage', params: { placeId: place.id }}"
                 class="btn btn-sm btn-outline-primary border-base waves-effect waves-light" style="border-style: dashed;">
                 <i class="bi bi-pencil-square Tempat me-2"></i>
                 <span>Kelola</span>
+                <span v-if="myInfo.role === UserRoleEnum.ADMIN" class="ms-1">(Akses Admin)</span>
             </RouterLink>
 
             <button @click="openGoogleMapDirectionLink()" class="btn btn-sm btn-primary border-base waves-effect waves-light">
@@ -97,6 +98,7 @@ import { useUserStore } from '@/stores/user.store'
 import { type PlaceEntity } from '@/interfaces/Place'
 import { usePlaceStore } from '@/stores/place.store'
 import { API_URL_PLACE_ACTION_METADATA, API_URL_PLACE_ADD_BOOKMARKS, API_URL_PLACE_DISLIKE, API_URL_PLACE_LIKE } from '@/constants/api-url'
+import { UserRoleEnum } from '@/interfaces/enums'
 
 export default {
 
@@ -107,7 +109,8 @@ export default {
             return this.placeData as PlaceEntity
         },
 
-        isPlaceOwner (): boolean {
+        isPlaceOwnerOrAdmin (): boolean {
+            if (this.myInfo.role === UserRoleEnum.ADMIN) return true
             if (this.place.user === undefined) return false
             return (this.place.user.id === this.myInfo.id)
         }
