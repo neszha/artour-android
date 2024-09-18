@@ -248,11 +248,12 @@ export default {
                 await axios.put(url, this.form.data)
                 await this.getMyPlaces()
                 if (window.Android !== undefined) {
-                    window.Android.showToast('Perubahan berhasil disimpan')
+                    window.Android.showToast('Perubahan berhasil disimpan.')
                 } else {
-                    alert('Perubahan berhasil disimpan')
+                    alert('Perubahan berhasil disimpan.')
                 }
-                this.$router.push({ name: 'contribution' })
+                // this.$router.push({ name: 'contribution' })
+                this.$router.back()
             } catch (error) {
                 if (isAxiosError(error)) {
                     const message = error.response?.data.message as string

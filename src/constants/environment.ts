@@ -9,3 +9,8 @@ export const LANDING_PAGE_BASE_URL: string = import.meta.env.VITE_APP_LANDING_PA
 */
 export const GOOGLE_AUTH_CLIENT_ID: string = import.meta.env.VITE_APP_GOOGLE_AUTH_CLIENT_ID ?? ''
 export const GOOGLE_MAPS_API_KEY: string = import.meta.env.VITE_APP_GOOGLE_MAPS_API_KEY ?? ''
+
+/**
+ * Test Mode.
+ */
+export const IN_TEST_MODE: boolean = import.meta.env.VITE_APP_TEST_MODE === 'true'
