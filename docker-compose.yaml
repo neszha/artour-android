@@ -1,0 +1,18 @@
+networks:
+  net-artour:
+    name: net-artour
+    external: true
+
+services:
+  artour-app:
+    container_name: artour-app
+    image: artour-app:1.0.0
+    restart: always
+    networks:
+        - net-artour
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.artour-app.rule=Host(`app-artour.myexams-web.id`)"
+      - "traefik.http.routers.artour-app.entrypoints=websecure"
+      - "traefik.http.routers.artour-app.tls.certresolver=resolver"
+      - "traefik.http.services.artour-app.loadbalancer.server.port=80"
