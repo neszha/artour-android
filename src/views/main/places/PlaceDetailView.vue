@@ -100,9 +100,7 @@ import CardPlaceReview from '@components/card/review/CardPlaceReview.vue'
             <div class="views">
                 <small>{{ numeral(place.views || 0).format('0.[0]a').toUpperCase() }} Pengunjung</small>
             </div>
-            <p class="description mb-3">
-                {{ place.description }}
-            </p>
+            <p v-html="descriptionHtml" class="description mt-2 mb-3"></p>
             <div class="d-flex align-items-center mb-2">
                 <i class="bi bi-geo-alt me-2 text-primary"></i>
                 <span class="text-sm text-heading">
@@ -238,6 +236,11 @@ export default {
                 { latitude: this.place.latitude, longitude: this.place.longitude }
             )
             return distanceInMater / 1000
+        },
+
+        descriptionHtml (): string {
+            if (this.place.description === undefined) return ''
+            return this.place.description.replace(/\n/g, '<br>')
         }
     },
 

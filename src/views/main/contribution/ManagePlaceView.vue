@@ -16,9 +16,7 @@ import ModalDeletePlace from '@components/modals/ModalDeletePlace.vue'
                     <h5 class="h4 mb-2">
                         {{ place.name }}
                     </h5>
-                    <p>
-                        {{ place.description }}
-                    </p>
+                    <p v-html="descriptionHtml"></p>
                 </div>
                 <div class="list-group list-group-flush">
                     <div class="list-group-item d-flex align-items-center px-0">
@@ -85,6 +83,11 @@ export default {
             const placeData = this.placeDetailObject[this.placeId] as PlaceEntity | undefined
             if (placeData === undefined) return defaultData
             return placeData
+        },
+
+        descriptionHtml (): string {
+            if (this.place.description === undefined) return ''
+            return this.place.description.replace(/\n/g, '<br>')
         }
     },
 
