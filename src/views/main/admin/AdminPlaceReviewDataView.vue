@@ -128,7 +128,7 @@ export default {
         filterPlaceReviews (filterKey: string) {
             this.filter.filterKey = filterKey
             this.filter.filterValue = this.filterList.find(x => x.key === filterKey)?.value as string
-            void this.getPlaceReviews(this.filter.filterKey as string, 500)
+            void this.getPlaceReviews(this.filter.filterKey as string, 50)
         },
 
         openPlaceReviewDetailView (placeReview: PlaceReviewEntity) {
@@ -152,7 +152,7 @@ export default {
     },
 
     beforeMount () {
-        this.getPlaceReviews(this.filter.filterKey, 500)
+        this.getPlaceReviews(this.filter.filterKey, 50)
     },
 
     data () {

@@ -66,7 +66,7 @@ export const useAdminStore = defineStore('admin', {
             }
         },
 
-        async getUsers (filter: string, keyword: string | null, limit: number = 500): Promise<void> {
+        async getUsers (filter: string, keyword: string | null, limit: number = 50): Promise<void> {
             try {
                 let url = API_URL_USERS
                 url += `?filter=${filter}`
@@ -83,7 +83,7 @@ export const useAdminStore = defineStore('admin', {
             }
         },
 
-        async getPlaces (filter: string, keyword: string | null, limit: number = 500): Promise<void> {
+        async getPlaces (filter: string, keyword: string | null, limit: number = 50): Promise<void> {
             try {
                 let url = API_URL_PLACES
                 url += `?filter=${filter}`
