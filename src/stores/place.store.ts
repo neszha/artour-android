@@ -192,10 +192,14 @@ export const usePlaceStore = defineStore('place', {
             }
             const imageCoverUrl = place.mapImageCover?.link ?? ''
             if (window.Android !== undefined) {
+                // Share content to Android app
                 window.Android.openShareContent(textContent, imageCoverUrl)
             } else {
-                console.log(textContent, imageCoverUrl)
+                // Share content to x.com web app.
+                const shareUrl = `https://x.com/intent/tweet?text=${encodeURIComponent(textContent)}`
+                window.open(shareUrl, '_blank')
             }
+            // console.log(textContent, imageCoverUrl)
         },
 
         clearPlaceSearchList () {
